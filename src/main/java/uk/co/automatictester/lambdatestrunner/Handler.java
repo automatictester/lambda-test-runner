@@ -46,8 +46,8 @@ public class Handler implements RequestHandler<Request, Response> {
 
     private void installJdk() {
         List<String> command = transformCommand("(cd /tmp; rm -rf jdk11; curl https://download.java.net/java/GA/jdk11/13/GPL/openjdk-11.0.1_linux-x64_bin.tar.gz | gunzip -c | tar xf -; mv jdk-11.0.1 jdk11)");
-        File dir = new File("/tmp/lambda-test-runner/scripts");
-        File logFile = new File("/tmp/lambda-test-runner/scripts/jdk-installer.log");
+        File dir = new File("/tmp");
+        File logFile = new File("/tmp/jdk-installer.log");
         ProcessRunner.runProcess(command, dir, logFile);
         logOutput(logFile.toString());
     }
