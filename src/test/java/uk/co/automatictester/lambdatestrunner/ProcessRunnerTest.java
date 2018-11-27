@@ -12,6 +12,6 @@ public class ProcessRunnerTest {
     @Test
     public void testRunProcess() {
         List<String> command = Arrays.asList("./mvnw", "clean", "test", "-Dtest=SmokeTest");
-        ProcessRunner.runProcess(command, null, new File("output.log"));
+        ProcessRunner.runProcess(command, null);
     }
 }

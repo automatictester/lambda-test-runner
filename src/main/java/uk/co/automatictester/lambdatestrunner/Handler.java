@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -19,9 +20,11 @@ public class Handler implements RequestHandler<Request, Response> {
 
     private static final Logger log = LogManager.getLogger(Handler.class);
 
-    // TODO: cleanup
+    // TODO: general cleanup
     // TODO: installJdk once
     // TODO: extract /tmp and subdirs from all classes
+    // TODO: log free space
+    // TODO: optional /tmp/.m2 cleanup
     @Override
     public Response handleRequest(Request request, Context context) {
         File targetDir = new File(request.getTargetDir());
@@ -36,41 +39,27 @@ public class Handler implements RequestHandler<Request, Response> {
         installJdk();
 
         List<String> command = transformCommand(request.getCommand());
-        String log = request.getLogFile();
-        File logFile = new File(log);
-        ProcessRunner.runProcess(command, targetDir, logFile);
+        ProcessRunner.runProcess(command, targetDir);
 
-        logOutput(log);
         return null;
     }
 
     private void installJdk() {
         File dir = new File("/tmp");
-        File logFile = new File("/tmp/jdk-installer.log");
-
         List<String> rm = transformCommand("rm -rf /tmp/jdk11");
-        ProcessRunner.runProcess(rm, dir, logFile);
+        ProcessRunner.runProcess(rm, dir);
 
-        List<String> mkdir = transformCommand("mkdir /tmp/jdk11");
-        ProcessRunner.runProcess(mkdir, dir, logFile);
+        List<String> curl = new ArrayList<>();
+        curl.add("/bin/sh");
+        curl.add("-c");
+        curl.add("curl https://download.java.net/java/GA/jdk11/13/GPL/openjdk-11.0.1_linux-x64_bin.tar.gz | gunzip -c | tar xf - -C /tmp");
+        ProcessRunner.runProcess(curl, dir);
 
-        List<String> curl = transformCommand("curl https://download.java.net/java/GA/jdk11/13/GPL/openjdk-11.0.1_linux-x64_bin.tar.gz | gunzip -c | tar xf - -C /tmp/jdk11");
-        ProcessRunner.runProcess(curl, dir, logFile);
-//        logOutput(logFile.toString());
+        List<String> mv = transformCommand("mv /tmp/jdk-11.0.1 /tmp/jdk11");
+        ProcessRunner.runProcess(mv, dir);
     }
 
     private List<String> transformCommand(String command) {
         return Arrays.asList(command.split(" "));
-    }
-
-    private void logOutput(String logFile) {
-        Path path = Paths.get(logFile);
-        Stream<String> output;
-        try {
-            output = Files.lines(path);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        output.forEach(System.out::println);
     }
 }
