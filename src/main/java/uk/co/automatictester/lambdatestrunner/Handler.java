@@ -46,7 +46,7 @@ public class Handler implements RequestHandler<Request, Response> {
 
     private void installJdk() {
         File dir = new File("/tmp");
-        List<String> rm = transformCommand("rm -rf /tmp/jdk11");
+        List<String> rm = transformCommand("rm -rf /tmp/jdk10");
         ProcessRunner.runProcess(rm, dir);
 
         List<String> curl = new ArrayList<>();
@@ -55,7 +55,7 @@ public class Handler implements RequestHandler<Request, Response> {
         curl.add("curl https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz | gunzip -c | tar xf - -C /tmp");
         ProcessRunner.runProcess(curl, dir);
 
-        List<String> mv = transformCommand("mv /tmp/jdk-11.0.1 /tmp/jdk11");
+        List<String> mv = transformCommand("mv /tmp/jdk-10.0.2 /tmp/jdk10");
         ProcessRunner.runProcess(mv, dir);
     }
 

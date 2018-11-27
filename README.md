@@ -16,7 +16,7 @@ To be set in AWS Console:
 
 ```bash
 MAVEN_USER_HOME=/tmp/.m2
-JAVA_HOME=/tmp/jdk11
+JAVA_HOME=/tmp/jdk10
 ```
 
 ## Current status
