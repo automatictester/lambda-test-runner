@@ -19,7 +19,12 @@ To be set in AWS Console:
 MAVEN_USER_HOME=/tmp/.m2
 ```
 
+(To be updated...)
+
 ## Current status
 
 - Cloning Git repo and running external process works fine.
 - Maven execution is failing due to JDK not available on the underlying image (only JRE is available).
+
+(To be updated...)
+
