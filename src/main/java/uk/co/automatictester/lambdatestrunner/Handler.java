@@ -45,11 +45,18 @@ public class Handler implements RequestHandler<Request, Response> {
     }
 
     private void installJdk() {
-        List<String> command = transformCommand("(cd /tmp; rm -rf jdk11; curl https://download.java.net/java/GA/jdk11/13/GPL/openjdk-11.0.1_linux-x64_bin.tar.gz | gunzip -c | tar xf -; mv jdk-11.0.1 jdk11)");
         File dir = new File("/tmp");
         File logFile = new File("/tmp/jdk-installer.log");
-        ProcessRunner.runProcess(command, dir, logFile);
-        logOutput(logFile.toString());
+
+        List<String> rm = transformCommand("rm -rf /tmp/jdk11");
+        ProcessRunner.runProcess(rm, dir, logFile);
+
+        List<String> mkdir = transformCommand("mkdir /tmp/jdk11");
+        ProcessRunner.runProcess(mkdir, dir, logFile);
+
+        List<String> curl = transformCommand("curl https://download.java.net/java/GA/jdk11/13/GPL/openjdk-11.0.1_linux-x64_bin.tar.gz | gunzip -c | tar xf - -C /tmp/jdk11");
+        ProcessRunner.runProcess(curl, dir, logFile);
+//        logOutput(logFile.toString());
     }
 
     private List<String> transformCommand(String command) {

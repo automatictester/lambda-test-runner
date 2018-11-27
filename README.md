@@ -17,9 +17,8 @@ To be set in AWS Console:
 
 ```bash
 MAVEN_USER_HOME=/tmp/.m2
+JAVA_HOME=/tmp/jdk11
 ```
-
-(To be updated...)
 
 ## Current status
 
@@ -27,4 +26,3 @@ MAVEN_USER_HOME=/tmp/.m2
 - Maven execution is failing due to JDK not available on the underlying image (only JRE is available).
 
 (To be updated...)
-
