@@ -28,7 +28,7 @@ public class Handler implements RequestHandler<Request, Response> {
     @Override
     public Response handleRequest(Request request, Context context) {
         installJdk();
-        
+
         File targetDir = new File(request.getTargetDir());
         try {
             FileUtils.deleteDirectory(targetDir);
@@ -38,6 +38,10 @@ public class Handler implements RequestHandler<Request, Response> {
 
         String repoUri = request.getRepoUri();
         GitCloner.cloneRepo(repoUri, targetDir);
+
+        log.info("DISK USAGE");
+        List<String> du = transformCommand("du -sh /tmp/");
+        ProcessRunner.runProcess(du, targetDir);
 
         List<String> command = transformCommand(request.getCommand());
         ProcessRunner.runProcess(command, targetDir);
@@ -58,9 +62,6 @@ public class Handler implements RequestHandler<Request, Response> {
 
         List<String> mv = transformCommand("mv /tmp/jdk-10.0.2 /tmp/jdk10");
         ProcessRunner.runProcess(mv, dir);
-
-        List<String> du = transformCommand("du -sh /tmp/*");
-        ProcessRunner.runProcess(du, dir);
     }
 
     private List<String> transformCommand(String command) {
