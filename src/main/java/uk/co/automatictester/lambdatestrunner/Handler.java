@@ -40,7 +40,7 @@ public class Handler implements RequestHandler<Request, Response> {
         File logFile = new File(log);
         ProcessRunner.runProcess(command, targetDir, logFile);
 
-//        logOutput(log);
+        logOutput(log);
         return null;
     }
 
