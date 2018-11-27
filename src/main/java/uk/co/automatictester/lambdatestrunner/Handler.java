@@ -21,6 +21,7 @@ public class Handler implements RequestHandler<Request, Response> {
 
     // TODO: cleanup
     // TODO: installJdk once
+    // TODO: extract /tmp and subdirs from all classes
     @Override
     public Response handleRequest(Request request, Context context) {
         installJdk();
@@ -47,7 +48,7 @@ public class Handler implements RequestHandler<Request, Response> {
     private void installJdk() {
         List<String> command = transformCommand("./jdk-installer.sh");
         File dir = new File("/tmp/lambda-test-runner/scripts");
-        File logFile = new File("jdk-installer.log");
+        File logFile = new File("/tmp/lambda-test-runner/jdk-installer.log");
         ProcessRunner.runProcess(command, dir, logFile);
         logOutput(logFile.toString());
     }
