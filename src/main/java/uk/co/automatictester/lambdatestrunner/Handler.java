@@ -52,7 +52,7 @@ public class Handler implements RequestHandler<Request, Response> {
         List<String> curl = new ArrayList<>();
         curl.add("/bin/sh");
         curl.add("-c");
-        curl.add("curl https://download.java.net/java/GA/jdk11/13/GPL/openjdk-11.0.1_linux-x64_bin.tar.gz | gunzip -c | tar xf - -C /tmp");
+        curl.add("curl https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz | gunzip -c | tar xf - -C /tmp");
         ProcessRunner.runProcess(curl, dir);
 
         List<String> mv = transformCommand("mv /tmp/jdk-11.0.1 /tmp/jdk11");

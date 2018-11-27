@@ -19,7 +19,6 @@ public class ProcessRunner {
     private ProcessRunner() {
     }
 
-    // TODO: string += ...
     public static void runProcess(List<String> command, File dir) {
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(command)
@@ -30,15 +29,12 @@ public class ProcessRunner {
             Process process = processBuilder.start();
             BufferedReader bReader = new BufferedReader(new InputStreamReader(process.getInputStream(), UTF_8));
 
-            String output = "";
-            String line;
+            String line = "";
             while ((line = bReader.readLine()) != null) {
-//                log.info(line);
-                output += line + "\n";
+                log.info(line);
             }
 
             process.waitFor();
-            log.info(output);
 
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);

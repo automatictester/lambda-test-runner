@@ -5,7 +5,6 @@ public class Request {
     private String targetDir;
     private String repoUri;
     private String command;
-    private String logFile;
 
     public String getTargetDir() {
         return targetDir;
@@ -29,13 +28,5 @@ public class Request {
 
     public void setCommand(String command) {
         this.command = command;
-    }
-
-    public String getLogFile() {
-        return logFile;
-    }
-
-    public void setLogFile(String logFile) {
-        this.logFile = logFile;
     }
 }
