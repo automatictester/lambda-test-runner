@@ -46,7 +46,7 @@ public class Handler implements RequestHandler<Request, Response> {
 
     private void installJdk() {
         List<String> command = transformCommand("./jdk-installer.sh");
-        File dir = new File("scripts");
+        File dir = new File("/tmp/lambda-test-runner/scripts");
         File logFile = new File("jdk-installer.log");
         ProcessRunner.runProcess(command, dir, logFile);
         logOutput(logFile.toString());
