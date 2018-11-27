@@ -5,7 +5,7 @@
 ```json
 {
     "targetDir": "/tmp/lambda-test-runner/",
-    "command": "./mvnw test -Dmaven.repo.local=/tmp/.m2",
+    "command": "./mvnw test -Dtest=SmokeTest -Dmaven.repo.local=/tmp/.m2",
     "logFile": "/tmp/output.log",
     "repoUri": "https://github.com/automatictester/lambda-test-runner.git"
 }
