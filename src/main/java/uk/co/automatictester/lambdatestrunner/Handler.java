@@ -25,6 +25,14 @@ public class Handler implements RequestHandler<Request, Response> {
     // TODO: extract /tmp and subdirs from all classes
     // TODO: log free space
     // TODO: optional /tmp/.m2 cleanup
+    // TODO: make JDK version configurable
+    // TODO: test concurrency
+    // TODO: /bin/bash
+    // TODO: add jacoco
+    // TODO: end-to-end test
+    // TODO: add travis for building PRs
+    // TODO: IAM role definition
+    // TODO: store results in S3
     @Override
     public Response handleRequest(Request request, Context context) {
         installJdk();

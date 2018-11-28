@@ -10,8 +10,7 @@ public class GitCloner {
     private GitCloner() {}
 
     // TODO: checkout branch
-    // TODO: ssh
-    // TODO: https
+    // TODO: private repo support
     public static void cloneRepo(String repoUri, File dir) {
         try {
             Git.cloneRepository()

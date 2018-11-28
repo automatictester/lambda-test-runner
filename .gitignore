@@ -1,3 +1,5 @@
 .idea/
 target/
+tf/.terraform/
+tf/terraform.tf*
 *.log
