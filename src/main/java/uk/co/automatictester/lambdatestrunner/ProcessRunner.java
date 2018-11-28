@@ -19,11 +19,6 @@ public class ProcessRunner {
     private ProcessRunner() {
     }
 
-    public static int runProcess(List<String> command) {
-        File workDir = new File(Config.getProperty("work.dir"));
-        return runProcess(command, workDir);
-    }
-
     public static int runProcess(List<String> command, File workDir) {
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(command)

@@ -14,7 +14,7 @@ public class HandlerTest {
 
     @BeforeClass
     public void deleteDir() throws IOException {
-        File workDir = new File(Config.getProperty("work.dir"));
+        File workDir = new File(Config.getProperty("repo.dir"));
         FileUtils.deleteDirectory(workDir);
     }
 

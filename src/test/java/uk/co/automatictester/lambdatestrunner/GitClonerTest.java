@@ -1,7 +1,6 @@
 package uk.co.automatictester.lambdatestrunner;
 
 import org.apache.commons.io.FileUtils;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -15,7 +14,7 @@ import static org.testng.Assert.assertTrue;
 
 public class GitClonerTest {
 
-    private File workDir = new File(Config.getProperty("work.dir"));
+    private File workDir = new File(Config.getProperty("repo.dir"));
 
     @BeforeClass
     public void deleteDir() throws IOException {

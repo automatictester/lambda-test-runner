@@ -37,3 +37,4 @@ JAVA_HOME=/tmp/jdk10
 - private repo support
 - Response class
 - add assertions to HandlerTest
+- /bin/bash
