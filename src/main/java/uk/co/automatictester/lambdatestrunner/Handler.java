@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,23 +26,14 @@ public class Handler implements RequestHandler<Request, Response> {
     }
 
     private void installJdkOnLambda(Context context) {
-        if (context != null) installJdk();
-    }
-
-    private void installJdk() {
-        if (jdkInstalled) {
-            log.info("JDK already installed, skipping");
-        } else {
-            log.info("Installing JDK...");
-
-            List<String> curl = new ArrayList<>();
-            curl.add("/bin/sh");
-            curl.add("-c");
-            curl.add("rm -rf /tmp/jdk10; curl https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz | gunzip -c | tar xf - -C /tmp; mv /tmp/jdk-10.0.2 /tmp/jdk10");
-            File dir = new File(Config.getProperty("temp.dir"));
-            ProcessRunner.runProcess(curl, dir);
-
-            jdkInstalled = true;
+        if (context != null) {
+            if (jdkInstalled) {
+                log.info("JDK already installed, skipping...");
+            } else {
+                log.info("Installing JDK...");
+                JdkInstaller.installJdk();
+                jdkInstalled = true;
+            }
         }
     }
 
