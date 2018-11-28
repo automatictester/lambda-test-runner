@@ -1,7 +1,5 @@
 #!groovy
 
-library "SharedLib@${env.BRANCH_NAME}"
-
 pipeline {
     agent {
         label 'linux'
