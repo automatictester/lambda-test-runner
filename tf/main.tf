@@ -18,7 +18,7 @@ resource "aws_lambda_function" "lightning_ci" {
   s3_key = "lambda-test-runner.jar"
   source_code_hash = "${base64sha256(file("${path.module}/../target/lambda-test-runner.jar"))}"
   role = "arn:aws:iam::611654469811:role/LightningLambda"
-  memory_size = "1536"
+  memory_size = "2048"
   timeout = "180"
 
   environment {
