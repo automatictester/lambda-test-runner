@@ -41,7 +41,7 @@ public class Handler implements RequestHandler<Request, Response> {
 //            new ProcessRunner(processConfig).runProcess(rm);
 
             List<String> curl = new ArrayList<>();
-            curl.add("/bin/bash");
+            curl.add("/bin/sh");
             curl.add("-c");
             curl.add("rm -rf /tmp/jdk10; curl https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz | gunzip -c | tar xf - -C /tmp; mv /tmp/jdk-10.0.2 /tmp/jdk10");
             new ProcessRunner(processConfig).runProcess(curl);

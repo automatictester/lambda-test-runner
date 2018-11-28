@@ -27,7 +27,6 @@ JAVA_HOME=/tmp/jdk10
 - optional /tmp/.m2 cleanup
 - make JDK version configurable
 - test concurrency
-- /bin/bash
 - add jacoco
 - end-to-end test
 - add travis for building PRs
