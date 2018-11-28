@@ -14,41 +14,17 @@ import java.util.List;
 
 public class Handler implements RequestHandler<Request, Response> {
 
-    private boolean jdkInstalled = false;
-
     private static final Logger log = LogManager.getLogger(Handler.class);
+    private boolean jdkInstalled = false;
+    private ProcessConfig processConfig = new ProcessConfig();
 
-    // TODO: general cleanup
-    // TODO: extract /tmp and subdirs from all classes
-    // TODO: log free space
-    // TODO: optional /tmp/.m2 cleanup
-    // TODO: make JDK version configurable
-    // TODO: test concurrency
-    // TODO: /bin/bash
-    // TODO: add jacoco
-    // TODO: end-to-end test
-    // TODO: add travis for building PRs
-    // TODO: IAM role definition
-    // TODO: store results in S3
-    // TODO: always verify exit code from ProcessRunner
     @Override
     public Response handleRequest(Request request, Context context) {
         installJdkOnLambda(context);
-
-        File targetDir = new File(request.getTargetDir());
-        try {
-            FileUtils.deleteDirectory(targetDir);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        String repoUri = request.getRepoUri();
-        GitCloner.cloneRepo(repoUri, targetDir);
-
-        List<String> command = transformCommand(request.getCommand());
-        ProcessRunner.runProcess(command, targetDir);
-
-        return null;
+        deleteWorkDir();
+        cloneRepo(request);
+        runCommand(request);
+        return new Response();
     }
 
     private void installJdkOnLambda(Context context) {
@@ -61,21 +37,40 @@ public class Handler implements RequestHandler<Request, Response> {
         } else {
             log.info("Installing JDK...");
 
-            File dir = new File("/tmp");
             List<String> rm = transformCommand("rm -rf /tmp/jdk10");
-            ProcessRunner.runProcess(rm, dir);
+            new ProcessRunner(processConfig).runProcess(rm);
 
             List<String> curl = new ArrayList<>();
             curl.add("/bin/sh");
             curl.add("-c");
             curl.add("curl https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz | gunzip -c | tar xf - -C /tmp");
-            ProcessRunner.runProcess(curl, dir);
+            new ProcessRunner(processConfig).runProcess(curl);
 
             List<String> mv = transformCommand("mv /tmp/jdk-10.0.2 /tmp/jdk10");
-            ProcessRunner.runProcess(mv, dir);
+            new ProcessRunner(processConfig).runProcess(mv);
 
             jdkInstalled = true;
         }
+    }
+
+    private void deleteWorkDir() {
+        File workDir = new File(Config.getProperty("work.dir"));
+        try {
+            FileUtils.deleteDirectory(workDir);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void cloneRepo(Request request) {
+        String repoUri = request.getRepoUri();
+        File workDir = processConfig.getWorkDir();
+        GitCloner.cloneRepo(repoUri, workDir);
+    }
+
+    private void runCommand(Request request) {
+        List<String> command = transformCommand(request.getCommand());
+        new ProcessRunner(processConfig).runProcess(command);
     }
 
     private List<String> transformCommand(String command) {

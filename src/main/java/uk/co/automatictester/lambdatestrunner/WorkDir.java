@@ -1,5 +1,5 @@
 package uk.co.automatictester.lambdatestrunner;
 
-public class Response {
-
+public enum WorkDir {
+    USER_DIR, CONFIG
 }

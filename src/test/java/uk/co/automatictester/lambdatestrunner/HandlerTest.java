@@ -1,20 +1,33 @@
 package uk.co.automatictester.lambdatestrunner;
 
 import com.amazonaws.services.lambda.runtime.Context;
+import org.apache.commons.io.FileUtils;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import java.io.File;
+import java.io.IOException;
 
 public class HandlerTest {
 
-    @Test
-    public void testHandleRequest() {
-        Request request = new Request();
-        request.setTargetDir("/tmp/lambda-test-runner/");
+    private Request request = new Request();
+
+    @BeforeClass
+    public void deleteDir() throws IOException {
+        File workDir = new File(Config.getProperty("work.dir"));
+        FileUtils.deleteDirectory(workDir);
+    }
+
+    @BeforeClass
+    public void setupRequest() {
         request.setCommand("./mvnw clean test -Dtest=SmokeTest -Dmaven.repo.local=/tmp/.m2");
         request.setRepoUri("https://github.com/automatictester/lambda-test-runner.git");
+    }
 
+    @Test
+    public void testHandleRequest() {
         Context context = null;
         Handler handler = new Handler();
         handler.handleRequest(request, context);
-        // TODO: add assertion
     }
 }
