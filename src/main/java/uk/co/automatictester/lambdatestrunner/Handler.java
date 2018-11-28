@@ -37,17 +37,17 @@ public class Handler implements RequestHandler<Request, Response> {
         } else {
             log.info("Installing JDK...");
 
-            List<String> rm = transformCommand("rm -rf /tmp/jdk10");
-            new ProcessRunner(processConfig).runProcess(rm);
+//            List<String> rm = transformCommand("rm -rf /tmp/jdk10");
+//            new ProcessRunner(processConfig).runProcess(rm);
 
             List<String> curl = new ArrayList<>();
-            curl.add("/bin/sh");
+            curl.add("/bin/bash");
             curl.add("-c");
-            curl.add("curl https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz | gunzip -c | tar xf - -C /tmp");
+            curl.add("rm -rf /tmp/jdk10; curl https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz | gunzip -c | tar xf - -C /tmp; mv /tmp/jdk-10.0.2 /tmp/jdk10");
             new ProcessRunner(processConfig).runProcess(curl);
 
-            List<String> mv = transformCommand("mv /tmp/jdk-10.0.2 /tmp/jdk10");
-            new ProcessRunner(processConfig).runProcess(mv);
+//            List<String> mv = transformCommand("mv /tmp/jdk-10.0.2 /tmp/jdk10");
+//            new ProcessRunner(processConfig).runProcess(mv);
 
             jdkInstalled = true;
         }

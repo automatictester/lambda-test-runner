@@ -18,3 +18,23 @@ To be set in AWS Console:
 MAVEN_USER_HOME=/tmp/.m2
 JAVA_HOME=/tmp/jdk10
 ```
+
+## TODOs
+
+- general code cleanup
+- extract /tmp and subdirs from all classes
+- log free space
+- optional /tmp/.m2 cleanup
+- make JDK version configurable
+- test concurrency
+- /bin/bash
+- add jacoco
+- end-to-end test
+- add travis for building PRs
+- IAM role definition
+- store results in S3
+- always verify exit code from ProcessRunner
+- checkout branch
+- private repo support
+- Response class
+- add assertions to HandlerTest
