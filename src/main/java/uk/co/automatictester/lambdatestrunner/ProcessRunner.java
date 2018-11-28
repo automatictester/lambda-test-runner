@@ -19,7 +19,7 @@ public class ProcessRunner {
     private ProcessRunner() {
     }
 
-    public static void runProcess(List<String> command, File dir) {
+    public static int runProcess(List<String> command, File dir) {
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(command)
                     .directory(dir)
@@ -34,7 +34,7 @@ public class ProcessRunner {
                 log.info(line);
             }
 
-            process.waitFor();
+            return process.waitFor();
 
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);

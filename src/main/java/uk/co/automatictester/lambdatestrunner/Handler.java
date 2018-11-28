@@ -35,7 +35,7 @@ public class Handler implements RequestHandler<Request, Response> {
     // TODO: store results in S3
     @Override
     public Response handleRequest(Request request, Context context) {
-        installJdk();
+        installJdkOnLambda(context);
 
         File targetDir = new File(request.getTargetDir());
         try {
@@ -55,6 +55,10 @@ public class Handler implements RequestHandler<Request, Response> {
         ProcessRunner.runProcess(command, targetDir);
 
         return null;
+    }
+
+    private void installJdkOnLambda(Context context) {
+        if (context != null) installJdk();
     }
 
     private void installJdk() {

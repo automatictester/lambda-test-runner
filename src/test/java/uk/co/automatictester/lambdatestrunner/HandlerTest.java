@@ -5,7 +5,6 @@ import org.testng.annotations.Test;
 
 public class HandlerTest {
 
-    // TODO: do not install JDK when running locally
     @Test
     public void testHandleRequest() {
         Request request = new Request();
@@ -16,5 +15,6 @@ public class HandlerTest {
         Context context = null;
         Handler handler = new Handler();
         handler.handleRequest(request, context);
+        // TODO: add assertion
     }
 }
