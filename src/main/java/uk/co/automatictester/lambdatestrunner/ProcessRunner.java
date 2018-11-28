@@ -15,16 +15,16 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class ProcessRunner {
 
     private static final Logger log = LogManager.getLogger(ProcessRunner.class);
-    private final ProcessConfig processConfig;
 
-    public ProcessRunner(ProcessConfig processConfig) {
-        this.processConfig = processConfig;
-
+    private ProcessRunner() {
     }
 
-    public int runProcess(List<String> command) {
-        File workDir = processConfig.getWorkDir();
+    public static int runProcess(List<String> command) {
+        File workDir = new File(Config.getProperty("work.dir"));
+        return runProcess(command, workDir);
+    }
 
+    public static int runProcess(List<String> command, File workDir) {
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(command)
                     .directory(workDir)

@@ -16,7 +16,6 @@ public class Handler implements RequestHandler<Request, Response> {
 
     private static final Logger log = LogManager.getLogger(Handler.class);
     private boolean jdkInstalled = false;
-    private ProcessConfig processConfig = new ProcessConfig();
 
     @Override
     public Response handleRequest(Request request, Context context) {
@@ -44,7 +43,8 @@ public class Handler implements RequestHandler<Request, Response> {
             curl.add("/bin/sh");
             curl.add("-c");
             curl.add("rm -rf /tmp/jdk10; curl https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz | gunzip -c | tar xf - -C /tmp; mv /tmp/jdk-10.0.2 /tmp/jdk10");
-            new ProcessRunner(processConfig).runProcess(curl);
+            File dir = new File(Config.getProperty("temp.dir"));
+            ProcessRunner.runProcess(curl, dir);
 
 //            List<String> mv = transformCommand("mv /tmp/jdk-10.0.2 /tmp/jdk10");
 //            new ProcessRunner(processConfig).runProcess(mv);
@@ -64,13 +64,13 @@ public class Handler implements RequestHandler<Request, Response> {
 
     private void cloneRepo(Request request) {
         String repoUri = request.getRepoUri();
-        File workDir = processConfig.getWorkDir();
+        File workDir = new File(Config.getProperty("work.dir"));
         GitCloner.cloneRepo(repoUri, workDir);
     }
 
     private void runCommand(Request request) {
         List<String> command = transformCommand(request.getCommand());
-        new ProcessRunner(processConfig).runProcess(command);
+        ProcessRunner.runProcess(command);
     }
 
     private List<String> transformCommand(String command) {
