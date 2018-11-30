@@ -20,5 +20,6 @@ public class ProcessRunnerTest {
         assertEquals(processResult.getExitCode(), 0);
         assertThat(processResult.getOutput(), containsString("Running uk.co.automatictester.lambdatestrunner.SmokeTest"));
         assertThat(processResult.getOutput(), containsString("Tests run: 1, Failures: 0, Errors: 0, Skipped: 0"));
+        assertThat(processResult.getOutput(), containsString("\n"));
     }
 }
