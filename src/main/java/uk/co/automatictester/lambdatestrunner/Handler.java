@@ -61,6 +61,7 @@ public class Handler implements RequestHandler<Request, Response> {
     private Response createResponse(ProcessResult processResult) {
         Response response = new Response();
         response.setOutput(processResult.getOutput());
+        response.setExitCode(processResult.getExitCode());
         return response;
     }
 
