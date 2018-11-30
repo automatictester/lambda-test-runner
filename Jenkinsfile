@@ -42,6 +42,13 @@ pipeline {
                 }
             }
         }
+        stage('End-to-end test') {
+            steps {
+                dir('e2e') {
+                    sh './basic-test.sh'
+                }
+            }
+        }
         stage('Archive JAR') {
             steps {
                 archiveArtifacts artifacts: 'target/lambda-test-runner.jar'

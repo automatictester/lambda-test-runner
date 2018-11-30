@@ -51,11 +51,8 @@ JAVA_HOME=/tmp/jdk10
 
 ## TODOs
 
-- End-to-end test
 - Test concurrency
 - Store results in S3
-- Response class
-- Add assertions to HandlerTest
 - Log free space
 - Test with Gradle Wrapper
 - IAM role definition

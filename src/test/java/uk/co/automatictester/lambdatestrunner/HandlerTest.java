@@ -8,6 +8,10 @@ import org.testng.annotations.Test;
 import java.io.File;
 import java.io.IOException;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.StringContains.containsString;
+import static org.testng.Assert.assertEquals;
+
 public class HandlerTest {
 
     private Request request = new Request();
@@ -28,6 +32,9 @@ public class HandlerTest {
     public void testHandleRequest() {
         Context context = null;
         Handler handler = new Handler();
-        handler.handleRequest(request, context);
+        Response response = handler.handleRequest(request, context);
+        assertEquals(response.getExitCode(), 0);
+        assertThat(response.getOutput(), containsString("Running uk.co.automatictester.lambdatestrunner.SmokeTest"));
+        assertThat(response.getOutput(), containsString("Tests run: 1, Failures: 0, Errors: 0, Skipped: 0"));
     }
 }
