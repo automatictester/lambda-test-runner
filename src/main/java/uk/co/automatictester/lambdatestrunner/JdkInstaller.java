@@ -6,6 +6,8 @@ import java.util.List;
 
 public class JdkInstaller {
 
+    private JdkInstaller() {}
+
     public static void installJdk() {
         File dir = new File(Config.getProperty("temp.dir"));
         ProcessRunner.runProcess(getCommand(), dir);
