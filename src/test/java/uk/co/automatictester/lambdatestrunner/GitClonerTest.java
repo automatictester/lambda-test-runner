@@ -1,7 +1,7 @@
 package uk.co.automatictester.lambdatestrunner;
 
 import org.apache.commons.io.FileUtils;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -16,7 +16,7 @@ public class GitClonerTest {
 
     private File workDir = new File(Config.getProperty("repo.dir"));
 
-    @BeforeClass
+    @BeforeMethod
     public void deleteDir() throws IOException {
         FileUtils.deleteDirectory(workDir);
     }
@@ -28,6 +28,17 @@ public class GitClonerTest {
         GitCloner.cloneRepo(repoUri, branch, workDir);
 
         String readmeFile = workDir.toString() + "/README.md";
+        Path path = Paths.get(readmeFile);
+        assertTrue(Files.exists(path));
+    }
+
+    @Test
+    public void testCloneRepoCheckoutNonDefaultBranch() {
+        String repoUri = "https://github.com/automatictester/lambda-test-runner.git";
+        String branch = "unit-testing";
+        GitCloner.cloneRepo(repoUri, branch, workDir);
+
+        String readmeFile = workDir.toString() + "/src/test/java/uk/co/automatictester/lambdatestrunner/YetAnotherSmokeTest.java";
         Path path = Paths.get(readmeFile);
         assertTrue(Files.exists(path));
     }
