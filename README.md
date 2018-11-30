@@ -19,7 +19,7 @@ AWS Lambda Test Runner will:
 
 ## Limitations
 
-The key AWS Lambda Function [limits](https://docs.aws.amazon.com/lambda/latest/dg/limits.html) you'll be interested in are:
+As of November 2018, the key AWS Lambda Function [limits](https://docs.aws.amazon.com/lambda/latest/dg/limits.html) you'll be interested in are:
 - Function memory allocation: 128 MB to 3008 MB, in 64 MB increments.
 - Function timeout: 900 seconds (15 minutes).
 - `/tmp` directory storage: 512 MB.

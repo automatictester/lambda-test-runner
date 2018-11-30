@@ -21,8 +21,8 @@ public class Handler implements RequestHandler<Request, Response> {
         installJdkOnLambda(context);
         deleteRepoDir();
         cloneRepo(request);
-        runCommand(request);
-        return new Response();
+        ProcessResult processResult = runCommand(request);
+        return createResponse(processResult);
     }
 
     private void installJdkOnLambda(Context context) {
@@ -52,10 +52,16 @@ public class Handler implements RequestHandler<Request, Response> {
         GitCloner.cloneRepo(repoUri, repoDir);
     }
 
-    private void runCommand(Request request) {
+    private ProcessResult runCommand(Request request) {
         List<String> command = transformCommand(request.getCommand());
         File dir = new File(Config.getProperty("repo.dir"));
-        ProcessRunner.runProcess(command, dir);
+        return ProcessRunner.runProcess(command, dir);
+    }
+
+    private Response createResponse(ProcessResult processResult) {
+        Response response = new Response();
+        response.setOutput(processResult.getOutput());
+        return response;
     }
 
     private List<String> transformCommand(String command) {

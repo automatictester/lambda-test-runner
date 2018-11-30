@@ -19,7 +19,7 @@ public class ProcessRunner {
     private ProcessRunner() {
     }
 
-    public static int runProcess(List<String> command, File workDir) {
+    public static ProcessResult runProcess(List<String> command, File workDir) {
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(command)
                     .directory(workDir)
@@ -29,12 +29,17 @@ public class ProcessRunner {
             Process process = processBuilder.start();
             BufferedReader bReader = new BufferedReader(new InputStreamReader(process.getInputStream(), UTF_8));
 
+            StringBuilder processOutput = new StringBuilder();
             String line = "";
             while ((line = bReader.readLine()) != null) {
                 log.info(line);
+                processOutput.append(line);
             }
 
-            return process.waitFor();
+            ProcessResult result = new ProcessResult();
+            result.setExitCode(process.waitFor());
+            result.setOutput(processOutput.toString());
+            return result;
 
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
