@@ -37,12 +37,7 @@ For sample request see [e2e/payload.json](https://github.com/automatictester/lam
 
 ## Required environment variables
 
-To be set in AWS Console:
-
-```bash
-MAVEN_USER_HOME=/tmp/.m2
-JAVA_HOME=/tmp/jdk10
-```
+For sample request see [tf/main.tf](https://github.com/automatictester/lambda-test-runner/blob/master/tf/main.tf).
 
 ## TODOs
 

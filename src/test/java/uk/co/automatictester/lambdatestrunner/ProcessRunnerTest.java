@@ -4,6 +4,7 @@ import org.testng.annotations.Test;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -21,5 +22,12 @@ public class ProcessRunnerTest {
         assertThat(processResult.getOutput(), containsString("Running uk.co.automatictester.lambdatestrunner.SmokeTest"));
         assertThat(processResult.getOutput(), containsString("Tests run: 1, Failures: 0, Errors: 0, Skipped: 0"));
         assertThat(processResult.getOutput(), containsString("\n"));
+    }
+
+    @Test(expectedExceptions = RuntimeException.class)
+    public void testRunProcessEx() {
+        List<String> command = Collections.singletonList("uname -a");
+        File workDir = new File("nonexistent");
+        ProcessRunner.runProcess(command, workDir);
     }
 }

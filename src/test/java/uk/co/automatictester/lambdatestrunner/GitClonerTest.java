@@ -38,8 +38,15 @@ public class GitClonerTest {
         String branch = "unit-testing";
         GitCloner.cloneRepo(repoUri, branch, workDir);
 
-        String readmeFile = workDir.toString() + "/src/test/java/uk/co/automatictester/lambdatestrunner/YetAnotherSmokeTest.java";
-        Path path = Paths.get(readmeFile);
+        String branchSpecificUnitTest = workDir.toString() + "/src/test/java/uk/co/automatictester/lambdatestrunner/YetAnotherSmokeTest.java";
+        Path path = Paths.get(branchSpecificUnitTest);
         assertTrue(Files.exists(path));
+    }
+
+    @Test(expectedExceptions = RuntimeException.class)
+    public void testCloneRepoEx() {
+        String repoUri = "https://github.com/automatictester/lambda-test-runner-2.git";
+        String branch = "master";
+        GitCloner.cloneRepo(repoUri, branch, workDir);
     }
 }
