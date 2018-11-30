@@ -48,8 +48,9 @@ public class Handler implements RequestHandler<Request, Response> {
 
     private void cloneRepo(Request request) {
         String repoUri = request.getRepoUri();
+        String branch = request.getBranch();
         File repoDir = new File(Config.getProperty("repo.dir"));
-        GitCloner.cloneRepo(repoUri, repoDir);
+        GitCloner.cloneRepo(repoUri, branch, repoDir);
     }
 
     private ProcessResult runCommand(Request request) {

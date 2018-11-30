@@ -11,9 +11,10 @@ public class GitCloner {
     private GitCloner() {
     }
 
-    public static void cloneRepo(String repoUri, File dir) {
+    public static void cloneRepo(String repoUri, String branch, File dir) {
         CloneCommand cloneCommand = Git.cloneRepository()
                 .setURI(repoUri)
+                .setBranch(branch)
                 .setDirectory(dir);
         execute(cloneCommand);
     }

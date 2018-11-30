@@ -3,6 +3,7 @@ package uk.co.automatictester.lambdatestrunner;
 public class Request {
 
     private String repoUri;
+    private String branch;
     private String command;
 
     public String getRepoUri() {
@@ -19,5 +20,13 @@ public class Request {
 
     public void setCommand(String command) {
         this.command = command;
+    }
+
+    public String getBranch() {
+        return branch;
+    }
+
+    public void setBranch(String branch) {
+        this.branch = branch;
     }
 }

@@ -24,7 +24,8 @@ public class GitClonerTest {
     @Test
     public void testCloneRepo() {
         String repoUri = "https://github.com/automatictester/lambda-test-runner.git";
-        GitCloner.cloneRepo(repoUri, workDir);
+        String branch = "master";
+        GitCloner.cloneRepo(repoUri, branch, workDir);
 
         String readmeFile = workDir.toString() + "/README.md";
         Path path = Paths.get(readmeFile);

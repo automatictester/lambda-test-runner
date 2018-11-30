@@ -24,8 +24,9 @@ public class HandlerTest {
 
     @BeforeClass
     public void setupRequest() {
-        request.setCommand("./mvnw clean test -Dtest=SmokeTest -Dmaven.repo.local=/tmp/.m2");
         request.setRepoUri("https://github.com/automatictester/lambda-test-runner.git");
+        request.setBranch("master");
+        request.setCommand("./mvnw clean test -Dtest=SmokeTest -Dmaven.repo.local=/tmp/.m2");
     }
 
     @Test

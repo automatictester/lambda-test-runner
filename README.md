@@ -33,12 +33,7 @@ the AWS community.
 
 ## Sample request
 
-```json
-{
-    "repoUri": "https://github.com/automatictester/lambda-test-runner.git",
-    "command": "./mvnw test -Dtest=SmokeTest -Dmaven.repo.local=/tmp/.m2"
-}
-```
+For sample request see [e2e/payload.json](https://github.com/automatictester/lambda-test-runner/blob/master/e2e/payload.json).
 
 ## Required environment variables
 
@@ -60,6 +55,6 @@ JAVA_HOME=/tmp/jdk10
 - Optional /tmp/.m2 cleanup
 - Add JaCoCo
 - Always verify exit code from ProcessRunner
-- Checkout branch
 - Private repo support
 - Externally configurable log level
+- Limit output size
