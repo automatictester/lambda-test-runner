@@ -53,7 +53,6 @@ JAVA_HOME=/tmp/jdk10
 - IAM role definition
 - Make JDK version configurable
 - Optional /tmp/.m2 cleanup
-- Add JaCoCo
 - Always verify exit code from ProcessRunner
 - Private repo support
 - Externally configurable log level
