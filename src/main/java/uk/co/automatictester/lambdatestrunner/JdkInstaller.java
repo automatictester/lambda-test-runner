@@ -4,6 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,9 +17,12 @@ public class JdkInstaller {
 
     public static void installJdk() {
         log.info("Installing JDK...");
+        Instant start = Instant.now();
         File dir = new File(Config.getProperty("temp.dir"));
         ProcessRunner.runProcess(getCommand(), dir);
-        log.info("JDK installation complete");
+        Instant finish = Instant.now();
+        Duration duration = Duration.between(start, finish);
+        log.info("JDK installation complete, took {}s", duration.getSeconds());
     }
 
     private static List<String> getCommand() {

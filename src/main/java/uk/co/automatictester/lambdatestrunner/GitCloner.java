@@ -9,6 +9,8 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
 
 public class GitCloner {
 
@@ -29,11 +31,15 @@ public class GitCloner {
 
     public static void cloneRepo(String repoUri, String branch, File dir) {
         log.info("Git repo '{}', branch '{}', dir '{}'", repoUri, branch, dir);
+        Instant start = Instant.now();
         CloneCommand cloneCommand = Git.cloneRepository()
                 .setURI(repoUri)
                 .setBranch(branch)
                 .setDirectory(dir);
         execute(cloneCommand);
+        Instant finish = Instant.now();
+        Duration duration = Duration.between(start, finish);
+        log.info("Cloning took {}s", duration.getSeconds());
     }
 
     private static void execute(CloneCommand cloneCommand) {

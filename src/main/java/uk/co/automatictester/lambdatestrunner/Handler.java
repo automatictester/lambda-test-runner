@@ -6,6 +6,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,8 +48,11 @@ public class Handler implements RequestHandler<Request, Response> {
         List<String> command = transformCommand(rawCommand);
         File dir = new File(Config.getProperty("repo.dir"));
         log.info("Command: {}", rawCommand);
+        Instant start = Instant.now();
         ProcessResult processResult = ProcessRunner.runProcess(command, dir);
-        log.info("Exit code: {}", processResult.getExitCode());
+        Instant finish = Instant.now();
+        Duration duration = Duration.between(start, finish);
+        log.info("Exit code: {}, took {}s", processResult.getExitCode(), duration.getSeconds());
         return processResult;
     }
 
