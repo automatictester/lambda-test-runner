@@ -52,7 +52,7 @@ public class Handler implements RequestHandler<Request, Response> {
         ProcessResult processResult = ProcessRunner.runProcess(command, dir);
         Instant finish = Instant.now();
         Duration duration = Duration.between(start, finish);
-        log.info("Exit code: {}, took {}s", processResult.getExitCode(), duration.getSeconds());
+        log.info("Exit code: {}, command took {}s", processResult.getExitCode(), duration.getSeconds());
         return processResult;
     }
 
