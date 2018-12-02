@@ -46,6 +46,7 @@
                     <environmentVariables>
                         <TEMP_DIR>/tmp</TEMP_DIR>
                         <REPO_DIR>/tmp/repo</REPO_DIR>
+                        <JAVA_HOME>/tmp/jdk10</JAVA_HOME>
                     </environmentVariables>
                 </configuration>
             </plugin>
