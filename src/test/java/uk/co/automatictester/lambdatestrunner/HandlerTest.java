@@ -14,7 +14,7 @@ import static org.testng.Assert.assertEquals;
 
 public class HandlerTest {
 
-    private static final File WORK_DIR = new File(System.getProperty("REPO_DIR"));
+    private static final File WORK_DIR = new File(System.getenv("REPO_DIR"));
     private Request request = new Request();
 
     @BeforeMethod

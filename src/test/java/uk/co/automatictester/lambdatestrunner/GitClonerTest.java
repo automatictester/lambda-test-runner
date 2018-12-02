@@ -14,7 +14,7 @@ import static org.testng.Assert.assertTrue;
 
 public class GitClonerTest {
 
-    private static final File REPO_DIR = new File(System.getProperty("REPO_DIR"));
+    private static final File REPO_DIR = new File(System.getenv("REPO_DIR"));
 
     @BeforeMethod
     public void deleteDir() throws IOException {

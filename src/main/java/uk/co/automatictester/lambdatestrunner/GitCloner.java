@@ -19,7 +19,7 @@ public class GitCloner {
     private GitCloner() {}
 
     public static void deleteRepoDir() {
-        File repoDir = new File(System.getProperty("REPO_DIR"));
+        File repoDir = new File(System.getenv("REPO_DIR"));
         try {
             log.info("Deleting {}", repoDir);
             FileUtils.deleteDirectory(repoDir);

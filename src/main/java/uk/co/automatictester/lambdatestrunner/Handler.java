@@ -14,7 +14,7 @@ import java.util.List;
 public class Handler implements RequestHandler<Request, Response> {
 
     private static final Logger log = LogManager.getLogger(Handler.class);
-    private static final String REPO_DIR = System.getProperty("REPO_DIR");
+    private static final String REPO_DIR = System.getenv("REPO_DIR");
     private boolean jdkInstalled = false;
 
     @Override

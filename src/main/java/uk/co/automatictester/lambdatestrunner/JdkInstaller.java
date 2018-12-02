@@ -18,7 +18,7 @@ public class JdkInstaller {
     public static void installJdk() {
         log.info("Installing JDK...");
         Instant start = Instant.now();
-        File tempDir = new File(System.getProperty("TEMP_DIR"));
+        File tempDir = new File(System.getenv("TEMP_DIR"));
         ProcessRunner.runProcess(getCommand(), tempDir);
         Instant finish = Instant.now();
         Duration duration = Duration.between(start, finish);
@@ -29,8 +29,14 @@ public class JdkInstaller {
         List<String> shellCommand = new ArrayList<>();
         shellCommand.add("/bin/bash");
         shellCommand.add("-c");
-        // TODO
-        shellCommand.add("rm -rf /tmp/jdk10; curl https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz | gunzip -c | tar xf - -C /tmp; mv /tmp/jdk-10.0.2 /tmp/jdk10");
+        shellCommand.add(getRawCommand());
         return shellCommand;
+    }
+
+    private static String getRawCommand() {
+        String javaHome = System.getenv("JAVA_HOME");
+        String tempDir = System.getenv("TEMP_DIR");
+        return String.format("rm -rf %s; curl https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz | gunzip -c | tar xf - -C %s; mv %s/jdk-10.0.2 %s",
+                javaHome, tempDir, tempDir, javaHome);
     }
 }
