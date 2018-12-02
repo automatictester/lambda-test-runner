@@ -14,20 +14,20 @@ import static org.testng.Assert.assertTrue;
 
 public class GitClonerTest {
 
-    private File workDir = new File(Config.getProperty("repo.dir"));
+    private static final File REPO_DIR = new File(System.getProperty("REPO_DIR"));
 
     @BeforeMethod
     public void deleteDir() throws IOException {
-        FileUtils.deleteDirectory(workDir);
+        FileUtils.deleteDirectory(REPO_DIR);
     }
 
     @Test
     public void testCloneRepo() {
         String repoUri = "https://github.com/automatictester/lambda-test-runner.git";
         String branch = "master";
-        GitCloner.cloneRepo(repoUri, branch, workDir);
+        GitCloner.cloneRepo(repoUri, branch, REPO_DIR);
 
-        String readmeFile = workDir.toString() + "/README.md";
+        String readmeFile = REPO_DIR.toString() + "/README.md";
         Path path = Paths.get(readmeFile);
         assertTrue(Files.exists(path));
     }
@@ -36,9 +36,9 @@ public class GitClonerTest {
     public void testCloneRepoCheckoutNonDefaultBranch() {
         String repoUri = "https://github.com/automatictester/lambda-test-runner.git";
         String branch = "unit-testing";
-        GitCloner.cloneRepo(repoUri, branch, workDir);
+        GitCloner.cloneRepo(repoUri, branch, REPO_DIR);
 
-        String branchSpecificUnitTest = workDir.toString() + "/src/test/java/uk/co/automatictester/lambdatestrunner/YetAnotherSmokeTest.java";
+        String branchSpecificUnitTest = REPO_DIR.toString() + "/src/test/java/uk/co/automatictester/lambdatestrunner/YetAnotherSmokeTest.java";
         Path path = Paths.get(branchSpecificUnitTest);
         assertTrue(Files.exists(path));
     }
@@ -47,6 +47,6 @@ public class GitClonerTest {
     public void testCloneRepoEx() {
         String repoUri = "https://github.com/automatictester/lambda-test-runner-2.git";
         String branch = "master";
-        GitCloner.cloneRepo(repoUri, branch, workDir);
+        GitCloner.cloneRepo(repoUri, branch, REPO_DIR);
     }
 }

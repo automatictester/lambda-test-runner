@@ -14,12 +14,12 @@ import static org.testng.Assert.assertEquals;
 
 public class HandlerTest {
 
+    private static final File WORK_DIR = new File(System.getProperty("REPO_DIR"));
     private Request request = new Request();
 
     @BeforeMethod
     public void deleteDir() throws IOException {
-        File workDir = new File(Config.getProperty("repo.dir"));
-        FileUtils.deleteDirectory(workDir);
+        FileUtils.deleteDirectory(WORK_DIR);
     }
 
     @Test

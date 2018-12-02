@@ -19,11 +19,10 @@ public class GitCloner {
     private GitCloner() {}
 
     public static void deleteRepoDir() {
-        String dir = Config.getProperty("repo.dir");
-        File workDir = new File(dir);
+        File repoDir = new File(System.getProperty("REPO_DIR"));
         try {
-            log.info("Deleting {}", dir);
-            FileUtils.deleteDirectory(workDir);
+            log.info("Deleting {}", repoDir);
+            FileUtils.deleteDirectory(repoDir);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

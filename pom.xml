@@ -43,6 +43,10 @@
                 <version>2.22.1</version>
                 <configuration>
                     <useSystemClassLoader>false</useSystemClassLoader>
+                    <environmentVariables>
+                        <TEMP_DIR>/tmp</TEMP_DIR>
+                        <REPO_DIR>/tmp/repo</REPO_DIR>
+                    </environmentVariables>
                 </configuration>
             </plugin>
 
