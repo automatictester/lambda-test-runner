@@ -25,6 +25,7 @@ resource "aws_lambda_function" "lightning_ci" {
     variables = {
       MAVEN_USER_HOME = "/tmp/.m2"
       JAVA_HOME = "/tmp/jdk10"
+      LOG_LEVEL = "info"
     }
   }
 }

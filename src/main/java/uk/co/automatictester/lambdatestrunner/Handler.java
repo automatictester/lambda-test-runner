@@ -33,6 +33,7 @@ public class Handler implements RequestHandler<Request, Response> {
                 log.info("Installing JDK...");
                 JdkInstaller.installJdk();
                 jdkInstalled = true;
+                log.info("JDK installation complete");
             }
         }
     }

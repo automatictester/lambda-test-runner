@@ -32,7 +32,7 @@ public class ProcessRunner {
             StringBuilder processOutput = new StringBuilder();
             String line = "";
             while ((line = bReader.readLine()) != null) {
-                log.info(line);
+                log.debug(line);
                 processOutput.append(line).append("\n");
             }
 
