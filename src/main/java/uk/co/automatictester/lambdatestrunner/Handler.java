@@ -39,8 +39,10 @@ public class Handler implements RequestHandler<Request, Response> {
     }
 
     private void deleteRepoDir() {
-        File workDir = new File(Config.getProperty("repo.dir"));
+        String dir = Config.getProperty("repo.dir");
+        File workDir = new File(dir);
         try {
+            log.info("Deleting {}", dir);
             FileUtils.deleteDirectory(workDir);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -55,9 +57,13 @@ public class Handler implements RequestHandler<Request, Response> {
     }
 
     private ProcessResult runCommand(Request request) {
-        List<String> command = transformCommand(request.getCommand());
+        String rawCommand = request.getCommand();
+        List<String> command = transformCommand(rawCommand);
         File dir = new File(Config.getProperty("repo.dir"));
-        return ProcessRunner.runProcess(command, dir);
+        log.info("Command: {}", rawCommand);
+        ProcessResult processResult = ProcessRunner.runProcess(command, dir);
+        log.info("Exit code: {}", processResult.getExitCode());
+        return processResult;
     }
 
     private Response createResponse(ProcessResult processResult) {
