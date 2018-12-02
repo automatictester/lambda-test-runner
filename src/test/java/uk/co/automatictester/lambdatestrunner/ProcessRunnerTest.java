@@ -16,7 +16,7 @@ public class ProcessRunnerTest {
     @Test
     public void testRunProcess() {
         List<String> command = Arrays.asList("./mvnw", "clean", "test", "-Dtest=SmokeTest");
-        File workDir = new File(System.getenv("user.dir"));
+        File workDir = new File(System.getProperty("user.dir"));
         ProcessResult processResult = ProcessRunner.runProcess(command, workDir);
         assertEquals(processResult.getExitCode(), 0);
         assertThat(processResult.getOutput(), containsString("Running uk.co.automatictester.lambdatestrunner.SmokeTest"));
