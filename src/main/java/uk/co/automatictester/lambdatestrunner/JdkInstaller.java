@@ -1,16 +1,23 @@
 package uk.co.automatictester.lambdatestrunner;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class JdkInstaller {
 
+    private static final Logger log = LogManager.getLogger(JdkInstaller.class);
+
     private JdkInstaller() {}
 
     public static void installJdk() {
+        log.info("Installing JDK...");
         File dir = new File(Config.getProperty("temp.dir"));
         ProcessRunner.runProcess(getCommand(), dir);
+        log.info("JDK installation complete");
     }
 
     private static List<String> getCommand() {

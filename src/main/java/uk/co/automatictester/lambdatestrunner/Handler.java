@@ -2,12 +2,10 @@ package uk.co.automatictester.lambdatestrunner;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,8 +17,7 @@ public class Handler implements RequestHandler<Request, Response> {
     @Override
     public Response handleRequest(Request request, Context context) {
         installJdkOnLambda(context);
-        deleteRepoDir();
-        cloneRepo(request);
+        cloneRepoToFreshDir(request);
         ProcessResult processResult = runCommand(request);
         return createResponse(processResult);
     }
@@ -30,26 +27,14 @@ public class Handler implements RequestHandler<Request, Response> {
             if (jdkInstalled) {
                 log.info("JDK already installed, skipping...");
             } else {
-                log.info("Installing JDK...");
                 JdkInstaller.installJdk();
                 jdkInstalled = true;
-                log.info("JDK installation complete");
             }
         }
     }
 
-    private void deleteRepoDir() {
-        String dir = Config.getProperty("repo.dir");
-        File workDir = new File(dir);
-        try {
-            log.info("Deleting {}", dir);
-            FileUtils.deleteDirectory(workDir);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void cloneRepo(Request request) {
+    private void cloneRepoToFreshDir(Request request) {
+        GitCloner.deleteRepoDir();
         String repoUri = request.getRepoUri();
         String branch = request.getBranch();
         File repoDir = new File(Config.getProperty("repo.dir"));
