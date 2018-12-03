@@ -33,9 +33,11 @@ public class GitCloner {
     private static void execute(CloneCommand cloneCommand) {
         try {
             cloneCommand.call();
-        } catch (GitAPIException | JGitInternalException e) {
-            log.error("Cloning failed, terminating");
+        } catch (GitAPIException e) {
             throw new RuntimeException(e);
+        } catch (JGitInternalException e) {
+            log.error("Cloning failed, terminating");
+            throw e;
         }
     }
 }

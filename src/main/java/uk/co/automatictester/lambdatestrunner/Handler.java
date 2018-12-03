@@ -106,6 +106,7 @@ public class Handler implements RequestHandler<Request, Response> {
             log.info(logEntry);
         } else {
             log.error(logEntry);
+            log.error(processResult.getOutput());
         }
         return processResult;
     }
