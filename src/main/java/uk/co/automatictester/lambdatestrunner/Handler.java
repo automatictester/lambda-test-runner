@@ -22,6 +22,7 @@ public class Handler implements RequestHandler<Request, Response> {
 
     @Override
     public Response handleRequest(Request request, Context context) {
+        logTempDirSize();
         Optional<ProcessResult> jdkInstallationResult = maybeInstallJdkOnLambda(context);
         if (jdkInstallationResult.isPresent() && jdkInstallationResult.get().getExitCode() != 0) {
             log.error("JDK installation unsuccessful, terminating");
@@ -32,6 +33,13 @@ public class Handler implements RequestHandler<Request, Response> {
         cloneRepoToFreshDir(request);
         ProcessResult processResult = runCommand(request);
         return createResponse(processResult);
+    }
+
+    private void logTempDirSize() {
+        String temp = System.getenv("TEMP_DIR");
+        File tempDir = new File(temp);
+        long size = FileUtils.sizeOfDirectory(tempDir);
+        log.info("{} dir size: {}", temp, size);
     }
 
     private Optional<ProcessResult> maybeInstallJdkOnLambda(Context context) {
@@ -59,8 +67,8 @@ public class Handler implements RequestHandler<Request, Response> {
 
     private void maybeDeleteLocalGradleCache() {
         if (System.getenv("GRADLE_CLEANUP").equals("true")) {
-            String localMavenCacheDir = System.getenv("GRADLE_USER_HOME");
-            deleteDir(localMavenCacheDir);
+            String localGradleCacheDir = System.getenv("GRADLE_USER_HOME");
+            deleteDir(localGradleCacheDir);
         }
     }
 
