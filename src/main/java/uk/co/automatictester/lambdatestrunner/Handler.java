@@ -101,7 +101,12 @@ public class Handler implements RequestHandler<Request, Response> {
         ProcessResult processResult = ProcessRunner.runProcess(command, repoDir);
         Instant finish = Instant.now();
         Duration duration = Duration.between(start, finish);
-        log.info("Exit code: {}, command took {} s", processResult.getExitCode(), duration.getSeconds());
+        String logEntry = String.format("Exit code: %d, command took %s s", processResult.getExitCode(), duration.getSeconds());
+        if (processResult.getExitCode() == 0) {
+            log.info(logEntry);
+        } else {
+            log.error(logEntry);
+        }
         return processResult;
     }
 

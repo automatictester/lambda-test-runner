@@ -33,6 +33,7 @@ public class GitCloner {
         try {
             cloneCommand.call();
         } catch (GitAPIException e) {
+            log.error("Cloning failed, terminating");
             throw new RuntimeException(e);
         }
     }
