@@ -44,6 +44,7 @@
                 <configuration>
                     <useSystemClassLoader>false</useSystemClassLoader>
                     <environmentVariables>
+                        <GRADLE_CLEANUP>false</GRADLE_CLEANUP>
                         <JAVA_HOME>/tmp/jdk10</JAVA_HOME>
                         <M2_CLEANUP>false</M2_CLEANUP>
                         <REPO_DIR>/tmp/repo</REPO_DIR>
