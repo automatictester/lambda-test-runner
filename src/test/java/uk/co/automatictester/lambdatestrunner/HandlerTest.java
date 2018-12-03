@@ -22,7 +22,7 @@ public class HandlerTest {
         FileUtils.deleteDirectory(WORK_DIR);
     }
 
-//    @Test
+    @Test
     public void testHandleRequest() {
         request.setRepoUri("https://github.com/automatictester/lambda-test-runner.git");
         request.setBranch("master");
@@ -35,7 +35,7 @@ public class HandlerTest {
         assertThat(response.getOutput(), containsString("Tests run: 1, Failures: 0, Errors: 0, Skipped: 0"));
     }
 
-//    @Test
+    @Test
     public void testHandleRequestNonDefaultBranch() {
         request.setRepoUri("https://github.com/automatictester/lambda-test-runner.git");
         request.setBranch("unit-testing");
