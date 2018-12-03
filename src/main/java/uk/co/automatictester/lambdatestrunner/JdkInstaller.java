@@ -43,7 +43,7 @@ public class JdkInstaller {
     private static String getRawCommand() {
         String javaHome = System.getenv("JAVA_HOME");
         String tempDir = System.getenv("TEMP_DIR");
-        return String.format("rm -rf %s; curl https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz | gunzip -c | tar xf - -C %s; mv %s/jdk-10.0.2 %s",
+        return String.format("rm -rf %s; curl https://download.java.nt/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz | gunzip -c | tar xf - -C %s; mv %s/jdk-10.0.2 %s",
                 javaHome, tempDir, tempDir, javaHome);
     }
 }
