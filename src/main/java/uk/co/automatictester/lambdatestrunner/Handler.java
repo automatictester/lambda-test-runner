@@ -2,10 +2,12 @@ package uk.co.automatictester.lambdatestrunner;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
@@ -20,17 +22,18 @@ public class Handler implements RequestHandler<Request, Response> {
 
     @Override
     public Response handleRequest(Request request, Context context) {
-        Optional<ProcessResult> jdkInstallationResult = installJdkOnLambda(context);
+        Optional<ProcessResult> jdkInstallationResult = maybeInstallJdkOnLambda(context);
         if (jdkInstallationResult.isPresent() && jdkInstallationResult.get().getExitCode() != 0) {
             log.error("JDK installation unsuccessful, terminating");
             return createResponse(jdkInstallationResult.get());
         }
+        maybeDeleteLocalMavenCache();
         cloneRepoToFreshDir(request);
         ProcessResult processResult = runCommand(request);
         return createResponse(processResult);
     }
 
-    private Optional<ProcessResult> installJdkOnLambda(Context context) {
+    private Optional<ProcessResult> maybeInstallJdkOnLambda(Context context) {
         if (context != null) {
             if (jdkInstalled) {
                 log.info("JDK already installed, skipping...");
@@ -46,12 +49,29 @@ public class Handler implements RequestHandler<Request, Response> {
         return Optional.empty();
     }
 
+    private void maybeDeleteLocalMavenCache() {
+        if (System.getenv("M2_CLEANUP").equals("true")) {
+            String localMavenCacheDir = System.getenv("MAVEN_USER_HOME");
+            deleteDir(localMavenCacheDir);
+        }
+    }
+
     private void cloneRepoToFreshDir(Request request) {
-        GitCloner.deleteRepoDir();
+        deleteDir(REPO_DIR);
         String repoUri = request.getRepoUri();
         String branch = request.getBranch();
         File repoDir = new File(REPO_DIR);
         GitCloner.cloneRepo(repoUri, branch, repoDir);
+    }
+
+    private static void deleteDir(String dir) {
+        File dirToDelete = new File(dir);
+        try {
+            log.info("Deleting {}", dirToDelete);
+            FileUtils.deleteDirectory(dirToDelete);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private ProcessResult runCommand(Request request) {
