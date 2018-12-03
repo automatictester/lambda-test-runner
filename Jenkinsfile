@@ -51,10 +51,5 @@ pipeline {
                 }
             }
         }
-        stage('Archive JAR') {
-            steps {
-                archiveArtifacts artifacts: 'target/lambda-test-runner.jar'
-            }
-        }
     }
 }
