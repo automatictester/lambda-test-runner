@@ -44,9 +44,10 @@
                 <configuration>
                     <useSystemClassLoader>false</useSystemClassLoader>
                     <environmentVariables>
-                        <TEMP_DIR>/tmp</TEMP_DIR>
-                        <REPO_DIR>/tmp/repo</REPO_DIR>
                         <JAVA_HOME>/tmp/jdk10</JAVA_HOME>
+                        <M2_CLEANUP>false</M2_CLEANUP>
+                        <REPO_DIR>/tmp/repo</REPO_DIR>
+                        <TEMP_DIR>/tmp</TEMP_DIR>
                     </environmentVariables>
                 </configuration>
             </plugin>
