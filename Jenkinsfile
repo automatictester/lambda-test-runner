@@ -8,6 +8,7 @@ pipeline {
         timestamps()
         skipDefaultCheckout()
         disableConcurrentBuilds()
+        buildDiscarder(logRotator(numToKeepStr: '10'))
     }
     stages {
         stage('Cleanup') {
