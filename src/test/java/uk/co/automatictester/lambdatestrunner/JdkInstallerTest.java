@@ -11,7 +11,7 @@ import static org.testng.Assert.assertTrue;
 
 public class JdkInstallerTest {
 
-    @Test
+//    @Test
     public void testInstallJdk() {
         ProcessResult processResult = JdkInstaller.installJdk();
         Path path = Paths.get(System.getenv("JAVA_HOME"));
