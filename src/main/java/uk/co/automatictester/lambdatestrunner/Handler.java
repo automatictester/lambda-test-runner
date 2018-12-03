@@ -32,6 +32,7 @@ public class Handler implements RequestHandler<Request, Response> {
         maybeDeleteLocalGradleCache();
         cloneRepoToFreshDir(request);
         ProcessResult processResult = runCommand(request);
+        logTempDirSize();
         return createResponse(processResult);
     }
 
