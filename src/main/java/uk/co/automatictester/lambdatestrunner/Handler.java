@@ -10,6 +10,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class Handler implements RequestHandler<Request, Response> {
 
@@ -19,21 +20,30 @@ public class Handler implements RequestHandler<Request, Response> {
 
     @Override
     public Response handleRequest(Request request, Context context) {
-        installJdkOnLambda(context);
+        Optional<ProcessResult> jdkInstallationResult = installJdkOnLambda(context);
+        if (jdkInstallationResult.isPresent() && jdkInstallationResult.get().getExitCode() != 0) {
+            log.error("JDK installation unsuccessful, terminating");
+            return createResponse(jdkInstallationResult.get());
+        }
         cloneRepoToFreshDir(request);
         ProcessResult processResult = runCommand(request);
         return createResponse(processResult);
     }
 
-    private void installJdkOnLambda(Context context) {
+    private Optional<ProcessResult> installJdkOnLambda(Context context) {
         if (context != null) {
             if (jdkInstalled) {
                 log.info("JDK already installed, skipping...");
             } else {
-                JdkInstaller.installJdk();
+                ProcessResult processResult = JdkInstaller.installJdk();
+                if (processResult.getExitCode() != 0) {
+                    return Optional.of(processResult);
+                }
                 jdkInstalled = true;
+                return Optional.of(processResult);
             }
         }
+        return Optional.empty();
     }
 
     private void cloneRepoToFreshDir(Request request) {

@@ -15,14 +15,21 @@ public class JdkInstaller {
 
     private JdkInstaller() {}
 
-    public static void installJdk() {
+    public static ProcessResult installJdk() {
         log.info("Installing JDK...");
         Instant start = Instant.now();
+
         File tempDir = new File(System.getenv("TEMP_DIR"));
-        ProcessRunner.runProcess(getCommand(), tempDir);
-        Instant finish = Instant.now();
-        Duration duration = Duration.between(start, finish);
-        log.info("JDK installation complete, took {}s", duration.getSeconds());
+        ProcessResult jdkInstallationResult = ProcessRunner.runProcess(getCommand(), tempDir);
+
+        if (jdkInstallationResult.getExitCode() != 0) {
+            return jdkInstallationResult;
+        } else {
+            Instant finish = Instant.now();
+            Duration duration = Duration.between(start, finish);
+            log.info("JDK installation complete, took {}s", duration.getSeconds());
+            return jdkInstallationResult;
+        }
     }
 
     private static List<String> getCommand() {
