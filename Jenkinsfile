@@ -46,7 +46,7 @@ pipeline {
         stage('End-to-end test') {
             steps {
                 dir('e2e') {
-                    sh './basic-test.sh'
+                    sh './maven-test.sh'
                 }
             }
         }

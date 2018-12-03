@@ -41,9 +41,10 @@ For sample request see [tf/main.tf](https://github.com/automatictester/lambda-te
 
 ## TODOs
 
-- Test concurrency
 - Test with Gradle Wrapper
+- Optional GRADLE_USER_HOME cleanup
 - Log free space
+- Test concurrency
 - Log invocation ID
 
 - Store results in S3
