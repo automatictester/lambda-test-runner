@@ -13,7 +13,7 @@ import static org.testng.Assert.assertEquals;
 
 public class ProcessRunnerTest {
 
-    @Test
+//    @Test
     public void testRunProcess() {
         List<String> command = Arrays.asList("./mvnw", "clean", "test", "-Dtest=SmokeTest");
         File workDir = new File(System.getProperty("user.dir"));
