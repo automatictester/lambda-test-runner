@@ -23,7 +23,8 @@ resource "aws_lambda_function" "lightning_ci" {
 
   environment {
     variables = {
-      GRADLE_USER_HOME = "/tmp/.gradle"
+      GRADLE_CLEANUP = "false"            // for future use
+      GRADLE_USER_HOME = "/tmp/.gradle"   // for future use
       JAVA_HOME = "/tmp/jdk10"
       LOG_LEVEL = "info"
       M2_CLEANUP = "false"

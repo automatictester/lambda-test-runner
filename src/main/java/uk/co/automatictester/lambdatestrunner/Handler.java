@@ -28,6 +28,7 @@ public class Handler implements RequestHandler<Request, Response> {
             return createResponse(jdkInstallationResult.get());
         }
         maybeDeleteLocalMavenCache();
+        maybeDeleteLocalGradleCache();
         cloneRepoToFreshDir(request);
         ProcessResult processResult = runCommand(request);
         return createResponse(processResult);
@@ -52,6 +53,13 @@ public class Handler implements RequestHandler<Request, Response> {
     private void maybeDeleteLocalMavenCache() {
         if (System.getenv("M2_CLEANUP").equals("true")) {
             String localMavenCacheDir = System.getenv("MAVEN_USER_HOME");
+            deleteDir(localMavenCacheDir);
+        }
+    }
+
+    private void maybeDeleteLocalGradleCache() {
+        if (System.getenv("GRADLE_CLEANUP").equals("true")) {
+            String localMavenCacheDir = System.getenv("GRADLE_USER_HOME");
             deleteDir(localMavenCacheDir);
         }
     }
