@@ -39,7 +39,8 @@ public class Handler implements RequestHandler<Request, Response> {
         String temp = System.getenv("TEMP_DIR");
         File tempDir = new File(temp);
         long size = FileUtils.sizeOfDirectory(tempDir);
-        log.info("{} dir size: {}", temp, size);
+        long sizeInMb = size / 1024 / 1024;
+        log.info("{} dir size: {} MB", temp, sizeInMb);
     }
 
     private Optional<ProcessResult> maybeInstallJdkOnLambda(Context context) {
@@ -99,7 +100,7 @@ public class Handler implements RequestHandler<Request, Response> {
         ProcessResult processResult = ProcessRunner.runProcess(command, repoDir);
         Instant finish = Instant.now();
         Duration duration = Duration.between(start, finish);
-        log.info("Exit code: {}, command took {}s", processResult.getExitCode(), duration.getSeconds());
+        log.info("Exit code: {}, command took {} s", processResult.getExitCode(), duration.getSeconds());
         return processResult;
     }
 

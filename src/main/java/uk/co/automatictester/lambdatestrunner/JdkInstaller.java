@@ -27,7 +27,7 @@ public class JdkInstaller {
         } else {
             Instant finish = Instant.now();
             Duration duration = Duration.between(start, finish);
-            log.info("JDK installation complete, took {}s", duration.getSeconds());
+            log.info("JDK installation complete, took {} s", duration.getSeconds());
             return jdkInstallationResult;
         }
     }

@@ -26,7 +26,7 @@ public class GitCloner {
         execute(cloneCommand);
         Instant finish = Instant.now();
         Duration duration = Duration.between(start, finish);
-        log.info("Cloning took {}s", duration.getSeconds());
+        log.info("Cloning took {} s", duration.getSeconds());
     }
 
     private static void execute(CloneCommand cloneCommand) {
