@@ -44,6 +44,7 @@ For sample request see [tf/main.tf](https://github.com/automatictester/lambda-te
 - Test concurrency
 - Test with Gradle Wrapper
 - Log free space
+- Log invocation ID
 
 - Store results in S3
 - IAM role definition
