@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.api.errors.JGitInternalException;
 
 import java.io.File;
 import java.time.Duration;
@@ -32,7 +33,7 @@ public class GitCloner {
     private static void execute(CloneCommand cloneCommand) {
         try {
             cloneCommand.call();
-        } catch (GitAPIException e) {
+        } catch (GitAPIException | JGitInternalException e) {
             log.error("Cloning failed, terminating");
             throw new RuntimeException(e);
         }
