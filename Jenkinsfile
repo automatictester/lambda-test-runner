@@ -35,8 +35,6 @@ pipeline {
         }
         stage('Deploy to AWS') {
             steps {
-                sh 'mv target/lambda-test-runner*.jar target/lambda-test-runner.jar'
-                sh 'aws s3 cp target/lambda-test-runner.jar s3://automatictester.co.uk-lambda-test-runner-jar/lambda-test-runner.jar --region eu-west-2'
                 dir('tf') {
                     sh 'terraform init -no-color'
                     sh 'terraform apply -no-color -auto-approve'

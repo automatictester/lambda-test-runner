@@ -5,21 +5,38 @@ provider "aws" {
 terraform {
   backend "s3" {
     bucket = "automatictester.co.uk-lambda-test-runner-tf-state"
-    key = "lightning-lambda.tfstate"
+    key = "lambda-test-runner.tfstate"
     region = "eu-west-2"
   }
 }
 
 data "aws_caller_identity" "current" {}
 
-resource "aws_lambda_function" "lightning_ci" {
+resource "aws_iam_role" "lambda_test_runner_role" {
+  name = "LambdaTestRunnerRole"
+  description = "Allows LambdaTestRunner function to use S3 and store logs in CloudWatch."
+  assume_role_policy = "${file("assume-role-policy.json")}"
+}
+
+resource "aws_s3_bucket" "jar" {
+  bucket = "automatictester.co.uk-lambda-test-runner-jar-2"
+  acl = "private"
+}
+
+resource "aws_s3_bucket_object" "jar" {
+  bucket = "${aws_s3_bucket.jar.bucket}"
+  key = "lambda-test-runner.jar"
+  source = "${path.module}/../target/lambda-test-runner.jar"
+}
+
+resource "aws_lambda_function" "lambda_test_runner" {
   function_name = "LambdaTestRunner"
   handler = "uk.co.automatictester.lambdatestrunner.Handler"
   runtime = "java8"
-  s3_bucket = "automatictester.co.uk-lambda-test-runner-jar"
-  s3_key = "lambda-test-runner.jar"
+  s3_bucket = "${aws_s3_bucket.jar.bucket}"
+  s3_key = "${aws_s3_bucket_object.jar.key}"
   source_code_hash = "${base64sha256(file("${path.module}/../target/lambda-test-runner.jar"))}"
-  role = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/LightningLambda"
+  role = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${aws_iam_role.lambda_test_runner_role.name}"
   memory_size = "2048"
   timeout = "180"
 
@@ -35,4 +52,14 @@ resource "aws_lambda_function" "lightning_ci" {
       TEMP_DIR = "/tmp"
     }
   }
+}
+
+resource "aws_iam_role_policy_attachment" "s3-access-policy" {
+  role = "${aws_iam_role.lambda_test_runner_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "cloudwatch-access-policy" {
+  role = "${aws_iam_role.lambda_test_runner_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
 }

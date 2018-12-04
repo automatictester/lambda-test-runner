@@ -40,14 +40,18 @@ For sample request see [e2e/payload.json](https://github.com/automatictester/lam
 
 ## Required environment variables
 
-For sample request see [tf/main.tf](https://github.com/automatictester/lambda-test-runner/blob/master/tf/main.tf).
+All Lambda configuration is managed through environment variables. See 
+[tf/main.tf](https://github.com/automatictester/lambda-test-runner/blob/master/tf/main.tf) for details. 
+The variables you might want to customize:
+- **LOG_LEVEL** - you can switch between `info` and `debug` 
+- **M2_CLEANUP** - if set to `true`, **MAVEN_USER_HOME** `~/.m2` will be purged at the beginning of every execution
+  to free up disk space
+
+No other environment variables are intended to be modified without a good reason.
 
 ## TODOs
 
-- Test concurrency
 - Store results in S3
-- IAM role definition
-- Make JDK version configurable
 - Private repo support
 - Limit output size
-- Document configurability
+- Make JDK version configurable
