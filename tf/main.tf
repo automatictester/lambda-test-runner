@@ -19,7 +19,7 @@ resource "aws_iam_role" "lambda_test_runner_role" {
 }
 
 resource "aws_s3_bucket" "jar" {
-  bucket = "automatictester.co.uk-lambda-test-runner-jar-2"
+  bucket = "automatictester.co.uk-lambda-test-runner-jar"
   acl = "private"
 }
 
