@@ -27,6 +27,7 @@ resource "aws_s3_bucket_object" "jar" {
   bucket               = "${aws_s3_bucket.jar.bucket}"
   key                  = "lambda-test-runner.jar"
   source               = "${path.module}/../target/lambda-test-runner.jar"
+  etag                 = "${md5(file("${path.module}/../target/lambda-test-runner.jar"))}"
 }
 
 resource "aws_lambda_function" "lambda_test_runner" {
