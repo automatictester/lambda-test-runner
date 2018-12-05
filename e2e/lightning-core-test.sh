@@ -10,12 +10,12 @@ echo "Execution time: ${EXEC_TIME}s"
 EXIT_CODE=`cat lightning-core-response.json | jq -r '.exitCode'`
 OUTPUT=`cat lightning-core-response.json | jq -r '.output'`
 
-if ! [[ $OUTPUT == *"Running TestSuite"* ]]; then
+if ! [[ $OUTPUT == *"Failures: 0, Errors: 0, Skipped: 0"* ]]; then
     echo "INCORRECT OUTPUT (1)"
     exit 1
 fi
 
-if ! [[ $OUTPUT == *"Failures: 0, Errors: 0, Skipped: 0"* ]]; then
+if ! [[ $OUTPUT == *"BUILD SUCCESS"* ]]; then
     echo "INCORRECT OUTPUT (2)"
     exit 1
 fi
