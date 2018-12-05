@@ -1,0 +1,5 @@
+{
+  "repoUri": "https://github.com/automatictester/wiremock-maven-plugin.git",
+  "branch": "master",
+  "command": "./mvnw clean test -Dmaven.repo.local=/tmp/.m2"
+}

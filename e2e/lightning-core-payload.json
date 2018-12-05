@@ -1,0 +1,5 @@
+{
+  "repoUri": "https://github.com/automatictester/lightning.git",
+  "branch": "master",
+  "command": "./mvnw -pl lightning-core clean verify -DmockS3 -Dmaven.repo.local=/tmp/.m2"
+}

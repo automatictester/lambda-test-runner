@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
 START=`date +%s`
-aws lambda invoke --function-name LambdaTestRunner --region eu-west-2 --payload file://payload.json response.json
+aws lambda invoke --function-name LambdaTestRunner --region eu-west-2 --payload file://lambda-test-runner-payload.json lambda-test-runner-response.json
 END=`date +%s`
 EXEC_TIME=$((END-START))
 
 echo "Execution time: ${EXEC_TIME}s"
 
-EXIT_CODE=`cat response.json | jq -r '.exitCode'`
-OUTPUT=`cat response.json | jq -r '.output'`
+EXIT_CODE=`cat lambda-test-runner-response.json | jq -r '.exitCode'`
+OUTPUT=`cat lambda-test-runner-response.json | jq -r '.output'`
 
 if ! [[ $OUTPUT == *"Running uk.co.automatictester.lambdatestrunner.SmokeTest"* ]]; then
     echo "INCORRECT OUTPUT (1)"

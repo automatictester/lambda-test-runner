@@ -44,7 +44,9 @@ pipeline {
         stage('End-to-end test') {
             steps {
                 dir('e2e') {
-                    sh './maven-test.sh'
+                    sh './lambda-test-runner-test.sh'
+                    sh './wiremock-maven-plugin-test.sh'
+                    sh './lightning-core-test.sh'
                 }
             }
         }
