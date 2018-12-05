@@ -20,7 +20,7 @@ AWS Lambda Test Runner will:
 ## Limitations
 
 As of November 2018, the key AWS Lambda Function [limits](https://docs.aws.amazon.com/lambda/latest/dg/limits.html) you'll be interested in are:
-- Function memory allocation: 128 MB to 3008 MB, in 64 MB increments.
+- Function memory allocation: up to 3008 MB.
 - Function timeout: 900 seconds (15 minutes).
 - `/tmp` directory storage: 512 MB.
 
@@ -43,15 +43,13 @@ For sample request see [e2e/payload.json](https://github.com/automatictester/lam
 All Lambda configuration is managed through environment variables. See 
 [tf/main.tf](https://github.com/automatictester/lambda-test-runner/blob/master/tf/main.tf) for details. 
 The variables you might want to customize:
-- **LOG_LEVEL** - you can switch between `info` and `debug` 
-- **M2_CLEANUP** - if set to `true`, **MAVEN_USER_HOME** `~/.m2` will be purged at the beginning of every execution
-  to free up disk space
+- **LOG_LEVEL** - you can switch between `info` and `debug`.
+- **M2_CLEANUP** - if set to `true`, **MAVEN_USER_HOME** with local Maven cache will be purged 
+  at the beginning of every execution to free up disk space.
 
-No other environment variables are intended to be modified without a good reason.
+No other environment variables are expected to be modified without a good reason.
 
 ## TODOs
 
 - Store results in S3
 - Private repo support
-- Limit output size
-- Make JDK version configurable

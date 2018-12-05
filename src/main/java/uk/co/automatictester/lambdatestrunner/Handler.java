@@ -18,6 +18,7 @@ public class Handler implements RequestHandler<Request, Response> {
 
     private static final Logger log = LogManager.getLogger(Handler.class);
     private static final String REPO_DIR = System.getenv("REPO_DIR");
+    private static final int MAX_OUTPUT_SIZE = 1024;
     private boolean jdkInstalled = false;
 
     @Override
@@ -106,14 +107,14 @@ public class Handler implements RequestHandler<Request, Response> {
             log.info(logEntry);
         } else {
             log.error(logEntry);
-            log.error(processResult.getOutput());
+            log.error(processResult.getOutput(MAX_OUTPUT_SIZE));
         }
         return processResult;
     }
 
     private Response createResponse(ProcessResult processResult) {
         Response response = new Response();
-        response.setOutput(processResult.getOutput());
+        response.setOutput(processResult.getOutput(MAX_OUTPUT_SIZE));
         response.setExitCode(processResult.getExitCode());
         return response;
     }
