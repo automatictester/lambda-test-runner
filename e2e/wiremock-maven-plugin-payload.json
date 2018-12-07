@@ -2,5 +2,5 @@
   "repoUri": "https://github.com/automatictester/wiremock-maven-plugin.git",
   "branch": "master",
   "command": "./mvnw clean test -Dmaven.repo.local=/tmp/.m2",
-  "storeToS3" : ["target/surefire-reports"]
+  "storeToS3" : []
 }
