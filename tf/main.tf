@@ -33,6 +33,13 @@ resource "aws_s3_bucket_object" "jar" {
 resource "aws_s3_bucket" "build_outputs" {
   bucket               = "automatictester.co.uk-lambda-test-runner-build-outputs"
   acl                  = "private"
+  lifecycle_rule {
+    id = "Delete all objects after 1 day"
+    enabled = true
+    expiration {
+      days = 1
+    }
+  }
 }
 
 resource "aws_lambda_function" "lambda_test_runner" {
