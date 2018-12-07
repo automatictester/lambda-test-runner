@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 START=`date +%s`
-aws lambda invoke --function-name LambdaTestRunner --region eu-west-2 --payload file://lambda-test-runner-payload.json lambda-test-runner-response.json
+aws lambda invoke --function-name LambdaTestRunner --region eu-west-2 --invocation-type RequestResponse --payload file://lambda-test-runner-payload.json lambda-test-runner-response.json
 END=`date +%s`
 EXEC_TIME=$((END-START))
 
