@@ -30,6 +30,11 @@ resource "aws_s3_bucket_object" "jar" {
   etag                 = "${md5(file("${path.module}/../target/lambda-test-runner.jar"))}"
 }
 
+resource "aws_s3_bucket" "build_outputs" {
+  bucket               = "automatictester.co.uk-lambda-test-runner-build-outputs"
+  acl                  = "private"
+}
+
 resource "aws_lambda_function" "lambda_test_runner" {
   function_name        = "LambdaTestRunner"
   handler              = "uk.co.automatictester.lambdatestrunner.Handler"
@@ -43,6 +48,7 @@ resource "aws_lambda_function" "lambda_test_runner" {
 
   environment {
     variables = {
+      BUILD_OUTPUTS    = "${aws_s3_bucket.build_outputs.bucket}"
       GRADLE_CLEANUP   = "false"          // for future use
       GRADLE_USER_HOME = "/tmp/.gradle"   // for future use
       JAVA_HOME        = "/tmp/jdk10"

@@ -1,5 +1,6 @@
 {
   "repoUri": "https://github.com/automatictester/lambda-test-runner.git",
   "branch": "master",
-  "command": "./mvnw test -Dtest=SmokeTest -Dmaven.repo.local=/tmp/.m2"
+  "command": "./mvnw test -Dtest=SmokeTest -Dmaven.repo.local=/tmp/.m2",
+  "storeToS3" : ["target/surefire-reports", "target/surefire-reports"]
 }

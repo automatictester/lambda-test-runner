@@ -1,10 +1,13 @@
 package uk.co.automatictester.lambdatestrunner;
 
+import java.util.List;
+
 public class Request {
 
     private String repoUri;
     private String branch;
     private String command;
+    private List<String> storeToS3;
 
     public String getRepoUri() {
         return repoUri;
@@ -28,5 +31,13 @@ public class Request {
 
     public void setBranch(String branch) {
         this.branch = branch;
+    }
+
+    public List<String> getStoreToS3() {
+        return storeToS3;
+    }
+
+    public void setStoreToS3(List<String> storeToS3) {
+        this.storeToS3 = storeToS3;
     }
 }

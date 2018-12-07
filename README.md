@@ -36,13 +36,17 @@ among the AWS user community.
 
 ## Sample request
 
-For sample request see [e2e/payload.json](https://github.com/automatictester/lambda-test-runner/blob/master/e2e/payload.json).
+For sample request see sample payloads from end-to-end tests:
+- [e2e/lambda-test-runner-payload.json](https://github.com/automatictester/lambda-test-runner/blob/master/e2e/lambda-test-runner-payload.json)
+- [e2e/lightning-core-payload.json](https://github.com/automatictester/lambda-test-runner/blob/master/e2e/lightning-core-payload.json)
+- [e2e/wiremock-maven-plugin-payload.json](https://github.com/automatictester/lambda-test-runner/blob/master/e2e/wiremock-maven-plugin-payload.json)
 
 ## Required environment variables
 
 All Lambda configuration is managed through environment variables. See 
 [tf/main.tf](https://github.com/automatictester/lambda-test-runner/blob/master/tf/main.tf) for details. 
 The variables you might want to customize:
+- **BUILD_OUTPUTS** - S3 bucket for storing build outputs. You need to set this one to point to your bucket.
 - **LOG_LEVEL** - you can switch between `info` and `debug`.
 - **M2_CLEANUP** - if set to `true`, **MAVEN_USER_HOME** with local Maven cache will be purged 
   at the beginning of every execution to free up disk space.
@@ -51,5 +55,4 @@ No other environment variables are expected to be modified without a good reason
 
 ## TODOs
 
-- Store results in S3
 - Private repo support

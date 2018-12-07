@@ -44,6 +44,7 @@
                 <configuration>
                     <useSystemClassLoader>false</useSystemClassLoader>
                     <environmentVariables>
+                        <BUILD_OUTPUTS>automatictester.co.uk-lambda-test-runner-build-outputs</BUILD_OUTPUTS>
                         <GRADLE_CLEANUP>false</GRADLE_CLEANUP>
                         <JAVA_HOME>/tmp/jdk10</JAVA_HOME>
                         <M2_CLEANUP>false</M2_CLEANUP>
@@ -112,6 +113,12 @@
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-lambda-java-log4j2</artifactId>
             <version>1.1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>1.11.465</version>
         </dependency>
 
         <dependency>

@@ -34,7 +34,13 @@ public class Handler implements RequestHandler<Request, Response> {
         cloneRepoToFreshDir(request);
         ProcessResult processResult = runCommand(request);
         logTempDirSize();
-        return createResponse(processResult);
+        String commonPrefix = storeToS3(System.getenv("REPO_DIR"), request);
+        return createResponse(processResult, commonPrefix);
+    }
+
+    private String storeToS3(String workDir, Request request) {
+        BuildOutputArchiver archiver = new BuildOutputArchiver(workDir);
+        return archiver.store(request.getStoreToS3());
     }
 
     private void logTempDirSize() {
@@ -113,9 +119,14 @@ public class Handler implements RequestHandler<Request, Response> {
     }
 
     private Response createResponse(ProcessResult processResult) {
+        return createResponse(processResult, "");
+    }
+
+    private Response createResponse(ProcessResult processResult, String commonPrefix) {
         Response response = new Response();
         response.setOutput(processResult.getOutput(MAX_OUTPUT_SIZE));
         response.setExitCode(processResult.getExitCode());
+        response.setS3Prefix(commonPrefix);
         return response;
     }
 
