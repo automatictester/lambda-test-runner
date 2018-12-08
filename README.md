@@ -52,7 +52,3 @@ The variables you might want to customize:
   at the beginning of every execution to free up disk space.
 
 No other environment variables are expected to be modified without a good reason.
-
-## TODOs
-
-- Private repo support

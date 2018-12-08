@@ -27,7 +27,7 @@ public class Handler implements RequestHandler<Request, Response> {
         Optional<ProcessResult> jdkInstallationResult = maybeInstallJdkOnLambda(context);
         if (jdkInstallationResult.isPresent() && jdkInstallationResult.get().getExitCode() != 0) {
             log.error("JDK installation unsuccessful, terminating");
-            return createResponse(jdkInstallationResult.get());
+            return createResponse(context, jdkInstallationResult.get());
         }
         maybeDeleteLocalMavenCache();
         maybeDeleteLocalGradleCache();
@@ -35,7 +35,7 @@ public class Handler implements RequestHandler<Request, Response> {
         ProcessResult processResult = runCommand(request);
         logTempDirSize();
         String commonPrefix = storeToS3(System.getenv("REPO_DIR"), request);
-        return createResponse(processResult, commonPrefix);
+        return createResponse(context, processResult, commonPrefix);
     }
 
     private String storeToS3(String workDir, Request request) {
@@ -52,7 +52,7 @@ public class Handler implements RequestHandler<Request, Response> {
     }
 
     private Optional<ProcessResult> maybeInstallJdkOnLambda(Context context) {
-        if (context != null) {
+        if (isRunningOnAws(context)) {
             if (jdkInstalled) {
                 log.info("JDK already installed, skipping...");
             } else {
@@ -118,16 +118,23 @@ public class Handler implements RequestHandler<Request, Response> {
         return processResult;
     }
 
-    private Response createResponse(ProcessResult processResult) {
-        return createResponse(processResult, "");
+    private Response createResponse(Context context, ProcessResult processResult) {
+        return createResponse(context, processResult, "");
     }
 
-    private Response createResponse(ProcessResult processResult, String commonPrefix) {
+    private Response createResponse(Context context, ProcessResult processResult, String commonPrefix) {
         Response response = new Response();
         response.setOutput(processResult.getOutput(MAX_OUTPUT_SIZE));
         response.setExitCode(processResult.getExitCode());
         response.setS3Prefix(commonPrefix);
+        if (isRunningOnAws(context)) {
+            response.setRequestId(context.getAwsRequestId());
+        }
         return response;
+    }
+
+    private boolean isRunningOnAws(Context context) {
+        return context != null;
     }
 
     private List<String> transformCommand(String command) {
