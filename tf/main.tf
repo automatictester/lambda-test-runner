@@ -1,10 +1,23 @@
+variable "s3-bucket-tf-state" {
+  default = "automatictester.co.uk-lambda-test-runner-tf-state"
+}
+variable "s3-bucket-jar" {
+  default = "automatictester.co.uk-lambda-test-runner-jar"
+}
+variable "s3-bucket-build-outputs" {
+  default = "automatictester.co.uk-lambda-test-runner-build-outputs"
+}
+variable "s3-bucket-ssh-keys" {
+  default = "automatictester.co.uk-ssh-keys"
+}
+
 provider "aws" {
   region               = "eu-west-2"
 }
 
 terraform {
   backend "s3" {
-    bucket             = "automatictester.co.uk-lambda-test-runner-tf-state"
+    bucket             = "${var.s3-bucket-tf-state}"
     key                = "lambda-test-runner.tfstate"
     region             = "eu-west-2"
   }
@@ -19,19 +32,19 @@ resource "aws_iam_role" "lambda_test_runner_role" {
 }
 
 resource "aws_s3_bucket" "jar" {
-  bucket               = "automatictester.co.uk-lambda-test-runner-jar"
+  bucket               = "${var.s3-bucket-jar}"
   acl                  = "private"
 }
 
 resource "aws_s3_bucket_object" "jar" {
-  bucket               = "${aws_s3_bucket.jar.bucket}"
+  bucket               = "${var.s3-bucket-jar}"
   key                  = "lambda-test-runner.jar"
   source               = "${path.module}/../target/lambda-test-runner.jar"
   etag                 = "${md5(file("${path.module}/../target/lambda-test-runner.jar"))}"
 }
 
 resource "aws_s3_bucket" "build_outputs" {
-  bucket               = "automatictester.co.uk-lambda-test-runner-build-outputs"
+  bucket               = "${var.s3-bucket-build-outputs}"
   acl                  = "private"
   lifecycle_rule {
     id = "Delete all objects after 1 day"
@@ -55,7 +68,7 @@ resource "aws_lambda_function" "lambda_test_runner" {
 
   environment {
     variables = {
-      BUILD_OUTPUTS    = "${aws_s3_bucket.build_outputs.bucket}"
+      BUILD_OUTPUTS    = "${var.s3-bucket-build-outputs}"
       GRADLE_CLEANUP   = "false"          // for future use
       GRADLE_USER_HOME = "/tmp/.gradle"   // for future use
       JAVA_HOME        = "/tmp/jdk10"
@@ -63,7 +76,7 @@ resource "aws_lambda_function" "lambda_test_runner" {
       M2_CLEANUP       = "false"
       MAVEN_USER_HOME  = "/tmp/.m2"
       REPO_DIR         = "/tmp/repo"
-      SSH_KEY_BUCKET   = "automatictester.co.uk-ssh-keys"
+      SSH_KEY_BUCKET   = "${var.s3-bucket-ssh-keys}"
       SSH_KEY_KEY      = "id_rsa_lambda_test_runner"
       SSH_KEY_LOCAL    = "/tmp/id_rsa"
       TEMP_DIR         = "/tmp"

@@ -17,9 +17,17 @@ AWS Lambda Test Runner will:
   `-Dmaven.repo.local=/tmp/.m2` in your command - this is because default **MAVEN_USER_HOME** `~/.m2`
   is not writable on Lambda.
 
+## How to deploy it
+
+- Clone the repo
+- Generate Java JAR: `./mvnw clean package -DskipTests`
+- Deploy it to your AWS account. There is a [Terraform script](https://github.com/automatictester/lambda-test-runner/blob/master/tf/main.tf) that should help.
+  Before you go ahead, customize the variables at the top of that file.
+- Don't forget to check [Required environment variables](https://github.com/automatictester/lambda-test-runner#required-environment-variables).
+
 ## Limitations
 
-As of November 2018, the key AWS Lambda Function [limits](https://docs.aws.amazon.com/lambda/latest/dg/limits.html) you'll be interested in are:
+Usual AWS Lambda service limits apply. As of November 2018, the key [limits](https://docs.aws.amazon.com/lambda/latest/dg/limits.html) you'll be interested in are:
 - Function memory allocation: up to 3008 MB.
 - Function timeout: 900 seconds (15 minutes).
 - `/tmp` directory storage: 512 MB.
@@ -30,7 +38,7 @@ in `.m2`.
 
 Running tests with Gradle is not supported at this time due to disk space required by Gradle Wrapper.
 
-I'd expect AWS to increase these limits in future. They have already increased function memory allocation limit and 
+I expect AWS to increase these limits in future. They have already increased function memory allocation limit and 
 function timeout in the past. Adding more disk space or adding the ability to mount EFS has also been a common request 
 among the AWS user community.
 
