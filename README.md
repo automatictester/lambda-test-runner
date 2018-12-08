@@ -2,7 +2,13 @@
 
 [![Build Status](https://travis-ci.com/automatictester/lambda-test-runner.svg?branch=master)](https://travis-ci.com/automatictester/lambda-test-runner)
 
+## What
+
 Run your unit tests with Maven on AWS Lambda!
+
+## Why
+
+I have started this open source project to explore how much AWS Lambda serverless technology can help us test software. Join me, if you want!
 
 ## How it works
 
