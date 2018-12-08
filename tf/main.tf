@@ -1,6 +1,3 @@
-variable "s3-bucket-tf-state" {
-  default              = "automatictester.co.uk-lambda-test-runner-tf-state"
-}
 variable "s3-bucket-jar" {
   default              = "automatictester.co.uk-lambda-test-runner-jar"
 }
@@ -17,7 +14,7 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    bucket             = "${var.s3-bucket-tf-state}"
+    bucket             = "automatictester.co.uk-lambda-test-runner-tf-state"
     key                = "lambda-test-runner.tfstate"
     region             = "eu-west-2"
   }
