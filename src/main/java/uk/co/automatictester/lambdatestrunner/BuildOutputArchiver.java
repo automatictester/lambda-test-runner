@@ -1,6 +1,8 @@
 package uk.co.automatictester.lambdatestrunner;
 
 import com.amazonaws.AmazonServiceException;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.transfer.MultipleFileUpload;
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
@@ -39,7 +41,11 @@ public class BuildOutputArchiver {
             String dirPrefix = commonPrefix + "/" + dir;
             String destination = S3_BUCKET + "/" + dirPrefix;
             log.info("Uploading '{}' to '{}'", dir, destination);
-            TransferManager transferManager = TransferManagerBuilder.standard().build();
+            AmazonS3 amazonS3 = AmazonS3Factory.getInstance();
+            TransferManager transferManager = TransferManagerBuilder
+                    .standard()
+                    .withS3Client(amazonS3)
+                    .build();
             try {
                 MultipleFileUpload transfer = transferManager.uploadDirectory(S3_BUCKET, dirPrefix, new File(dirPath.toString()), true);
                 transfer.waitForCompletion();

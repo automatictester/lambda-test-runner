@@ -1,7 +1,11 @@
 package uk.co.automatictester.lambdatestrunner;
 
 import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.s3.AmazonS3;
+import io.findify.s3mock.S3Mock;
 import org.apache.commons.io.FileUtils;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -19,8 +23,34 @@ import static org.testng.Assert.assertEquals;
 
 public class HandlerTest {
 
+    private static final String BUCKET = System.getenv("BUILD_OUTPUTS");
     private static final File WORK_DIR = new File(System.getenv("REPO_DIR"));
+    private final AmazonS3 amazonS3 = AmazonS3Factory.getInstance();
+    private S3Mock s3Mock;
     private Request request = new Request();
+
+    @BeforeClass
+    public void setupEnv() {
+        startS3Mock();
+        maybeCreateBucket();
+    }
+
+    private void startS3Mock() {
+        int port = 8001;
+        s3Mock = new S3Mock.Builder().withPort(port).withInMemoryBackend().build();
+        s3Mock.start();
+    }
+
+    private void maybeCreateBucket() {
+        if (!amazonS3.doesBucketExistV2(BUCKET)) {
+            amazonS3.createBucket(BUCKET);
+        }
+    }
+
+    @AfterClass
+    public void teardown() {
+        s3Mock.stop();
+    }
 
     @BeforeMethod
     public void deleteDir() throws IOException {

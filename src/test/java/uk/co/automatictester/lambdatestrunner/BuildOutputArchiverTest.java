@@ -1,7 +1,9 @@
 package uk.co.automatictester.lambdatestrunner;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import io.findify.s3mock.S3Mock;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -10,6 +12,33 @@ import java.util.List;
 import static org.testng.Assert.assertEquals;
 
 public class BuildOutputArchiverTest {
+
+    private static final String BUCKET = System.getenv("BUILD_OUTPUTS");
+    private S3Mock s3Mock;
+    private final AmazonS3 amazonS3 = AmazonS3Factory.getInstance();
+
+    @BeforeClass
+    public void setupEnv() {
+        startS3Mock();
+        maybeCreateBucket();
+    }
+
+    private void startS3Mock() {
+        int port = 8001;
+        s3Mock = new S3Mock.Builder().withPort(port).withInMemoryBackend().build();
+        s3Mock.start();
+    }
+
+    private void maybeCreateBucket() {
+        if (!amazonS3.doesBucketExistV2(BUCKET)) {
+            amazonS3.createBucket(BUCKET);
+        }
+    }
+
+    @AfterClass
+    public void teardown() {
+        s3Mock.stop();
+    }
 
     @Test
     public void testStore() {
@@ -36,9 +65,6 @@ public class BuildOutputArchiverTest {
     }
 
     private String getObjectAsString(String key) {
-        AmazonS3ClientBuilder amazonS3ClientBuilder = AmazonS3ClientBuilder.standard();
-        AmazonS3 client = amazonS3ClientBuilder.build();
-        String S3_BUCKET = System.getenv("BUILD_OUTPUTS");
-        return client.getObjectAsString(S3_BUCKET, key);
+        return amazonS3.getObjectAsString(BUCKET, key);
     }
 }
