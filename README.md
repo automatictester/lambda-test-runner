@@ -44,11 +44,23 @@ For sample request see sample payloads from end-to-end tests:
 ## Required environment variables
 
 All Lambda configuration is managed through environment variables. See 
-[tf/main.tf](https://github.com/automatictester/lambda-test-runner/blob/master/tf/main.tf) for details. 
+[tf/main.tf](https://github.com/automatictester/lambda-test-runner/blob/master/tf/main.tf) for details.
+ 
 The variables you might want to customize:
 - **BUILD_OUTPUTS** - S3 bucket for storing build outputs. You need to set this one to point to your bucket.
 - **LOG_LEVEL** - you can switch between `info` and `debug`.
 - **M2_CLEANUP** - if set to `true`, **MAVEN_USER_HOME** with local Maven cache will be purged 
   at the beginning of every execution to free up disk space.
+- **SSH_KEY_BUCKET** and **SSH_KEY_KEY** - your S3 bucket and object key with private SSH key (see [SSH access](https://github.com/automatictester/lambda-test-runner#SSH-access)).
 
 No other environment variables are expected to be modified without a good reason.
+
+## SSH access
+
+To clone public repos, you should provide HTTPS URL in your request payload.
+
+To clone private repos, you should provide SSH URL in your request payload, as well as configure a few other things:
+- Set **SSH_KEY_BUCKET** and **SSH_KEY_KEY** environment variables (see [Required environment variables](https://github.com/automatictester/lambda-test-runner#required-environment-variables))
+  to point at the SSH key you want to use.
+- The SSH key you use should be compliant with both JGit and the Git hosting provider you are using. To generate JGit-, GitHub- and BitBucket-compilant SSH key,
+  you can use this command: `ssh-keygen -m PEM -t rsa -b 4096`
