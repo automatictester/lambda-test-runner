@@ -66,6 +66,7 @@ public class CloneCommandFactory {
 
             @Override
             protected void configure(OpenSshConfig.Host host, Session session) {
+                session.setConfig("StrictHostKeyChecking", "no");
                 session.setUserInfo(getUserInfo());
             }
         };
