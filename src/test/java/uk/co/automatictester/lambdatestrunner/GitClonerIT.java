@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 
 import static org.testng.Assert.assertTrue;
 
-public class GitClonerTest {
+public class GitClonerIT {
 
     private static final File REPO_DIR = new File(System.getenv("REPO_DIR"));
 
@@ -22,8 +22,8 @@ public class GitClonerTest {
     }
 
     @Test
-    public void testCloneRepoGitHubOverHttps() {
-        String repoUri = "https://github.com/automatictester/lambda-test-runner.git";
+    public void testCloneRepoGitHubOverSsh() {
+        String repoUri = "git@github.com:automatictester/lambda-test-runner.git";
         String branch = "master";
         GitCloner.cloneRepo(repoUri, branch, REPO_DIR);
 
@@ -33,20 +33,13 @@ public class GitClonerTest {
     }
 
     @Test
-    public void testCloneRepoGitHubOverHttpsCheckoutNonDefaultBranch() {
-        String repoUri = "https://github.com/automatictester/lambda-test-runner.git";
-        String branch = "unit-testing";
-        GitCloner.cloneRepo(repoUri, branch, REPO_DIR);
-
-        String branchSpecificUnitTest = REPO_DIR.toString() + "/src/test/java/uk/co/automatictester/lambdatestrunner/YetAnotherSmokeTest.java";
-        Path path = Paths.get(branchSpecificUnitTest);
-        assertTrue(Files.exists(path));
-    }
-
-    @Test(expectedExceptions = RuntimeException.class)
-    public void testCloneRepoNonexistent() {
-        String repoUri = "https://github.com/automatictester/lambda-test-runner-2.git";
+    public void testCloneRepoBitBucketOverSsh() {
+        String repoUri = "git@bitbucket.org:buildlogic/sample-private-repo.git";
         String branch = "master";
         GitCloner.cloneRepo(repoUri, branch, REPO_DIR);
+
+        String readmeFile = REPO_DIR.toString() + "/README.md";
+        Path path = Paths.get(readmeFile);
+        assertTrue(Files.exists(path));
     }
 }

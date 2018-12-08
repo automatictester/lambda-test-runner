@@ -25,11 +25,11 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh './mvnw clean package'
+                sh './mvnw clean verify package'
             }
             post {
                 always {
-                    junit 'target/surefire-reports/junitreports/*.xml'
+                    junit 'target/*-reports/junitreports/*.xml'
                 }
             }
         }

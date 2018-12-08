@@ -6,4 +6,4 @@ jdk: openjdk8
 cache:
   directories:
     - $HOME/.m2
-script: ./mvnw clean verify -DmockS3
+script: ./mvnw clean test -DmockS3
