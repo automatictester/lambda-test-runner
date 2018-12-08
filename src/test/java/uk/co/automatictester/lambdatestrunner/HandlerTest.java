@@ -31,8 +31,10 @@ public class HandlerTest {
 
     @BeforeClass
     public void setupEnv() {
-        startS3Mock();
-        maybeCreateBucket();
+        if (System.getProperty("mockS3") != null) {
+            startS3Mock();
+            maybeCreateBucket();
+        }
     }
 
     private void startS3Mock() {
@@ -49,7 +51,9 @@ public class HandlerTest {
 
     @AfterClass
     public void teardown() {
-        s3Mock.stop();
+        if (System.getProperty("mockS3") != null) {
+            s3Mock.stop();
+        }
     }
 
     @BeforeMethod
