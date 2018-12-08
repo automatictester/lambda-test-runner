@@ -1,14 +1,14 @@
 variable "s3-bucket-tf-state" {
-  default = "automatictester.co.uk-lambda-test-runner-tf-state"
+  default              = "automatictester.co.uk-lambda-test-runner-tf-state"
 }
 variable "s3-bucket-jar" {
-  default = "automatictester.co.uk-lambda-test-runner-jar"
+  default              = "automatictester.co.uk-lambda-test-runner-jar"
 }
 variable "s3-bucket-build-outputs" {
-  default = "automatictester.co.uk-lambda-test-runner-build-outputs"
+  default              = "automatictester.co.uk-lambda-test-runner-build-outputs"
 }
 variable "s3-bucket-ssh-keys" {
-  default = "automatictester.co.uk-ssh-keys"
+  default              = "automatictester.co.uk-ssh-keys"
 }
 
 provider "aws" {
