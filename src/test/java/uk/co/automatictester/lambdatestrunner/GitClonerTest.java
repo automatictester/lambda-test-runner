@@ -22,7 +22,7 @@ public class GitClonerTest {
     }
 
     @Test
-    public void testCloneRepo() {
+    public void testCloneRepoGitHubOverHttps() {
         String repoUri = "https://github.com/automatictester/lambda-test-runner.git";
         String branch = "master";
         GitCloner.cloneRepo(repoUri, branch, REPO_DIR);
@@ -33,7 +33,7 @@ public class GitClonerTest {
     }
 
     @Test
-    public void testCloneRepoCheckoutNonDefaultBranch() {
+    public void testCloneRepoGitHubOverHttpsCheckoutNonDefaultBranch() {
         String repoUri = "https://github.com/automatictester/lambda-test-runner.git";
         String branch = "unit-testing";
         GitCloner.cloneRepo(repoUri, branch, REPO_DIR);
@@ -43,8 +43,30 @@ public class GitClonerTest {
         assertTrue(Files.exists(path));
     }
 
+    @Test(enabled = false)
+    public void testCloneRepoGitHubOverSsh() {
+        String repoUri = "git@github.com:automatictester/lambda-test-runner.git";
+        String branch = "master";
+        GitCloner.cloneRepo(repoUri, branch, REPO_DIR);
+
+        String readmeFile = REPO_DIR.toString() + "/README.md";
+        Path path = Paths.get(readmeFile);
+        assertTrue(Files.exists(path));
+    }
+
+    @Test(enabled = false)
+    public void testCloneRepoBitBucketOverSsh() {
+        String repoUri = "git@bitbucket.org:buildlogic/sample-private-repo.git";
+        String branch = "master";
+        GitCloner.cloneRepo(repoUri, branch, REPO_DIR);
+
+        String readmeFile = REPO_DIR.toString() + "/README.md";
+        Path path = Paths.get(readmeFile);
+        assertTrue(Files.exists(path));
+    }
+
     @Test(expectedExceptions = RuntimeException.class)
-    public void testCloneRepoEx() {
+    public void testCloneRepoNonexistent() {
         String repoUri = "https://github.com/automatictester/lambda-test-runner-2.git";
         String branch = "master";
         GitCloner.cloneRepo(repoUri, branch, REPO_DIR);

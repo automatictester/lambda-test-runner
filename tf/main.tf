@@ -63,6 +63,9 @@ resource "aws_lambda_function" "lambda_test_runner" {
       M2_CLEANUP       = "false"
       MAVEN_USER_HOME  = "/tmp/.m2"
       REPO_DIR         = "/tmp/repo"
+      SSH_KEY_BUCKET   = "automatictester.co.uk-ssh-keys"
+      SSH_KEY_KEY      = "id_rsa_lambda_test_runner"
+      SSH_KEY_LOCAL    = "/tmp/id_rsa"
       TEMP_DIR         = "/tmp"
     }
   }

@@ -21,6 +21,10 @@ public class AmazonS3Factory {
         return System.getProperty("mockS3") != null;
     }
 
+    public static AmazonS3 getRealInstance() {
+        return AmazonS3ClientBuilder.standard().build();
+    }
+
     private static AmazonS3 getMockedInstance() {
         String s3MockUrl = "http://localhost:8001";
         String region = AmazonS3ClientBuilder.standard().getRegion();
@@ -30,9 +34,5 @@ public class AmazonS3Factory {
                 .withPathStyleAccessEnabled(true)
                 .withEndpointConfiguration(endpointConfiguration)
                 .build();
-    }
-
-    private static AmazonS3 getRealInstance() {
-        return AmazonS3ClientBuilder.standard().build();
     }
 }

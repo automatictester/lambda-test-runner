@@ -1,4 +1,4 @@
-# AWS Lambda Test Runner (experimental)
+# AWS Lambda Test Runner
 
 [![Build Status](https://travis-ci.com/automatictester/lambda-test-runner.svg?branch=master)](https://travis-ci.com/automatictester/lambda-test-runner)
 

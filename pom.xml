@@ -49,6 +49,9 @@
                         <JAVA_HOME>/tmp/jdk10</JAVA_HOME>
                         <M2_CLEANUP>false</M2_CLEANUP>
                         <REPO_DIR>/tmp/repo</REPO_DIR>
+                        <SSH_KEY_BUCKET>automatictester.co.uk-ssh-keys</SSH_KEY_BUCKET>
+                        <SSH_KEY_KEY>id_rsa_lambda_test_runner</SSH_KEY_KEY>
+                        <SSH_KEY_LOCAL>/tmp/id_rsa</SSH_KEY_LOCAL>
                         <TEMP_DIR>/tmp</TEMP_DIR>
                     </environmentVariables>
                 </configuration>
