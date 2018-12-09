@@ -99,5 +99,5 @@ To clone public repos, you should provide HTTPS URL in your request payload. If 
 To clone private repos, you should provide SSH URL in your request payload, as well as configure a few other things:
 - Set **SSH_KEY_BUCKET** and **SSH_KEY_KEY** environment variables (see [Required environment variables](https://github.com/automatictester/lambda-test-runner#required-environment-variables))
   to point at the SSH key you want to use.
-- The SSH key you use should be compliant with both JGit and the Git hosting provider you are using. To generate JGit-, GitHub- and BitBucket-compilant SSH key,
-  you can use this command: `ssh-keygen -m PEM -t rsa -b 4096`
+- The SSH key you use should be compliant with both JGit and the Git hosting you are using. To generate such SSH key, you can use this command:
+  `ssh-keygen -m PEM -t rsa -b 4096`
