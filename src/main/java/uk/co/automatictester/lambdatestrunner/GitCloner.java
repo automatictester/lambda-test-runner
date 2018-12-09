@@ -14,18 +14,23 @@ public class GitCloner {
 
     private static final Logger log = LogManager.getLogger(GitCloner.class);
 
-    private GitCloner() {}
+    private GitCloner() {
+    }
 
     public static void cloneRepo(String repoUri, String branch, File dir) {
+        if (repoUri.startsWith("git")) {
+            SshKeyManager.downloadSshKey();
+        }
         log.info("Git repo '{}', branch '{}', dir '{}'", repoUri, branch, dir);
-        SshKeyManager.downloadSshKey();
         Instant start = Instant.now();
         CloneCommand cloneCommand = CloneCommandFactory.getInstance(repoUri, branch, dir);
         execute(cloneCommand);
         Instant finish = Instant.now();
-        SshKeyManager.deleteSshKey();
         Duration duration = Duration.between(start, finish);
         log.info("Cloning took {} s", duration.getSeconds());
+        if (repoUri.startsWith("git")) {
+            SshKeyManager.deleteSshKey();
+        }
     }
 
     private static void execute(CloneCommand cloneCommand) {
