@@ -34,7 +34,7 @@ To provide an efficient test runner based on AWS Lambda technology for the Java 
 
 - [x] Maven - requires [Maven Wrapper](https://github.com/takari/maven-wrapper)
 - [ ] Gradle - currently not supported due to disk space required by Gradle Wrapper
-- [ ] Other Java/JVM build tools - not verified
+- [ ] Other - not verified
 
 ### Java version
 
