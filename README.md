@@ -23,6 +23,13 @@ To provide an efficient test runner based on AWS Lambda technology for the Java 
 
 ## Supported platforms
 
+### Git hosting
+
+- [x] GitHub - HTTPS and SSH
+- [x] BitBucket - HTTPS and SSH
+- [x] GitLab - HTTPS and SSH
+- [ ] Other - not verified
+
 ### Build tools
 
 - [x] Maven - requires [Maven Wrapper](https://github.com/takari/maven-wrapper)
