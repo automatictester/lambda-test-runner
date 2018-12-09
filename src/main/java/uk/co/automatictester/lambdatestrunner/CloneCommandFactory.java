@@ -1,6 +1,5 @@
 package uk.co.automatictester.lambdatestrunner;
 
-import com.amazonaws.services.s3.AmazonS3;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
@@ -14,9 +13,6 @@ import org.eclipse.jgit.transport.SshTransport;
 import org.eclipse.jgit.util.FS;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class CloneCommandFactory {
 
@@ -54,8 +50,6 @@ public class CloneCommandFactory {
     }
 
     private static SshSessionFactory getSshSessionFactory() {
-        getPrivateSshKey();
-
         SshSessionFactory sshSessionFactory = new JschConfigSessionFactory() {
             @Override
             protected JSch createDefaultJSch(FS fs) throws JSchException {
@@ -71,11 +65,6 @@ public class CloneCommandFactory {
             }
         };
         return sshSessionFactory;
-    }
-
-    private static void getPrivateSshKey() {
-        String content = getSshKeyFromS3();
-        storeSshKeyToDisk(content);
     }
 
     private static UserInfo getUserInfo() {
@@ -109,20 +98,5 @@ public class CloneCommandFactory {
             public void showMessage(String message) {
             }
         };
-    }
-
-    private static String getSshKeyFromS3() {
-        AmazonS3 amazonS3 = AmazonS3Factory.getRealInstance();
-        String bucket = System.getenv("SSH_KEY_BUCKET");
-        String key = System.getenv("SSH_KEY_KEY");
-        return amazonS3.getObjectAsString(bucket, key);
-    }
-
-    private static void storeSshKeyToDisk(String content) {
-        try {
-            Files.write(Paths.get(SSH_KEY_LOCAL), content.getBytes());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 }
