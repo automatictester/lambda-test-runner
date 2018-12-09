@@ -44,6 +44,17 @@ public class GitClonerTest {
     }
 
     @Test(groups = "local")
+    public void testCloneRepoGitLabOverHttps() {
+        String repoUri = "https://gitlab.com/buildlogic/sample-public-repo.git";
+        String branch = "master";
+        GitCloner.cloneRepo(repoUri, branch, REPO_DIR);
+
+        String readmeFile = REPO_DIR.toString() + "/README.md";
+        Path path = Paths.get(readmeFile);
+        assertTrue(Files.exists(path));
+    }
+
+    @Test(groups = "local")
     public void testCloneRepoGitHubOverHttpsCheckoutNonDefaultBranch() {
         String repoUri = "https://github.com/automatictester/lambda-test-runner.git";
         String branch = "unit-testing";
@@ -75,6 +86,17 @@ public class GitClonerTest {
     @Test(groups = "jenkins")
     public void testCloneRepoBitBucketOverSsh() {
         String repoUri = "git@bitbucket.org:buildlogic/sample-private-repo.git";
+        String branch = "master";
+        GitCloner.cloneRepo(repoUri, branch, REPO_DIR);
+
+        String readmeFile = REPO_DIR.toString() + "/README.md";
+        Path path = Paths.get(readmeFile);
+        assertTrue(Files.exists(path));
+    }
+
+    @Test(groups = "jenkins")
+    public void testCloneRepoGitLabOverSsh() {
+        String repoUri = "git@gitlab.com:buildlogic/sample-private-repo.git";
         String branch = "master";
         GitCloner.cloneRepo(repoUri, branch, REPO_DIR);
 
