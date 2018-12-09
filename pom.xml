@@ -122,7 +122,7 @@
         </profile>
 
         <!--
-           This is a profile for running unit tests in Jenkins. It requires:
+           This is a profile for running unit tests in Travis. It requires:
            - write access to /tmp
            - large file download
            - running S3 mock
