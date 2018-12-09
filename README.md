@@ -18,7 +18,7 @@ To provide an efficient test runner based on AWS Lambda technology for the Java 
 ## Project aspirations
 
 - Stay as decoupled as possible from any particular Git hosting.
-- Provide the runner, not the orchestration - if your current CI server is Jenkins, AWS Lambda Test Runner may help you reduce your dependency 
+- Provide the runner, not the orchestration. In other words, if your current CI server is Jenkins, AWS Lambda Test Runner may help you reduce your dependency 
   on Jenkins slaves, not on Jenkins master. Of course you don't have to be using Jenkins to use AWS Lambda Test Runner.
 
 ## Supported platforms
