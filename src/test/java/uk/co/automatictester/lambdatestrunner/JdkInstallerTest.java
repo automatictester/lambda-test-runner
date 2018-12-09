@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 import static org.testng.Assert.assertEquals;
@@ -16,9 +15,7 @@ public class JdkInstallerTest {
 
     @Test(groups = "travis")
     public void testInstallJdk() {
-        Map<String, String> extraEnvVars = new HashMap<>();
-        extraEnvVars.put("JAVA_HOME", "/tmp/jdk10");
-        extraEnvVars.put("LOG_LEVEL", "debug");
+        Map<String, String> extraEnvVars = Collections.singletonMap("JAVA_HOME", "/tmp/jdk10");
         ProcessResult processResult = JdkInstaller.installJdk(extraEnvVars);
         assertEquals(processResult.getExitCode(), 0);
         Path path = Paths.get("/tmp/jdk10");
