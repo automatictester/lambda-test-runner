@@ -33,6 +33,17 @@ public class GitClonerTest {
     }
 
     @Test(groups = "local")
+    public void testCloneRepoBitBucketOverHttps() {
+        String repoUri = "https://buildlogic@bitbucket.org/buildlogic/sample-public-repo.git";
+        String branch = "master";
+        GitCloner.cloneRepo(repoUri, branch, REPO_DIR);
+
+        String readmeFile = REPO_DIR.toString() + "/README.md";
+        Path path = Paths.get(readmeFile);
+        assertTrue(Files.exists(path));
+    }
+
+    @Test(groups = "local")
     public void testCloneRepoGitHubOverHttpsCheckoutNonDefaultBranch() {
         String repoUri = "https://github.com/automatictester/lambda-test-runner.git";
         String branch = "unit-testing";
