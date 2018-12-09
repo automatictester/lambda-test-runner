@@ -25,7 +25,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh './mvnw clean verify package'
+                sh './mvnw clean package -P jenkins'
             }
             post {
                 always {

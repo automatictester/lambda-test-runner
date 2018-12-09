@@ -6,7 +6,7 @@ import static org.testng.Assert.assertTrue;
 
 public class SmokeTest {
 
-    @Test
+    @Test(groups = "local")
     public void runSmokeTest() {
         assertTrue(true);
     }

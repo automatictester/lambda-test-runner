@@ -17,7 +17,7 @@ public class BuildOutputArchiverTest {
     private S3Mock s3Mock;
     private final AmazonS3 amazonS3 = AmazonS3Factory.getInstance();
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void setupEnv() {
         if (System.getProperty("mockS3") != null) {
             startS3Mock();
@@ -37,14 +37,14 @@ public class BuildOutputArchiverTest {
         }
     }
 
-    @AfterClass
+    @AfterClass(alwaysRun = true)
     public void teardown() {
         if (System.getProperty("mockS3") != null) {
             s3Mock.stop();
         }
     }
 
-    @Test
+    @Test(groups = "local")
     public void testStore() {
         String dirNonexistent = "src/test/resources/nonexistent";
         String dirA = "src/test/resources/a";

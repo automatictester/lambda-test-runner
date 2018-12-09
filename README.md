@@ -26,7 +26,7 @@ AWS Lambda Test Runner will:
 ## How to deploy it
 
 - Clone the repo
-- Generate Java JAR: `./mvnw clean package -DskipTests`
+- Generate Java JAR: `./mvnw clean package`
 - Deploy it to your AWS account. There is a [Terraform script](https://github.com/automatictester/lambda-test-runner/blob/master/tf/main.tf) that should help.
   Before you go ahead, customize the variables at the top of that file, plus terraform backend bucket.
 - Don't forget to check [Required environment variables](https://github.com/automatictester/lambda-test-runner#required-environment-variables).

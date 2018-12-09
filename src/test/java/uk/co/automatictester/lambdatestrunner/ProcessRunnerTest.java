@@ -15,21 +15,21 @@ public class ProcessRunnerTest {
 
     private static final int MAX_OUTPUT_SIZE = 1024;
 
-    @Test
+    @Test(groups = "local")
     public void testRunProcess() {
         List<String> command = Arrays.asList("./mvnw", "clean", "test", "-Dtest=SmokeTest");
         File workDir = new File(System.getProperty("user.dir"));
-        ProcessResult processResult = ProcessRunner.runProcess(command, workDir);
+        ProcessResult processResult = ProcessRunner.runProcess(command, workDir, Collections.emptyMap());
         assertEquals(processResult.getExitCode(), 0);
         assertThat(processResult.getOutput(MAX_OUTPUT_SIZE), containsString("Running uk.co.automatictester.lambdatestrunner.SmokeTest"));
         assertThat(processResult.getOutput(MAX_OUTPUT_SIZE), containsString("Tests run: 1, Failures: 0, Errors: 0, Skipped: 0"));
         assertThat(processResult.getOutput(MAX_OUTPUT_SIZE), containsString("\n"));
     }
 
-    @Test(expectedExceptions = RuntimeException.class)
+    @Test(groups = "local", expectedExceptions = RuntimeException.class)
     public void testRunProcessEx() {
         List<String> command = Collections.singletonList("uname -a");
         File workDir = new File("nonexistent");
-        ProcessRunner.runProcess(command, workDir);
+        ProcessRunner.runProcess(command, workDir, Collections.emptyMap());
     }
 }

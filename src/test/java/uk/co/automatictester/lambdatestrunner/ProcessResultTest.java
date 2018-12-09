@@ -6,7 +6,7 @@ import static org.testng.Assert.*;
 
 public class ProcessResultTest {
 
-    @Test
+    @Test(groups = "local")
     public void testGetLimitedOutput() {
         ProcessResult processResult = new ProcessResult();
         processResult.setOutput("1234567890");

@@ -29,7 +29,7 @@ public class HandlerTest {
     private S3Mock s3Mock;
     private Request request = new Request();
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void setupEnv() {
         if (System.getProperty("mockS3") != null) {
             startS3Mock();
@@ -49,19 +49,19 @@ public class HandlerTest {
         }
     }
 
-    @AfterClass
+    @AfterClass(alwaysRun = true)
     public void teardown() {
         if (System.getProperty("mockS3") != null) {
             s3Mock.stop();
         }
     }
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void deleteDir() throws IOException {
         FileUtils.deleteDirectory(WORK_DIR);
     }
 
-    @Test
+    @Test(groups = "local")
     public void testHandleRequest() {
         request.setRepoUri("https://github.com/automatictester/lambda-test-runner.git");
         request.setBranch("master");
@@ -76,7 +76,7 @@ public class HandlerTest {
         assertThat(response.getS3Prefix(), startsWith(getDatePartFromPrefix()));
     }
 
-    @Test
+    @Test(groups = "local")
     public void testHandleRequestNonDefaultBranch() {
         request.setRepoUri("https://github.com/automatictester/lambda-test-runner.git");
         request.setBranch("unit-testing");

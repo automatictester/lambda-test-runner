@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,7 +57,7 @@ public class Handler implements RequestHandler<Request, Response> {
             if (jdkInstalled) {
                 log.info("JDK already installed, skipping...");
             } else {
-                ProcessResult processResult = JdkInstaller.installJdk();
+                ProcessResult processResult = JdkInstaller.installJdk(Collections.emptyMap());
                 if (processResult.getExitCode() != 0) {
                     return Optional.of(processResult);
                 }
@@ -105,7 +106,7 @@ public class Handler implements RequestHandler<Request, Response> {
         File repoDir = new File(REPO_DIR);
         log.info("Command: {}", rawCommand);
         Instant start = Instant.now();
-        ProcessResult processResult = ProcessRunner.runProcess(command, repoDir);
+        ProcessResult processResult = ProcessRunner.runProcess(command, repoDir, Collections.emptyMap());
         Instant finish = Instant.now();
         Duration duration = Duration.between(start, finish);
         String logEntry = String.format("Exit code: %d, command took %s s", processResult.getExitCode(), duration.getSeconds());

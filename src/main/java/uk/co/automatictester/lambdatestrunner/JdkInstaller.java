@@ -8,19 +8,21 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class JdkInstaller {
 
     private static final Logger log = LogManager.getLogger(JdkInstaller.class);
 
-    private JdkInstaller() {}
+    private JdkInstaller() {
+    }
 
-    public static ProcessResult installJdk() {
+    public static ProcessResult installJdk(Map<String, String> extraEnvVars) {
         log.info("Installing JDK...");
         Instant start = Instant.now();
 
         File tempDir = new File(System.getenv("TEMP_DIR"));
-        ProcessResult jdkInstallationResult = ProcessRunner.runProcess(getCommand(), tempDir);
+        ProcessResult jdkInstallationResult = ProcessRunner.runProcess(getCommand(), tempDir, extraEnvVars);
 
         if (jdkInstallationResult.getExitCode() != 0) {
             return jdkInstallationResult;
