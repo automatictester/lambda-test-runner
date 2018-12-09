@@ -8,7 +8,7 @@ Run your unit tests with Maven on AWS Lambda!
 
 ## Why
 
-I have started this open source project to explore how much AWS Lambda serverless technology can help us test software. Join me, if you want!
+I have started this open source project to explore how much AWS Lambda serverless technology can help us test software.
 
 ## How it works
 
