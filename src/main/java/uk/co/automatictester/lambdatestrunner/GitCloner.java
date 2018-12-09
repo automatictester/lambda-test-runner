@@ -18,9 +18,7 @@ public class GitCloner {
     }
 
     public static void cloneRepo(String repoUri, String branch, File dir) {
-        if (repoUri.startsWith("git")) {
-            SshKeyManager.downloadSshKey();
-        }
+        maybeDownloadSshKey(repoUri);
         log.info("Git repo '{}', branch '{}', dir '{}'", repoUri, branch, dir);
         Instant start = Instant.now();
         CloneCommand cloneCommand = CloneCommandFactory.getInstance(repoUri, branch, dir);
@@ -28,6 +26,16 @@ public class GitCloner {
         Instant finish = Instant.now();
         Duration duration = Duration.between(start, finish);
         log.info("Cloning took {} s", duration.getSeconds());
+        maybeDeleteSshKey(repoUri);
+    }
+
+    private static void maybeDownloadSshKey(String repoUri) {
+        if (repoUri.startsWith("git")) {
+            SshKeyManager.downloadSshKey();
+        }
+    }
+
+    private static void maybeDeleteSshKey(String repoUri) {
         if (repoUri.startsWith("git")) {
             SshKeyManager.deleteSshKey();
         }
