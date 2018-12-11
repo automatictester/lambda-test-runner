@@ -33,7 +33,7 @@ public class SshKeyManager {
     }
 
     private static String getSshKeyFromS3() {
-        AmazonS3 amazonS3 = AmazonS3Factory.getRealInstance();
+        AmazonS3 amazonS3 = AmazonS3Factory.getInstance();
         String bucket = System.getenv("SSH_KEY_BUCKET");
         String key = System.getenv("SSH_KEY_KEY");
         return amazonS3.getObjectAsString(bucket, key);

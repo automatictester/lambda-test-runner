@@ -21,7 +21,7 @@ public class AmazonS3Factory {
         return System.getProperty("mockS3") != null;
     }
 
-    public static AmazonS3 getRealInstance() {
+    private static AmazonS3 getRealInstance() {
         return AmazonS3ClientBuilder.standard().build();
     }
 
