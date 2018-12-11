@@ -1,4 +1,5 @@
 .idea/
+e2e/*/
 target/
 tf/.terraform/
 tf/terraform.tf*
