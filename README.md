@@ -7,7 +7,7 @@ Run your unit tests with Maven directly on AWS Lambda.
 ## Project history
 
 It all started one day when I was updating my [Packer](https://www.packer.io/) templates for building my Jenkins EC2 slaves. 
-I asked myself: "Hold on, why am I doing this? Isn't running unit tests a perfect use case for AWS Lambda?". I think it is, and this is 
+I asked myself: *"Hold on, why am I doing this? Isn't running unit tests a perfect use case for AWS Lambda?"*. I think it is, and this is 
 how it all began - I have started this open source project as an experiment aiming to explore how much AWS Lambda serverless technology 
 can help us test our software.
 
@@ -33,7 +33,7 @@ To provide an efficient test runner based on AWS Lambda technology for the Java 
 ### Build tools
 
 - [x] Maven - requires [Maven Wrapper](https://github.com/takari/maven-wrapper)
-- [ ] Gradle - currently not supported due to disk space required by Gradle Wrapper
+- [ ] Gradle - currently not supported due to required disk space
 - [ ] Other - not verified
 
 ### Java version
@@ -54,29 +54,9 @@ AWS Lambda Test Runner will:
 
 - Clone the repo.
 - Generate Java JAR: `./mvnw clean package`.
-- Deploy it to your AWS account. There is a [Terraform script](https://github.com/automatictester/lambda-test-runner/blob/master/tf/main.tf) that should help.
+- Deploy it to your AWS account. There is a [Terraform script](https://github.com/automatictester/lambda-test-runner/blob/master/tf) that should help.
   Before you go ahead, customize the variables at the top of that file, plus terraform backend bucket.
 - Don't forget to check [Required environment variables](https://github.com/automatictester/lambda-test-runner#required-environment-variables).
-
-## Limitations
-
-Usual AWS Lambda service limits apply. As of November 2018, the key [limits](https://docs.aws.amazon.com/lambda/latest/dg/limits.html) you'll be interested in are:
-- Function memory allocation: up to 3008 MB.
-- Function timeout: 900 seconds (15 minutes).
-- `/tmp` directory storage: 512 MB.
-
-If your tests need more time or memory to run, you won't be able to run them using AWS Lambda Test Runner. Pay special attention to 512 MB directory 
-storage limit - it needs to accommodate unpacked JDK, your repo and local Maven cache in `.m2`.
-
-I expect AWS to increase these limits in future. They have already increased function memory allocation limit and function timeout in the past. 
-Adding more disk space or adding the ability to mount EFS has also been a common request among the AWS user community.
-
-## Sample request
-
-For sample request see sample payloads from end-to-end tests:
-- [e2e/lambda-test-runner-payload.json](https://github.com/automatictester/lambda-test-runner/blob/master/e2e/lambda-test-runner-payload.json)
-- [e2e/lightning-core-payload.json](https://github.com/automatictester/lambda-test-runner/blob/master/e2e/lightning-core-payload.json)
-- [e2e/wiremock-maven-plugin-payload.json](https://github.com/automatictester/lambda-test-runner/blob/master/e2e/wiremock-maven-plugin-payload.json)
 
 ## Required environment variables
 
@@ -92,6 +72,53 @@ The variables you might want to customize:
 
 No other environment variables are expected to be modified without a good reason.
 
+## Usage example
+
+This example demonstrates how to invoke already deployed AWS Lambda Test Runner using `aws cli`. It requires all necessary tools to be installed and configured.
+
+Below is sample JSON payload: 
+
+```
+cat wiremock-maven-plugin-payload.json 
+{
+  "repoUri": "https://github.com/automatictester/wiremock-maven-plugin.git",
+  "branch": "master",
+  "command": "./mvnw clean test -Dmaven.repo.local=/tmp/.m2",
+  "storeToS3" : ["target/surefire-reports"]
+}
+```
+
+This payload tells AWS Lambda Test Runner which Git repo to clone, which branch to check out, how to run the tests and which build outputs you want to store to S3.
+
+Now we will use this payload to invoke Lambda function:
+
+```
+aws lambda invoke --function-name LambdaTestRunner --region eu-west-2 --payload file://wiremock-maven-plugin-payload.json wiremock-maven-plugin-response.json
+```
+
+This assumes your Lambda is named `LambdaTestRunner` and was deployed to `eu-west-2`. The JSON response will be stored to `wiremock-maven-plugin-response.json`. 
+
+Now you can inspect content of the `wiremock-maven-plugin-response.json` file. It should look similar to this one:
+
+```
+cat wiremock-maven-plugin-response.json
+...,"exitCode":0,"s3Prefix":"2018-12-11-13-33-10","requestId":"418eaf5d-fd49-11e8-8fd7-ade5a41cf0d6"}
+```
+
+We can now read `s3Prefix` into `S3_PREFIX` variable, which we will use in a subsequent command:
+
+```
+S3_PREFIX=$(jq -r ".s3Prefix" wiremock-maven-plugin-response.json)
+```
+
+Now we can fetch from S3 the build outputs:
+
+```
+aws s3 cp --exclude "*" --include "${S3_PREFIX}*" --recursive s3://automatictester.co.uk-lambda-test-runner-build-outputs .
+```
+
+At this point we have the test results on the local file system. They can be now processed in the usual way.
+
 ## SSH access
 
 To clone public repos, you should provide HTTPS URL in your request payload. If you intend to clone only public repos, you can ignore remainder of this section.
@@ -101,3 +128,16 @@ To clone private repos, you should provide SSH URL in your request payload, as w
   to point at the SSH key you want to use.
 - The SSH key you use should be compliant with both JGit and the Git hosting you are using. To generate such SSH key, you can use this command:
   `ssh-keygen -m PEM -t rsa -b 4096`
+
+## Limitations
+
+Usual AWS Lambda service limits apply. As of November 2018, the key [limits](https://docs.aws.amazon.com/lambda/latest/dg/limits.html) you'll be interested in are:
+- Function memory allocation: up to 3008 MB.
+- Function timeout: 900 seconds (15 minutes).
+- `/tmp` directory storage: 512 MB.
+
+If your tests need more time or memory to run, you won't be able to run them using AWS Lambda Test Runner. Pay special attention to 512 MB directory 
+storage limit - it needs to accommodate unpacked JDK, your repo and local Maven cache in `.m2`.
+
+I expect AWS to increase these limits in future. They have already increased function memory allocation limit and function timeout in the past. 
+Adding more disk space or adding the ability to mount EFS has also been a common request among the AWS user community.
