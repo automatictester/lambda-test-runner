@@ -118,8 +118,8 @@ S3_PREFIX=$(jq -r ".s3Prefix" wiremock-maven-plugin-response.json)
 ```
 
 Now we can fetch from S3 the build outputs. You will need to substitute the S3 bucket I use in the example below 
-(`automatictester.co.uk-lambda-test-runner-build-outputs`) with your own S3 bucket name 
-- see [How to deploy it](https://github.com/automatictester/lambda-test-runner#how-to-deploy-it) for details:
+(`automatictester.co.uk-lambda-test-runner-build-outputs`) with your own S3 bucket name - see 
+[How to deploy it](https://github.com/automatictester/lambda-test-runner#how-to-deploy-it) for details:
 
 ```
 aws s3 cp --exclude "*" --include "${S3_PREFIX}*" --recursive \
