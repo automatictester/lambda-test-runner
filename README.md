@@ -99,10 +99,15 @@ aws lambda invoke --function-name LambdaTestRunner --region eu-west-2 \
 
 This assumes your Lambda is named `LambdaTestRunner` and was deployed to `eu-west-2`. The JSON response will be stored to `wiremock-maven-plugin-response.json`. 
 
-Now you can inspect content of the `wiremock-maven-plugin-response.json` file. It should look similar to this one:
+Now you can inspect content of the `wiremock-maven-plugin-response.json` file:
 
 ```
 cat wiremock-maven-plugin-response.json
+```
+
+It should look similar to this one:
+
+```
 ...,"exitCode":0,"s3Prefix":"2018-12-11-13-33-10","requestId":"418eaf5d-fd49-11e8-8fd7-ade5a41cf0d6"}
 ```
 
