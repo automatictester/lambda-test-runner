@@ -1,13 +1,3 @@
-variable "s3-bucket-jar" {
-  default              = "automatictester.co.uk-lambda-test-runner-jar"
-}
-variable "s3-bucket-build-outputs" {
-  default              = "automatictester.co.uk-lambda-test-runner-build-outputs"
-}
-variable "s3-bucket-ssh-keys" {
-  default              = "automatictester.co.uk-ssh-keys"
-}
-
 provider "aws" {
   region               = "eu-west-2"
 }
@@ -20,8 +10,6 @@ terraform {
   }
 }
 
-data "aws_caller_identity" "current" {}
-
 resource "aws_iam_role" "lambda_test_runner_role" {
   name                 = "LambdaTestRunnerRole"
   description          = "Allows LambdaTestRunner function to use S3 and store logs in CloudWatch."
@@ -29,20 +17,21 @@ resource "aws_iam_role" "lambda_test_runner_role" {
 }
 
 resource "aws_s3_bucket" "jar" {
-  bucket               = "${var.s3-bucket-jar}"
+  bucket               = "${var.s3_bucket_jar}"
   acl                  = "private"
 }
 
 resource "aws_s3_bucket_object" "jar" {
-  bucket               = "${var.s3-bucket-jar}"
+  bucket               = "${var.s3_bucket_jar}"
   key                  = "lambda-test-runner.jar"
   source               = "${path.module}/../target/lambda-test-runner.jar"
   etag                 = "${md5(file("${path.module}/../target/lambda-test-runner.jar"))}"
 }
 
 resource "aws_s3_bucket" "build_outputs" {
-  bucket               = "${var.s3-bucket-build-outputs}"
+  bucket               = "${var.s3_bucket_build_outputs}"
   acl                  = "private"
+  force_destroy        = true
   lifecycle_rule {
     id = "Delete all objects after 1 day"
     enabled = true
@@ -65,7 +54,7 @@ resource "aws_lambda_function" "lambda_test_runner" {
 
   environment {
     variables = {
-      BUILD_OUTPUTS    = "${var.s3-bucket-build-outputs}"
+      BUILD_OUTPUTS    = "${var.s3_bucket_build_outputs}"
       GRADLE_CLEANUP   = "false"          // for future use
       GRADLE_USER_HOME = "/tmp/.gradle"   // for future use
       JAVA_HOME        = "/tmp/jdk10"
@@ -73,7 +62,7 @@ resource "aws_lambda_function" "lambda_test_runner" {
       M2_CLEANUP       = "false"
       MAVEN_USER_HOME  = "/tmp/.m2"
       REPO_DIR         = "/tmp/repo"
-      SSH_KEY_BUCKET   = "${var.s3-bucket-ssh-keys}"
+      SSH_KEY_BUCKET   = "${var.s3_bucket_ssh_keys}"
       SSH_KEY_KEY      = "id_rsa_lambda_test_runner"
       SSH_KEY_LOCAL    = "/tmp/id_rsa"
       TEMP_DIR         = "/tmp"
@@ -81,12 +70,12 @@ resource "aws_lambda_function" "lambda_test_runner" {
   }
 }
 
-resource "aws_iam_role_policy_attachment" "s3-access-policy" {
+resource "aws_iam_role_policy_attachment" "s3_access_policy" {
   role                 = "${aws_iam_role.lambda_test_runner_role.name}"
   policy_arn           = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
 
-resource "aws_iam_role_policy_attachment" "cloudwatch-access-policy" {
+resource "aws_iam_role_policy_attachment" "cloudwatch_access_policy" {
   role                 = "${aws_iam_role.lambda_test_runner_role.name}"
   policy_arn           = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
 }
