@@ -93,7 +93,8 @@ This payload tells AWS Lambda Test Runner which Git repo to clone, which branch 
 Now we will use this payload to invoke Lambda function:
 
 ```
-aws lambda invoke --function-name LambdaTestRunner --region eu-west-2 --payload file://wiremock-maven-plugin-payload.json wiremock-maven-plugin-response.json
+aws lambda invoke --function-name LambdaTestRunner --region eu-west-2 \
+  --payload file://wiremock-maven-plugin-payload.json wiremock-maven-plugin-response.json
 ```
 
 This assumes your Lambda is named `LambdaTestRunner` and was deployed to `eu-west-2`. The JSON response will be stored to `wiremock-maven-plugin-response.json`. 
@@ -114,7 +115,8 @@ S3_PREFIX=$(jq -r ".s3Prefix" wiremock-maven-plugin-response.json)
 Now we can fetch from S3 the build outputs:
 
 ```
-aws s3 cp --exclude "*" --include "${S3_PREFIX}*" --recursive s3://automatictester.co.uk-lambda-test-runner-build-outputs .
+aws s3 cp --exclude "*" --include "${S3_PREFIX}*" --recursive \
+  s3://automatictester.co.uk-lambda-test-runner-build-outputs .
 ```
 
 At this point we have the test results on the local file system. They can be now processed in the usual way.
