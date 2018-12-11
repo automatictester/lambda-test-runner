@@ -45,6 +45,7 @@
                     <groups>${testng.groups}</groups>
                     <useSystemClassLoader>false</useSystemClassLoader>
                     <environmentVariables>
+                        <AWS_REGION>eu-west-2</AWS_REGION>
                         <BUILD_OUTPUTS>automatictester.co.uk-lambda-test-runner-build-outputs</BUILD_OUTPUTS>
                         <GRADLE_CLEANUP>false</GRADLE_CLEANUP>
                         <M2_CLEANUP>false</M2_CLEANUP>
