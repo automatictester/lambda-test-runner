@@ -1,13 +1,13 @@
-provider "aws" {
-  region               = "eu-west-2"
-}
-
 terraform {
   backend "s3" {
     bucket             = "automatictester.co.uk-lambda-test-runner-tf-state"
     key                = "lambda-test-runner.tfstate"
     region             = "eu-west-2"
   }
+}
+
+provider "aws" {
+  region               = "eu-west-2"
 }
 
 resource "aws_iam_role" "lambda_test_runner_role" {
