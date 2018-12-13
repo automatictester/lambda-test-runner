@@ -19,7 +19,7 @@ pipeline {
         stage('Clone') {
             steps {
                 sshagent(['github-creds']) {
-                    git credentialsId: 'github-creds', url: 'git@github.com:automatictester/lambda-test-runner.git'
+                    git branch: "${env.BRANCH_NAME}", credentialsId: 'github-creds', url: 'git@github.com:automatictester/lambda-test-runner.git'
                 }
             }
         }
