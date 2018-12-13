@@ -24,7 +24,6 @@ public class Handler implements RequestHandler<Request, Response> {
 
     @Override
     public Response handleRequest(Request request, Context context) {
-        logTempDirSize();
         Optional<ProcessResult> jdkInstallationResult = maybeInstallJdkOnLambda(context);
         if (jdkInstallationResult.isPresent() && jdkInstallationResult.get().getExitCode() != 0) {
             log.error("JDK installation unsuccessful, terminating");
@@ -32,6 +31,7 @@ public class Handler implements RequestHandler<Request, Response> {
         }
         maybeDeleteLocalMavenCache();
         maybeDeleteLocalSbtCache();
+        logTempDirSize();
         cloneRepoToFreshDir(request);
         ProcessResult processResult = runCommand(request);
         logTempDirSize();
