@@ -1,6 +1,6 @@
 {
   "repoUri": "https://github.com/automatictester/sample-sbt-project.git",
   "branch": "master",
-  "command": "./sbt -Dsbt.global.base=${SBT_GLOBAL_BASE} -Dsbt.ivy.home=${SBT_IVY_HOME}",
+  "command": "./sbt -Dsbt.global.base=${SBT_GLOBAL_BASE} -Dsbt.ivy.home=${SBT_IVY_HOME} test",
   "storeToS3" : ["target/test-reports"]
 }
