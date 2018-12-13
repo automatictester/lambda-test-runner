@@ -48,6 +48,7 @@
                         <AWS_REGION>eu-west-2</AWS_REGION>
                         <BUILD_OUTPUTS>automatictester.co.uk-lambda-test-runner-build-outputs</BUILD_OUTPUTS>
                         <M2_CLEANUP>false</M2_CLEANUP>
+                        <MAVEN_USER_HOME>/tmp/.m2</MAVEN_USER_HOME>
                         <REPO_DIR>/tmp/repo</REPO_DIR>
                         <SBT_CLEANUP>false</SBT_CLEANUP>
                         <SSH_KEY_BUCKET>automatictester.co.uk-ssh-keys</SSH_KEY_BUCKET>

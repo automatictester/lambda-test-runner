@@ -65,7 +65,7 @@ public class HandlerTest {
     public void testHandleRequest() {
         request.setRepoUri("https://github.com/automatictester/lambda-test-runner.git");
         request.setBranch("master");
-        request.setCommand("./mvnw clean test -Dtest=SmokeTest -Dmaven.repo.local=/tmp/.m2");
+        request.setCommand("./mvnw clean test -Dtest=SmokeTest -Dmaven.repo.local=${MAVEN_USER_HOME}");
         request.setStoreToS3(getStoreToS3());
         Context context = null;
         Handler handler = new Handler();
@@ -80,7 +80,7 @@ public class HandlerTest {
     public void testHandleRequestNonDefaultBranch() {
         request.setRepoUri("https://github.com/automatictester/lambda-test-runner.git");
         request.setBranch("unit-testing");
-        request.setCommand("./mvnw clean test -Dtest=*SmokeTest -Dmaven.repo.local=/tmp/.m2");
+        request.setCommand("./mvnw clean test -Dtest=*SmokeTest -Dmaven.repo.local=${MAVEN_USER_HOME}");
         request.setStoreToS3(getStoreToS3());
         Context context = null;
         Handler handler = new Handler();

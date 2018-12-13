@@ -7,3 +7,6 @@ variable "s3_bucket_build_outputs" {
 variable "s3_bucket_ssh_keys" {
   default = "automatictester.co.uk-ssh-keys"
 }
+variable "s3_bucket_object_ssh_key_key" {
+  default = "id_rsa_lambda_test_runner"
+}

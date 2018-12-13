@@ -65,7 +65,7 @@ resource "aws_lambda_function" "lambda_test_runner" {
       SBT_GLOBAL_BASE  = "/tmp/.sbt"
       SBT_IVY_HOME     = "/tmp/.ivy2"
       SSH_KEY_BUCKET   = "${var.s3_bucket_ssh_keys}"
-      SSH_KEY_KEY      = "id_rsa_lambda_test_runner"
+      SSH_KEY_KEY      = "${var.s3_bucket_object_ssh_key_key}"
       SSH_KEY_LOCAL    = "/tmp/id_rsa"
       TEMP_DIR         = "/tmp"
     }
