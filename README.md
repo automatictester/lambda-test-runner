@@ -92,7 +92,7 @@ cat wiremock-maven-plugin-payload.json
 {
   "repoUri": "https://github.com/automatictester/wiremock-maven-plugin.git",
   "branch": "master",
-  "command": "./mvnw clean test -Dmaven.repo.local=${MAVEN_USER_HOME}",
+  "command": "./mvnw test -Dmaven.repo.local=${MAVEN_USER_HOME}",
   "storeToS3" : ["target/surefire-reports"]
 }
 ```
