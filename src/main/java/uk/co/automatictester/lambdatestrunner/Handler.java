@@ -69,7 +69,7 @@ public class Handler implements RequestHandler<Request, Response> {
     }
 
     private void maybeDeleteLocalMavenCache() {
-        if (System.getenv("M2_CLEANUP").equals("true")) {
+        if (System.getenv("M2_CLEANUP") != null && System.getenv("M2_CLEANUP").equals("true")) {
             log.info("Deleting Maven cache...");
             String localMavenCacheDir = System.getenv("MAVEN_USER_HOME");
             deleteDir(localMavenCacheDir);
@@ -77,7 +77,7 @@ public class Handler implements RequestHandler<Request, Response> {
     }
 
     private void maybeDeleteLocalSbtCache() {
-        if (System.getenv("SBT_CLEANUP").equals("true")) {
+        if (System.getenv("SBT_CLEANUP") != null && System.getenv("SBT_CLEANUP").equals("true")) {
             log.info("Deleting SBT cache...");
             String sbtGlobalBase = System.getenv("SBT_GLOBAL_BASE");
             String sbtIvyHome = System.getenv("SBT_IVY_HOME");

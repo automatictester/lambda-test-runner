@@ -60,6 +60,7 @@ resource "aws_lambda_function" "lambda_test_runner" {
       M2_CLEANUP       = "false"
       MAVEN_USER_HOME  = "/tmp/.m2"
       REPO_DIR         = "/tmp/repo"
+      SBT_CLEANUP      = "false"
       SBT_GLOBAL_BASE  = "/tmp/.sbt"
       SBT_IVY_HOME     = "/tmp/.ivy2"
       SSH_KEY_BUCKET   = "${var.s3_bucket_ssh_keys}"
