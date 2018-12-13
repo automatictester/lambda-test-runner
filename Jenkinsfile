@@ -47,6 +47,7 @@ pipeline {
                     sh './lambda-test-runner-test.sh'
                     sh './wiremock-maven-plugin-test.sh'
                     sh './lightning-core-test.sh'
+                    sh './sample-sbt-project-test.sh'
                 }
             }
         }

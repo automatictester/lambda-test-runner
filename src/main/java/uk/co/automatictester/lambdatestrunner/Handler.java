@@ -31,7 +31,7 @@ public class Handler implements RequestHandler<Request, Response> {
             return createResponse(context, jdkInstallationResult.get());
         }
         maybeDeleteLocalMavenCache();
-        maybeDeleteLocalGradleCache();
+        maybeDeleteLocalSbtCache();
         cloneRepoToFreshDir(request);
         ProcessResult processResult = runCommand(request);
         logTempDirSize();
@@ -70,15 +70,19 @@ public class Handler implements RequestHandler<Request, Response> {
 
     private void maybeDeleteLocalMavenCache() {
         if (System.getenv("M2_CLEANUP").equals("true")) {
+            log.info("Deleting Maven cache...");
             String localMavenCacheDir = System.getenv("MAVEN_USER_HOME");
             deleteDir(localMavenCacheDir);
         }
     }
 
-    private void maybeDeleteLocalGradleCache() {
-        if (System.getenv("GRADLE_CLEANUP").equals("true")) {
-            String localGradleCacheDir = System.getenv("GRADLE_USER_HOME");
-            deleteDir(localGradleCacheDir);
+    private void maybeDeleteLocalSbtCache() {
+        if (System.getenv("SBT_CLEANUP").equals("true")) {
+            log.info("Deleting SBT cache...");
+            String sbtGlobalBase = System.getenv("SBT_GLOBAL_BASE");
+            String sbtIvyHome = System.getenv("SBT_IVY_HOME");
+            deleteDir(sbtGlobalBase);
+            deleteDir(sbtIvyHome);
         }
     }
 

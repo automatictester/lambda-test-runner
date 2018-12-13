@@ -55,13 +55,13 @@ resource "aws_lambda_function" "lambda_test_runner" {
   environment {
     variables = {
       BUILD_OUTPUTS    = "${var.s3_bucket_build_outputs}"
-      GRADLE_CLEANUP   = "false"          // for future use
-      GRADLE_USER_HOME = "/tmp/.gradle"   // for future use
       JAVA_HOME        = "/tmp/jdk10"
       LOG_LEVEL        = "info"
       M2_CLEANUP       = "false"
       MAVEN_USER_HOME  = "/tmp/.m2"
       REPO_DIR         = "/tmp/repo"
+      SBT_GLOBAL_BASE  = "/tmp/.sbt"
+      SBT_IVY_HOME     = "/tmp/.ivy2"
       SSH_KEY_BUCKET   = "${var.s3_bucket_ssh_keys}"
       SSH_KEY_KEY      = "id_rsa_lambda_test_runner"
       SSH_KEY_LOCAL    = "/tmp/id_rsa"
