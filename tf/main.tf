@@ -50,7 +50,7 @@ resource "aws_lambda_function" "lambda_test_runner" {
   source_code_hash     = "${base64sha256(file("${path.module}/../target/lambda-test-runner.jar"))}"
   role                 = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${aws_iam_role.lambda_test_runner_role.name}"
   memory_size          = "2048"
-  timeout              = "180"
+  timeout              = "300"
 
   environment {
     variables = {
