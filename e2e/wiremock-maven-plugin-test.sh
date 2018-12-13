@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
+rm -f wiremock-maven-plugin-response.json
+
 START=`date +%s`
-aws lambda invoke --function-name LambdaTestRunner --region eu-west-2 --payload file://wiremock-maven-plugin-payload.json wiremock-maven-plugin-response.json
+aws lambda invoke --function-name LambdaTestRunner --region eu-west-2 --cli-read-timeout 0 --payload file://wiremock-maven-plugin-payload.json wiremock-maven-plugin-response.json
 END=`date +%s`
 EXEC_TIME=$((END-START))
 

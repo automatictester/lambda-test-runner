@@ -94,9 +94,12 @@ This payload tells AWS Lambda Test Runner which Git repo to clone, which branch 
 Now we will use this payload to invoke Lambda function:
 
 ```
-aws lambda invoke --function-name LambdaTestRunner --region eu-west-2 \
+aws lambda invoke --function-name LambdaTestRunner --region eu-west-2 --cli-read-timeout 0 \
   --payload file://wiremock-maven-plugin-payload.json wiremock-maven-plugin-response.json
 ```
+
+It is critical to override the default 60s maximum socket read time with `--cli-read-timeout`. If we don't do that and our tests take more than 60s to execute, 
+Lambda will automatically trigger a retry with all its consequences. This is not the behaviour we want.
 
 This assumes your Lambda is named `LambdaTestRunner` and was deployed to `eu-west-2`. The JSON response will be stored to `wiremock-maven-plugin-response.json`. 
 
