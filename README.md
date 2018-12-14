@@ -53,7 +53,7 @@ AWS Lambda Test Runner will:
 
 ## Architecture
 
-![AWS Lambda Test Runner architecture](img/aws-lambda-test-runner-architecture.png height=70% width=70%)
+<img src="img/aws-lambda-test-runner-architecture.png" width="752" height="662"/>
 
 ## How to deploy it
 
