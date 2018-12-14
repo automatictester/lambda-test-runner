@@ -50,7 +50,7 @@ AWS Lambda Test Runner will:
 - Clone Git repository you passed in your request to `/tmp` using JGit library.
 - Run shell command which you passed in your request. There are no build tools available on Lambda, so it needs to be included in your repo.
   See [Build tools](https://github.com/automatictester/lambda-test-runner#build-tools) and 
-  [Build tools examples](https://github.com/automatictester/lambda-test-runner#build-tool-examples) for more information.
+  [Build tool examples](https://github.com/automatictester/lambda-test-runner#build-tool-examples) for more information.
 - Store build outputs to S3, if requested.
 - Log events to CloudWatch Logs.
 
@@ -165,7 +165,7 @@ Below is an example of an invokation request with all supported parameters:
 Parameters:
 - `repoUri`: URI of Git repo to clone (required). Both HTTPS and SSH clones are supported.
 - `branch`: Git branch (required).
-- `command`: Command to run the tests (required). See [Build tools examples](https://github.com/automatictester/lambda-test-runner#build-tool-examples) for more information.
+- `command`: Command to run the tests (required). See [Build tool examples](https://github.com/automatictester/lambda-test-runner#build-tool-examples) for more information.
 - `storeToS3`: Zero or more element list of directories to store to S3 (required). Valid values include: `["target/surefire-reports", "target/failsafe-reports"]`,
 `["target/surefire-reports"]`, `[]`.
 
