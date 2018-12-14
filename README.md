@@ -49,7 +49,7 @@ AWS Lambda Test Runner will:
 - Clone to `/tmp` Git repo you passed in your request, using JGit library.
 - Run shell command which you passed in your request. There are no build tools available on Lambda, so it needs to be included in your repo.
   See [Build tools](https://github.com/automatictester/lambda-test-runner#build-tools) and 
-  [Build tools](https://github.com/automatictester/lambda-test-runner#build-tool-examples) for more information.
+  [Build tools examples](https://github.com/automatictester/lambda-test-runner#build-tool-examples) for more information.
 
 ## How to deploy it
 
@@ -140,16 +140,33 @@ aws s3 cp --exclude "*" --include "${S3_PREFIX}*" --recursive \
 
 At this point we have the test results on the local file system. They can be now processed in the usual way.
 
+## Request parameters
+
+Below is an example of an invokation request with all supported parameters:
+
+{
+  "repoUri": "https://github.com/automatictester/lambda-test-runner.git",
+  "branch": "master",
+  "command": "./mvnw test -Dtest=SmokeTest -Dmaven.repo.local=${MAVEN_USER_HOME}",
+  "storeToS3" : ["target/surefire-reports", "target/surefire-reports"]
+}
+
+Parameters:
+- `repoUri`: URI of Git repo to clone (required). Both HTTPS and SSH clones are supported.
+- `branch`: Git branch (required).
+- `command`: Command to run the tests (required). See [Build tools examples](https://github.com/automatictester/lambda-test-runner#build-tool-examples) for more information.
+- `storeToS3`: Zero or more element list of directories to store to S3 (required). Valid values include: `["target/surefire-reports", "target/failsafe-reports"]`,
+`["target/surefire-reports"]`, `[]`.
+
 ## Build tool examples
 
 Sample request payload for running Maven tests:
 
 ``` 
 {
-  "repoUri": "https://github.com/automatictester/wiremock-maven-plugin.git",
-  "branch": "master",
-  "command": "./mvnw clean test -Dmaven.repo.local=${MAVEN_USER_HOME}",
-  "storeToS3" : ["target/surefire-reports"]
+  ...
+  "command": "./mvnw test -Dmaven.repo.local=${MAVEN_USER_HOME}",
+  ...
 }
 ```
 
@@ -157,10 +174,9 @@ Sample request payload for running SBT tests:
 
 ``` 
 {
-  "repoUri": "https://github.com/automatictester/sample-sbt-project.git",
-  "branch": "master",
+  ...
   "command": "./sbt -Dsbt.global.base=${SBT_GLOBAL_BASE} -Dsbt.ivy.home=${SBT_IVY_HOME} test",
-  "storeToS3" : ["target/test-reports"]
+  ...
 }
 ```
 
