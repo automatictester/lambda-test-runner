@@ -42,16 +42,21 @@ To provide an efficient test runner based on AWS Lambda technology for the Java 
 
 - [x] OpenJDK 10.0.2 - is used to run your tests
 
-## How it works (internally)
+## How it works
 
 AWS Lambda Test Runner will:
-- Install JDK to `/tmp` on first run, as Java runtime for AWS Lambda doesn't ship with `javac`.  
-- Clone to `/tmp` Git repo you passed in your request, using JGit library.
+- Install JDK to `/tmp` on first run, as Java runtime for AWS Lambda doesn't ship with `javac`.
+- Get SSH key from S3, if Git repository URI is for cloning with SSH.
+- Clone Git repository you passed in your request to `/tmp` using JGit library.
 - Run shell command which you passed in your request. There are no build tools available on Lambda, so it needs to be included in your repo.
   See [Build tools](https://github.com/automatictester/lambda-test-runner#build-tools) and 
   [Build tools examples](https://github.com/automatictester/lambda-test-runner#build-tool-examples) for more information.
+- Store build outputs to S3, if requested.
+- Log events to CloudWatch Logs.
 
 ## Architecture
+
+This is the big picture:
 
 <img src="img/aws-lambda-test-runner-architecture.png" width="537" height="473"/>
 
