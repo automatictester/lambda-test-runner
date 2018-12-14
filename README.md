@@ -144,12 +144,14 @@ At this point we have the test results on the local file system. They can be now
 
 Below is an example of an invokation request with all supported parameters:
 
+```
 {
   "repoUri": "https://github.com/automatictester/lambda-test-runner.git",
   "branch": "master",
   "command": "./mvnw test -Dtest=SmokeTest -Dmaven.repo.local=${MAVEN_USER_HOME}",
   "storeToS3" : ["target/surefire-reports", "target/surefire-reports"]
 }
+```
 
 Parameters:
 - `repoUri`: URI of Git repo to clone (required). Both HTTPS and SSH clones are supported.
