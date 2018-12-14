@@ -129,7 +129,12 @@ cat wiremock-maven-plugin-response.json
 It should look similar to this one:
 
 ```
-...,"exitCode":0,"s3Prefix":"2018-12-11-13-33-10","requestId":"418eaf5d-fd49-11e8-8fd7-ade5a41cf0d6"}
+{
+  "output": "...",
+  "exitCode": 0,
+  "s3Prefix": "2018-12-11-13-33-10",
+  "requestId": "418eaf5d-fd49-11e8-8fd7-ade5a41cf0d6"
+}
 ```
 
 We can now read `s3Prefix` into `S3_PREFIX` variable, which we will use in a subsequent command:
