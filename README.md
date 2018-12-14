@@ -51,6 +51,10 @@ AWS Lambda Test Runner will:
   See [Build tools](https://github.com/automatictester/lambda-test-runner#build-tools) and 
   [Build tools examples](https://github.com/automatictester/lambda-test-runner#build-tool-examples) for more information.
 
+## Architecture
+
+![AWS Lambda Test Runner architecture](img/aws-lambda-test-runner-architecture.png "AWS Lambda Test Runner architecture")
+
 ## How to deploy it
 
 - Clone the repo.
