@@ -2,6 +2,8 @@ package uk.co.automatictester.lambdatestrunner;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectListing;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 import io.findify.s3mock.S3Mock;
 import org.apache.commons.io.FileUtils;
 import org.testng.annotations.AfterClass;
@@ -14,6 +16,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -39,10 +42,10 @@ public class HandlerTest {
 
     @AfterClass(alwaysRun = true)
     public void teardown() {
+        maybeDeleteBucket();
         if (System.getProperty("mockS3") != null) {
             s3Mock.stop();
         }
-        maybeDeleteBucket();
     }
 
     private void startS3Mock() {
@@ -59,7 +62,23 @@ public class HandlerTest {
 
     private void maybeDeleteBucket() {
         if (amazonS3.doesBucketExistV2(BUCKET)) {
+            deleteAllObjects(BUCKET);
             amazonS3.deleteBucket(BUCKET);
+        }
+    }
+
+    private void deleteAllObjects(String bucket) {
+        ObjectListing objectListing = amazonS3.listObjects(bucket);
+        while (true) {
+            Iterator<S3ObjectSummary> objIter = objectListing.getObjectSummaries().iterator();
+            while (objIter.hasNext()) {
+                amazonS3.deleteObject(bucket, objIter.next().getKey());
+            }
+            if (objectListing.isTruncated()) {
+                objectListing = amazonS3.listNextBatchOfObjects(objectListing);
+            } else {
+                break;
+            }
         }
     }
 
