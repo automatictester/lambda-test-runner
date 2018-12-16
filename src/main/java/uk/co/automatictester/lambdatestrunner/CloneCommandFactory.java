@@ -34,13 +34,13 @@ public class CloneCommandFactory {
         if (repoUri.startsWith("git")) {
             return getSshCloneCommand(repoUri, branch, dir);
         } else if (repoUri.startsWith("http")) {
-            return getHttpsCloneCommand(repoUri, branch, dir);
+            return getCloneCommand(repoUri, branch, dir);
         } else {
-            throw new RuntimeException("Unknown Git repo protocol: " + repoUri);
+            throw new IllegalArgumentException("Unknown protocol: " + repoUri);
         }
     }
 
-    private static CloneCommand getHttpsCloneCommand(String repoUri, String branch, File dir) {
+    private static CloneCommand getCloneCommand(String repoUri, String branch, File dir) {
         return Git.cloneRepository()
                 .setURI(repoUri)
                 .setBranch(branch)
@@ -48,10 +48,7 @@ public class CloneCommandFactory {
     }
 
     private static CloneCommand getSshCloneCommand(String repoUri, String branch, File dir) {
-        return Git.cloneRepository()
-                .setURI(repoUri)
-                .setBranch(branch)
-                .setDirectory(dir)
+        return getCloneCommand(repoUri, branch, dir)
                 .setTransportConfigCallback(transport -> {
                     SshTransport sshTransport = (SshTransport) transport;
                     sshTransport.setSshSessionFactory(getSshSessionFactory());
