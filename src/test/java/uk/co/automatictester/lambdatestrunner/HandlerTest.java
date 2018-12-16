@@ -33,8 +33,8 @@ public class HandlerTest {
     public void setupEnv() {
         if (System.getProperty("mockS3") != null) {
             startS3Mock();
-            maybeCreateBucket();
         }
+        maybeCreateBucket();
     }
 
     private void startS3Mock() {
