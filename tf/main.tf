@@ -25,12 +25,20 @@ resource "aws_iam_policy" "cloudwatch_logs_put_log_events" {
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Action": "logs:PutLogEvents",
+            "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+            ],
             "Effect": "Allow",
             "Resource": [
                 "arn:aws:logs:*:*:log-group:/aws/lambda/${aws_lambda_function.lambda_test_runner.function_name}",
                 "arn:aws:logs:*:*:log-group:*:*:*"
             ]
+        },
+        {
+            "Action": "logs:CreateLogGroup",
+            "Effect": "Allow",
+            "Resource": "*"
         }
     ]
 }
