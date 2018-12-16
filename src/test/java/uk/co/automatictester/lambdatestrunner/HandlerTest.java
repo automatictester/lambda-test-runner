@@ -37,6 +37,14 @@ public class HandlerTest {
         maybeCreateBucket();
     }
 
+    @AfterClass(alwaysRun = true)
+    public void teardown() {
+        if (System.getProperty("mockS3") != null) {
+            s3Mock.stop();
+        }
+        maybeDeleteBucket();
+    }
+
     private void startS3Mock() {
         int port = 8001;
         s3Mock = new S3Mock.Builder().withPort(port).withInMemoryBackend().build();
@@ -49,10 +57,9 @@ public class HandlerTest {
         }
     }
 
-    @AfterClass(alwaysRun = true)
-    public void teardown() {
-        if (System.getProperty("mockS3") != null) {
-            s3Mock.stop();
+    private void maybeDeleteBucket() {
+        if (amazonS3.doesBucketExistV2(BUCKET)) {
+            amazonS3.deleteBucket(BUCKET);
         }
     }
 
