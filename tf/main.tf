@@ -12,8 +12,80 @@ provider "aws" {
 
 resource "aws_iam_role" "lambda_test_runner_role" {
   name                 = "LambdaTestRunnerRole"
-  description          = "Allows LambdaTestRunner function to use S3 and store logs in CloudWatch."
-  assume_role_policy   = "${file("assume-role-policy.json")}"
+  description          = "Allow LambdaTestRunner to use S3 CloudWatch Logs."
+  assume_role_policy   = "${file("iam-policy/assume-role-policy.json")}"
+}
+
+resource "aws_iam_policy" "cloudwatch_logs_put_log_events" {
+  name                 = "CloudWatchLogsPutLogEvents"
+  path                 = "/"
+  description          = "CloudWatch Logs Put Log Events"
+  policy               = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": "logs:PutLogEvents",
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:logs:*:*:log-group:/aws/lambda/${aws_lambda_function.lambda_test_runner.function_name}",
+                "arn:aws:logs:*:*:log-group:*:*:*"
+            ]
+        }
+    ]
+}
+EOF
+}
+
+resource "aws_iam_policy" "s3_put_build_outputs" {
+  name                 = "LambdaTestRunnerPutBuildOutputsToS3"
+  path                 = "/"
+  description          = "Put LambdaTestRunner Build Outputs to S3"
+  policy               = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": "s3:PutObject",
+            "Effect": "Allow",
+            "Resource": "arn:aws:s3:::${var.s3_bucket_build_outputs}/*"
+        }
+    ]
+}
+EOF
+}
+
+resource "aws_iam_policy" "s3_get_ssh_key" {
+  name                 = "LambdaTestRunnerGetSshKeyFromS3"
+  path                 = "/"
+  description          = "LambdaTestRunner Get Ssh Key From S3"
+  policy               = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": "s3:GetObject",
+            "Effect": "Allow",
+            "Resource": "arn:aws:s3:::${var.s3_bucket_ssh_keys}/${var.s3_bucket_object_ssh_key_key}"
+        }
+    ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "s3_build_outputs_access_policy" {
+  role                 = "${aws_iam_role.lambda_test_runner_role.name}"
+  policy_arn           = "${aws_iam_policy.s3_put_build_outputs.arn}"
+}
+
+resource "aws_iam_role_policy_attachment" "s3_ssh_key_access_policy" {
+  role                 = "${aws_iam_role.lambda_test_runner_role.name}"
+  policy_arn           = "${aws_iam_policy.s3_get_ssh_key.arn}"
+}
+
+resource "aws_iam_role_policy_attachment" "cloudwatch_logs_access_policy" {
+  role                 = "${aws_iam_role.lambda_test_runner_role.name}"
+  policy_arn           = "${aws_iam_policy.cloudwatch_logs_put_log_events.arn}"
 }
 
 resource "aws_s3_bucket" "jar" {
@@ -70,14 +142,4 @@ resource "aws_lambda_function" "lambda_test_runner" {
       TEMP_DIR         = "/tmp"
     }
   }
-}
-
-resource "aws_iam_role_policy_attachment" "s3_access_policy" {
-  role                 = "${aws_iam_role.lambda_test_runner_role.name}"
-  policy_arn           = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
-}
-
-resource "aws_iam_role_policy_attachment" "cloudwatch_access_policy" {
-  role                 = "${aws_iam_role.lambda_test_runner_role.name}"
-  policy_arn           = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
 }
