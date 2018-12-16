@@ -100,10 +100,14 @@ public class Handler implements RequestHandler<Request, Response> {
 
     private void cloneRepoToFreshDir(Request request) {
         deleteDir(REPO_DIR);
-        String repoUri = request.getRepoUri();
-        String branch = request.getBranch();
         File repoDir = new File(REPO_DIR);
-        GitCloner.cloneRepo(repoUri, branch, repoDir);
+        String repoUri = request.getRepoUri();
+        if (request.getBranch() != null) {
+            String branch = request.getBranch();
+            GitCloner.cloneRepo(repoUri, branch, repoDir);
+        } else {
+            GitCloner.cloneRepo(repoUri, repoDir);
+        }
     }
 
     private static void deleteDir(String dir) {

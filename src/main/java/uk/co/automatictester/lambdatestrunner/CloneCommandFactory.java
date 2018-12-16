@@ -4,6 +4,8 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.UserInfo;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.transport.JschConfigSessionFactory;
@@ -16,9 +18,16 @@ import java.io.File;
 
 public class CloneCommandFactory {
 
+    private static final Logger log = LogManager.getLogger(CloneCommandFactory.class);
     private static final String SSH_KEY_LOCAL = System.getenv("SSH_KEY_LOCAL");
 
     private CloneCommandFactory() {
+    }
+
+    public static CloneCommand getInstance(String repoUri, File dir) {
+        String branch = "HEAD";
+        log.info("Branch not specified, using '{}'", branch);
+        return getInstance(repoUri, branch, dir);
     }
 
     public static CloneCommand getInstance(String repoUri, String branch, File dir) {

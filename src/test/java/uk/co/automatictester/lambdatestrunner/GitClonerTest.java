@@ -55,6 +55,16 @@ public class GitClonerTest {
     }
 
     @Test(groups = "local")
+    public void testCloneRepoWithDefaultDevelopBranchWithoutSpecifyingBranchName() {
+        String repoUri = "https://github.com/automatictester/sample-repo-with-develop-branch.git";
+        GitCloner.cloneRepo(repoUri, REPO_DIR);
+
+        String readmeFile = REPO_DIR.toString() + "/README.md";
+        Path path = Paths.get(readmeFile);
+        assertTrue(Files.exists(path));
+    }
+
+    @Test(groups = "local")
     public void testCloneRepoGitHubOverHttpsCheckoutNonDefaultBranch() {
         String repoUri = "https://github.com/automatictester/lambda-test-runner.git";
         String branch = "unit-testing";

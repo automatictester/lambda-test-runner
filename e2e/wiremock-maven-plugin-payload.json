@@ -1,5 +1,4 @@
 {
   "repoUri": "https://github.com/automatictester/wiremock-maven-plugin.git",
-  "branch": "master",
   "command": "./mvnw test -Dmaven.repo.local=${MAVEN_USER_HOME}"
 }

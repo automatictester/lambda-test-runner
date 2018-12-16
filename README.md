@@ -169,8 +169,8 @@ Below is an example of an invokation request with all supported parameters:
 
 Parameters:
 - `repoUri`: (Required) URI of Git repo to clone. Both HTTPS and SSH clones are supported.
-- `branch`: (Required) Git branch.
 - `command`: (Required) Command to run the tests. See [Build tool examples](https://github.com/automatictester/lambda-test-runner#build-tool-examples) for more information.
+- `branch`: (Optional) Git branch. If not specified, defaults to `HEAD`.
 - `storeToS3`: (Optional) list of directories to store to S3. Valid values include: `["target/surefire-reports", "target/failsafe-reports"]`,
 `["target/surefire-reports"]`, `[]`.
 

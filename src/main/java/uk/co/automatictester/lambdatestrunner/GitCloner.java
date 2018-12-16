@@ -20,13 +20,38 @@ public class GitCloner {
     public static void cloneRepo(String repoUri, String branch, File dir) {
         maybeDownloadSshKey(repoUri);
         log.info("Git repo '{}', branch '{}', dir '{}'", repoUri, branch, dir);
-        Instant start = Instant.now();
         CloneCommand cloneCommand = CloneCommandFactory.getInstance(repoUri, branch, dir);
-        execute(cloneCommand);
+        try {
+            executeCloneCommand(cloneCommand);
+        } finally {
+            maybeDeleteSshKey(repoUri);
+        }
+    }
+
+    public static void cloneRepo(String repoUri, File dir) {
+        maybeDownloadSshKey(repoUri);
+        log.info("Git repo '{}', dir '{}'", repoUri, dir);
+        CloneCommand cloneCommand = CloneCommandFactory.getInstance(repoUri, dir);
+        try {
+            executeCloneCommand(cloneCommand);
+        } finally {
+            maybeDeleteSshKey(repoUri);
+        }
+    }
+
+    private static void executeCloneCommand(CloneCommand cloneCommand) {
+        Instant start = Instant.now();
+        try {
+            cloneCommand.call();
+        } catch (GitAPIException e) {
+            throw new RuntimeException(e);
+        } catch (JGitInternalException e) {
+            log.error("Cloning failed, terminating");
+            throw e;
+        }
         Instant finish = Instant.now();
         Duration duration = Duration.between(start, finish);
         log.info("Cloning took {} s", duration.getSeconds());
-        maybeDeleteSshKey(repoUri);
     }
 
     private static void maybeDownloadSshKey(String repoUri) {
@@ -38,17 +63,6 @@ public class GitCloner {
     private static void maybeDeleteSshKey(String repoUri) {
         if (repoUri.startsWith("git")) {
             SshKeyManager.deleteSshKey();
-        }
-    }
-
-    private static void execute(CloneCommand cloneCommand) {
-        try {
-            cloneCommand.call();
-        } catch (GitAPIException e) {
-            throw new RuntimeException(e);
-        } catch (JGitInternalException e) {
-            log.error("Cloning failed, terminating");
-            throw e;
         }
     }
 }
