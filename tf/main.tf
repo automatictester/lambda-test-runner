@@ -16,35 +16,6 @@ resource "aws_iam_role" "lambda_test_runner_role" {
   assume_role_policy   = "${file("iam-policy/assume-role-policy.json")}"
 }
 
-resource "aws_iam_policy" "cloudwatch_logs_put_log_events" {
-  name                 = "CloudWatchLogsPutLogEvents"
-  path                 = "/"
-  description          = "CloudWatch Logs Put Log Events"
-  policy               = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Action": [
-                "logs:CreateLogStream",
-                "logs:PutLogEvents"
-            ],
-            "Effect": "Allow",
-            "Resource": [
-                "arn:aws:logs:*:*:log-group:/aws/lambda/${aws_lambda_function.lambda_test_runner.function_name}",
-                "arn:aws:logs:*:*:log-group:*:*:*"
-            ]
-        },
-        {
-            "Action": "logs:CreateLogGroup",
-            "Effect": "Allow",
-            "Resource": "*"
-        }
-    ]
-}
-EOF
-}
-
 resource "aws_iam_policy" "s3_put_build_outputs" {
   name                 = "LambdaTestRunnerPutBuildOutputsToS3"
   path                 = "/"
@@ -91,9 +62,9 @@ resource "aws_iam_role_policy_attachment" "s3_ssh_key_access_policy" {
   policy_arn           = "${aws_iam_policy.s3_get_ssh_key.arn}"
 }
 
-resource "aws_iam_role_policy_attachment" "cloudwatch_logs_access_policy" {
+resource "aws_iam_role_policy_attachment" "cloudwatch_access_policy" {
   role                 = "${aws_iam_role.lambda_test_runner_role.name}"
-  policy_arn           = "${aws_iam_policy.cloudwatch_logs_put_log_events.arn}"
+  policy_arn           = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
 resource "aws_s3_bucket" "jar" {
