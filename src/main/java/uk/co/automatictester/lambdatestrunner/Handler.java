@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -35,13 +37,23 @@ public class Handler implements RequestHandler<Request, Response> {
         cloneRepoToFreshDir(request);
         ProcessResult processResult = runCommand(request);
         logTempDirSize();
-        String commonPrefix = storeToS3(System.getenv("REPO_DIR"), request);
-        return createResponse(context, processResult, commonPrefix);
+        String commonS3Prefix = null;
+        if (request.getStoreToS3() != null) {
+            commonS3Prefix = getS3Prefix();
+            storeToS3(System.getenv("REPO_DIR"), request, commonS3Prefix);
+        }
+        return createResponse(context, processResult, commonS3Prefix);
     }
 
-    private String storeToS3(String workDir, Request request) {
-        BuildOutputArchiver archiver = new BuildOutputArchiver(workDir);
-        return archiver.store(request.getStoreToS3());
+    private void storeToS3(String workDir, Request request, String prefix) {
+        BuildOutputArchiver archiver = new BuildOutputArchiver(workDir, prefix);
+        archiver.store(request.getStoreToS3());
+    }
+
+    private String getS3Prefix() {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss");
+        return f.format(now);
     }
 
     private void logTempDirSize() {

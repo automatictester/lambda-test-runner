@@ -6,6 +6,8 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,9 +15,11 @@ import static org.testng.Assert.assertEquals;
 
 public class BuildOutputArchiverTest {
 
-    private static final String BUCKET = System.getenv("BUILD_OUTPUTS");
-    private S3Mock s3Mock;
+    private final String s3Bucket = System.getenv("BUILD_OUTPUTS");
+    private final String workDir = System.getProperty("user.dir");
     private final AmazonS3 amazonS3 = AmazonS3Factory.getInstance();
+    private final String commonS3Prefix = getS3Prefix();
+    private final S3Mock s3Mock = new S3Mock.Builder().withPort(8001).withInMemoryBackend().build();
 
     @BeforeClass(alwaysRun = true)
     public void setupEnv() {
@@ -26,14 +30,12 @@ public class BuildOutputArchiverTest {
     }
 
     private void startS3Mock() {
-        int port = 8001;
-        s3Mock = new S3Mock.Builder().withPort(port).withInMemoryBackend().build();
         s3Mock.start();
     }
 
     private void maybeCreateBucket() {
-        if (!amazonS3.doesBucketExistV2(BUCKET)) {
-            amazonS3.createBucket(BUCKET);
+        if (!amazonS3.doesBucketExistV2(s3Bucket)) {
+            amazonS3.createBucket(s3Bucket);
         }
     }
 
@@ -55,12 +57,13 @@ public class BuildOutputArchiverTest {
         dirsToStore.add(dirNonexistent);
         dirsToStore.add(dirB);
 
-        BuildOutputArchiver archiver = new BuildOutputArchiver(System.getProperty("user.dir"));
-        String commonPrefix = archiver.store(dirsToStore);
-        String keyA = commonPrefix + "/" + dirA + "/a.txt";
-        String keyAA = commonPrefix + "/" + dirA + "/subdir/aa.txt";
-        String keyB = commonPrefix + "/" + dirB + "/b.txt";
-        String keyBB = commonPrefix + "/" + dirB + "/subdir/bb.txt";
+
+        BuildOutputArchiver archiver = new BuildOutputArchiver(workDir, commonS3Prefix);
+        archiver.store(dirsToStore);
+        String keyA = commonS3Prefix + "/" + dirA + "/a.txt";
+        String keyAA = commonS3Prefix + "/" + dirA + "/subdir/aa.txt";
+        String keyB = commonS3Prefix + "/" + dirB + "/b.txt";
+        String keyBB = commonS3Prefix + "/" + dirB + "/subdir/bb.txt";
 
         assertEquals(getObjectAsString(keyA), "a");
         assertEquals(getObjectAsString(keyAA), "aa");
@@ -68,7 +71,19 @@ public class BuildOutputArchiverTest {
         assertEquals(getObjectAsString(keyBB), "bb");
     }
 
+    @Test(groups = "local", expectedExceptions = IllegalArgumentException.class)
+    public void testStoreNullInput() {
+        BuildOutputArchiver archiver = new BuildOutputArchiver(workDir, commonS3Prefix);
+        archiver.store(null);
+    }
+
+    private String getS3Prefix() {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss");
+        return f.format(now);
+    }
+
     private String getObjectAsString(String key) {
-        return amazonS3.getObjectAsString(BUCKET, key);
+        return amazonS3.getObjectAsString(s3Bucket, key);
     }
 }
