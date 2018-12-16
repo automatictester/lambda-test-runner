@@ -72,13 +72,6 @@ resource "aws_s3_bucket" "jar" {
   acl                  = "private"
 }
 
-resource "aws_s3_bucket_object" "jar" {
-  bucket               = "${var.s3_bucket_jar}"
-  key                  = "lambda-test-runner.jar"
-  source               = "${path.module}/../target/lambda-test-runner.jar"
-  etag                 = "${md5(file("${path.module}/../target/lambda-test-runner.jar"))}"
-}
-
 resource "aws_s3_bucket" "build_outputs" {
   bucket               = "${var.s3_bucket_build_outputs}"
   acl                  = "private"
@@ -90,6 +83,13 @@ resource "aws_s3_bucket" "build_outputs" {
       days = 1
     }
   }
+}
+
+resource "aws_s3_bucket_object" "jar" {
+  bucket               = "${var.s3_bucket_jar}"
+  key                  = "lambda-test-runner.jar"
+  source               = "${path.module}/../target/lambda-test-runner.jar"
+  etag                 = "${md5(file("${path.module}/../target/lambda-test-runner.jar"))}"
 }
 
 resource "aws_lambda_function" "lambda_test_runner" {
