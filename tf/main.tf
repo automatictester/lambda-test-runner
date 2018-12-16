@@ -12,7 +12,7 @@ provider "aws" {
 
 resource "aws_iam_role" "lambda_test_runner_role" {
   name                 = "LambdaTestRunnerRole"
-  description          = "Allow LambdaTestRunner to use S3 CloudWatch Logs."
+  description          = "Allow LambdaTestRunner to use S3 and CloudWatch Logs."
   assume_role_policy   = "${file("iam-policy/assume-role-policy.json")}"
 }
 

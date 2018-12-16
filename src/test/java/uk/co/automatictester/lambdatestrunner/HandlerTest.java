@@ -26,10 +26,10 @@ import static org.testng.Assert.assertEquals;
 
 public class HandlerTest {
 
-    private static final String BUCKET = System.getenv("BUILD_OUTPUTS");
-    private static final File WORK_DIR = new File(System.getenv("REPO_DIR"));
+    private final String bucket = System.getenv("BUILD_OUTPUTS");
+    private final File workDir = new File(System.getenv("REPO_DIR"));
     private final AmazonS3 amazonS3 = AmazonS3Factory.getInstance();
-    private S3Mock s3Mock;
+    private final S3Mock s3Mock = new S3Mock.Builder().withPort(8001).withInMemoryBackend().build();
     private Request request = new Request();
 
     @BeforeClass(alwaysRun = true)
@@ -49,21 +49,19 @@ public class HandlerTest {
     }
 
     private void startS3Mock() {
-        int port = 8001;
-        s3Mock = new S3Mock.Builder().withPort(port).withInMemoryBackend().build();
         s3Mock.start();
     }
 
     private void maybeCreateBucket() {
-        if (!amazonS3.doesBucketExistV2(BUCKET)) {
-            amazonS3.createBucket(BUCKET);
+        if (!amazonS3.doesBucketExistV2(bucket)) {
+            amazonS3.createBucket(bucket);
         }
     }
 
     private void maybeDeleteBucket() {
-        if (amazonS3.doesBucketExistV2(BUCKET)) {
-            deleteAllObjects(BUCKET);
-            amazonS3.deleteBucket(BUCKET);
+        if (amazonS3.doesBucketExistV2(bucket)) {
+            deleteAllObjects(bucket);
+            amazonS3.deleteBucket(bucket);
         }
     }
 
@@ -84,7 +82,7 @@ public class HandlerTest {
 
     @BeforeMethod(alwaysRun = true)
     public void deleteDir() throws IOException {
-        FileUtils.deleteDirectory(WORK_DIR);
+        FileUtils.deleteDirectory(workDir);
     }
 
     @Test(groups = "local")

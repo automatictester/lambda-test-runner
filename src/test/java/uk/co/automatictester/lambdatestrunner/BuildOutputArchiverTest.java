@@ -1,6 +1,8 @@
 package uk.co.automatictester.lambdatestrunner;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectListing;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 import io.findify.s3mock.S3Mock;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -9,13 +11,14 @@ import org.testng.annotations.Test;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import static org.testng.Assert.assertEquals;
 
 public class BuildOutputArchiverTest {
 
-    private final String s3Bucket = System.getenv("BUILD_OUTPUTS");
+    private final String bucket = System.getenv("BUILD_OUTPUTS");
     private final String workDir = System.getProperty("user.dir");
     private final AmazonS3 amazonS3 = AmazonS3Factory.getInstance();
     private final String commonS3Prefix = getS3Prefix();
@@ -25,7 +28,15 @@ public class BuildOutputArchiverTest {
     public void setupEnv() {
         if (System.getProperty("mockS3") != null) {
             startS3Mock();
-            maybeCreateBucket();
+        }
+        maybeCreateBucket();
+    }
+
+    @AfterClass(alwaysRun = true)
+    public void teardown() {
+        maybeDeleteBucket();
+        if (System.getProperty("mockS3") != null) {
+            s3Mock.stop();
         }
     }
 
@@ -34,15 +45,30 @@ public class BuildOutputArchiverTest {
     }
 
     private void maybeCreateBucket() {
-        if (!amazonS3.doesBucketExistV2(s3Bucket)) {
-            amazonS3.createBucket(s3Bucket);
+        if (!amazonS3.doesBucketExistV2(bucket)) {
+            amazonS3.createBucket(bucket);
         }
     }
 
-    @AfterClass(alwaysRun = true)
-    public void teardown() {
-        if (System.getProperty("mockS3") != null) {
-            s3Mock.stop();
+    private void maybeDeleteBucket() {
+        if (amazonS3.doesBucketExistV2(bucket)) {
+            deleteAllObjects(bucket);
+            amazonS3.deleteBucket(bucket);
+        }
+    }
+
+    private void deleteAllObjects(String bucket) {
+        ObjectListing objectListing = amazonS3.listObjects(bucket);
+        while (true) {
+            Iterator<S3ObjectSummary> objIter = objectListing.getObjectSummaries().iterator();
+            while (objIter.hasNext()) {
+                amazonS3.deleteObject(bucket, objIter.next().getKey());
+            }
+            if (objectListing.isTruncated()) {
+                objectListing = amazonS3.listNextBatchOfObjects(objectListing);
+            } else {
+                break;
+            }
         }
     }
 
@@ -84,6 +110,6 @@ public class BuildOutputArchiverTest {
     }
 
     private String getObjectAsString(String key) {
-        return amazonS3.getObjectAsString(s3Bucket, key);
+        return amazonS3.getObjectAsString(bucket, key);
     }
 }
