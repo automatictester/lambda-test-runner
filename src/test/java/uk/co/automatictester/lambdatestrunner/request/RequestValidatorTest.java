@@ -11,7 +11,7 @@ public class RequestValidatorTest {
 
     private Request request;
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void createRequest() {
         List<String> dirsToStore = new ArrayList<>();
         dirsToStore.add("target/surefire-reports");
