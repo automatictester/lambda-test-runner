@@ -10,6 +10,31 @@ provider "aws" {
   region               = "eu-west-2"
 }
 
+resource "aws_s3_bucket" "jar" {
+  bucket               = "${var.s3_bucket_jar}"
+  acl                  = "private"
+}
+
+resource "aws_s3_bucket_object" "jar" {
+  bucket               = "${aws_s3_bucket.jar.bucket}"
+  key                  = "lambda-test-runner.jar"
+  source               = "${path.module}/../target/lambda-test-runner.jar"
+  etag                 = "${md5(file("${path.module}/../target/lambda-test-runner.jar"))}"
+}
+
+resource "aws_s3_bucket" "build_outputs" {
+  bucket               = "${var.s3_bucket_build_outputs}"
+  acl                  = "private"
+  force_destroy        = true
+  lifecycle_rule {
+    id = "Delete all objects after 1 day"
+    enabled = true
+    expiration {
+      days = 1
+    }
+  }
+}
+
 resource "aws_iam_role" "lambda_test_runner_role" {
   name                 = "LambdaTestRunnerRole"
   description          = "Allow LambdaTestRunner to use S3 and CloudWatch Logs."
@@ -27,7 +52,7 @@ resource "aws_iam_policy" "s3_put_build_outputs" {
         {
             "Action": "s3:PutObject",
             "Effect": "Allow",
-            "Resource": "arn:aws:s3:::${var.s3_bucket_build_outputs}/*"
+            "Resource": "arn:aws:s3:::${aws_s3_bucket.build_outputs.bucket}/*"
         }
     ]
 }
@@ -67,31 +92,6 @@ resource "aws_iam_role_policy_attachment" "cloudwatch_access_policy" {
   policy_arn           = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
-resource "aws_s3_bucket" "jar" {
-  bucket               = "${var.s3_bucket_jar}"
-  acl                  = "private"
-}
-
-resource "aws_s3_bucket" "build_outputs" {
-  bucket               = "${var.s3_bucket_build_outputs}"
-  acl                  = "private"
-  force_destroy        = true
-  lifecycle_rule {
-    id = "Delete all objects after 1 day"
-    enabled = true
-    expiration {
-      days = 1
-    }
-  }
-}
-
-resource "aws_s3_bucket_object" "jar" {
-  bucket               = "${var.s3_bucket_jar}"
-  key                  = "lambda-test-runner.jar"
-  source               = "${path.module}/../target/lambda-test-runner.jar"
-  etag                 = "${md5(file("${path.module}/../target/lambda-test-runner.jar"))}"
-}
-
 resource "aws_lambda_function" "lambda_test_runner" {
   function_name                  = "LambdaTestRunner"
   handler                        = "uk.co.automatictester.lambdatestrunner.Handler"
@@ -106,7 +106,7 @@ resource "aws_lambda_function" "lambda_test_runner" {
 
   environment {
     variables = {
-      BUILD_OUTPUTS    = "${var.s3_bucket_build_outputs}"
+      BUILD_OUTPUTS    = "${aws_s3_bucket.build_outputs.bucket}"
       JAVA_HOME        = "/tmp/jdk10"
       LOG_LEVEL        = "info"
       M2_CLEANUP       = "true"
