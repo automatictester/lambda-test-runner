@@ -1,4 +1,4 @@
-package uk.co.automatictester.lambdatestrunner;
+package uk.co.automatictester.lambdatestrunner.request;
 
 import java.util.List;
 

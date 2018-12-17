@@ -5,6 +5,8 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import uk.co.automatictester.lambdatestrunner.request.Request;
+import uk.co.automatictester.lambdatestrunner.request.RequestValidator;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +28,7 @@ public class Handler implements RequestHandler<Request, Response> {
 
     @Override
     public Response handleRequest(Request request, Context context) {
+        RequestValidator.validate(request);
         Optional<ProcessResult> jdkInstallationResult = maybeInstallJdkOnLambda(context);
         if (jdkInstallationResult.isPresent() && jdkInstallationResult.get().getExitCode() != 0) {
             log.error("JDK installation unsuccessful, terminating");
