@@ -9,7 +9,7 @@ import java.util.List;
 
 public class RequestValidatorTest {
 
-    private Request request;
+    private RawRequest rawRequest;
 
     @BeforeMethod(alwaysRun = true)
     public void createRequest() {
@@ -17,57 +17,63 @@ public class RequestValidatorTest {
         dirsToStore.add("target/surefire-reports");
         dirsToStore.add("target/failsafe-reports");
 
-        request = new Request();
-        request.setRepoUri("https://github.com/automatictester/lambda-test-runner.git");
-        request.setBranch("master");
-        request.setCommand("./mvnw clean test -Dtest=SmokeTest -Dmaven.repo.local=${MAVEN_USER_HOME}");
-        request.setStoreToS3(dirsToStore);
+        rawRequest = new RawRequest();
+        rawRequest.setRepoUri("https://github.com/automatictester/lambda-test-runner.git");
+        rawRequest.setBranch("master");
+        rawRequest.setCommand("./mvnw clean test -Dtest=SmokeTest -Dmaven.repo.local=${MAVEN_USER_HOME}");
+        rawRequest.setStoreToS3(dirsToStore);
     }
 
     @Test(groups = "local")
     public void testHappyPath() {
-        RequestValidator.validate(request);
+        RequestValidator.validate(rawRequest);
     }
 
     @Test(groups = "local", expectedExceptions = IllegalArgumentException.class)
     public void testRepoUriNull() {
-        request.setRepoUri(null);
-        RequestValidator.validate(request);
+        rawRequest.setRepoUri(null);
+        RequestValidator.validate(rawRequest);
     }
 
     @Test(groups = "local", expectedExceptions = IllegalArgumentException.class)
     public void testRepoUriEmptyString() {
-        request.setRepoUri("");
-        RequestValidator.validate(request);
+        rawRequest.setRepoUri("");
+        RequestValidator.validate(rawRequest);
+    }
+
+    @Test(groups = "local", expectedExceptions = IllegalArgumentException.class)
+    public void testRepoUriUnknown() {
+        rawRequest.setRepoUri("ftp://github.com/automatictester/lambda-test-runner.git");
+        RequestValidator.validate(rawRequest);
     }
 
     @Test(groups = "local", expectedExceptions = IllegalArgumentException.class)
     public void testCommandNull() {
-        request.setCommand(null);
-        RequestValidator.validate(request);
+        rawRequest.setCommand(null);
+        RequestValidator.validate(rawRequest);
     }
 
     @Test(groups = "local", expectedExceptions = IllegalArgumentException.class)
     public void testCommandEmptyString() {
-        request.setCommand("");
-        RequestValidator.validate(request);
+        rawRequest.setCommand("");
+        RequestValidator.validate(rawRequest);
     }
 
     @Test(groups = "local")
     public void testStoreToS3Null() {
-        request.setStoreToS3(null);
-        RequestValidator.validate(request);
+        rawRequest.setStoreToS3(null);
+        RequestValidator.validate(rawRequest);
     }
 
     @Test(groups = "local")
     public void testStoreToS3EmptyList() {
-        request.setStoreToS3(Collections.emptyList());
-        RequestValidator.validate(request);
+        rawRequest.setStoreToS3(Collections.emptyList());
+        RequestValidator.validate(rawRequest);
     }
 
     @Test(groups = "local", expectedExceptions = IllegalArgumentException.class)
     public void testStoreToS3InvalidElement() {
-        request.setStoreToS3(Collections.singletonList("/tmp/repo/target/failsafe-reports"));
-        RequestValidator.validate(request);
+        rawRequest.setStoreToS3(Collections.singletonList("/tmp/repo/target/failsafe-reports"));
+        RequestValidator.validate(rawRequest);
     }
 }

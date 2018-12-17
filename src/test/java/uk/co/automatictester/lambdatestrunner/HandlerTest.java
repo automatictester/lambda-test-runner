@@ -10,7 +10,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import uk.co.automatictester.lambdatestrunner.request.Request;
+import uk.co.automatictester.lambdatestrunner.request.RawRequest;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +31,7 @@ public class HandlerTest {
     private final File workDir = new File(System.getenv("REPO_DIR"));
     private final AmazonS3 amazonS3 = AmazonS3Factory.getInstance();
     private final S3Mock s3Mock = new S3Mock.Builder().withPort(8001).withInMemoryBackend().build();
-    private Request request = new Request();
+    private RawRequest request = new RawRequest();
 
     @BeforeClass(alwaysRun = true)
     public void setupEnv() {

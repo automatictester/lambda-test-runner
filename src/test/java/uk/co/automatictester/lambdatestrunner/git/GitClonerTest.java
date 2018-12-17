@@ -1,4 +1,4 @@
-package uk.co.automatictester.lambdatestrunner;
+package uk.co.automatictester.lambdatestrunner.git;
 
 import org.apache.commons.io.FileUtils;
 import org.testng.annotations.BeforeMethod;
@@ -57,7 +57,7 @@ public class GitClonerTest {
     @Test(groups = "local")
     public void testCloneRepoWithDefaultDevelopBranchWithoutSpecifyingBranchName() {
         String repoUri = "https://github.com/automatictester/sample-repo-with-develop-branch.git";
-        GitCloner.cloneRepo(repoUri, REPO_DIR);
+        GitCloner.cloneRepo(repoUri, "HEAD", REPO_DIR);
 
         String readmeFile = REPO_DIR.toString() + "/README.md";
         Path path = Paths.get(readmeFile);

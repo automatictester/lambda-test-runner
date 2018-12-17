@@ -5,7 +5,12 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import uk.co.automatictester.lambdatestrunner.git.GitCloner;
+import uk.co.automatictester.lambdatestrunner.process.ProcessResult;
+import uk.co.automatictester.lambdatestrunner.process.ProcessRunner;
+import uk.co.automatictester.lambdatestrunner.request.RawRequest;
 import uk.co.automatictester.lambdatestrunner.request.Request;
+import uk.co.automatictester.lambdatestrunner.request.RequestTransformer;
 import uk.co.automatictester.lambdatestrunner.request.RequestValidator;
 
 import java.io.File;
@@ -19,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class Handler implements RequestHandler<Request, Response> {
+public class Handler implements RequestHandler<RawRequest, Response> {
 
     private static final Logger log = LogManager.getLogger(Handler.class);
     private static final String REPO_DIR = System.getenv("REPO_DIR");
@@ -27,9 +32,10 @@ public class Handler implements RequestHandler<Request, Response> {
     private boolean jdkInstalled = false;
 
     @Override
-    public Response handleRequest(Request request, Context context) {
-        RequestValidator.validate(request);
-        Optional<ProcessResult> jdkInstallationResult = maybeInstallJdkOnLambda(context);
+    public Response handleRequest(RawRequest rawRequest, Context context) {
+        RequestValidator.validate(rawRequest);
+        Request request = RequestTransformer.transform(rawRequest);
+        Optional<ProcessResult> jdkInstallationResult = maybeInstallJdk(context);
         if (jdkInstallationResult.isPresent() && jdkInstallationResult.get().getExitCode() != 0) {
             log.error("JDK installation unsuccessful, terminating");
             return createResponse(context, jdkInstallationResult.get());
@@ -67,7 +73,7 @@ public class Handler implements RequestHandler<Request, Response> {
         log.info("{} dir size: {} MB", temp, sizeInMb);
     }
 
-    private Optional<ProcessResult> maybeInstallJdkOnLambda(Context context) {
+    private Optional<ProcessResult> maybeInstallJdk(Context context) {
         if (isRunningOnAws(context)) {
             if (jdkInstalled) {
                 log.info("JDK already installed, skipping...");
@@ -105,12 +111,8 @@ public class Handler implements RequestHandler<Request, Response> {
         deleteDir(REPO_DIR);
         File repoDir = new File(REPO_DIR);
         String repoUri = request.getRepoUri();
-        if (request.getBranch() != null) {
-            String branch = request.getBranch();
-            GitCloner.cloneRepo(repoUri, branch, repoDir);
-        } else {
-            GitCloner.cloneRepo(repoUri, repoDir);
-        }
+        String branch = request.getBranch();
+        GitCloner.cloneRepo(repoUri, branch, repoDir);
     }
 
     private static void deleteDir(String dir) {

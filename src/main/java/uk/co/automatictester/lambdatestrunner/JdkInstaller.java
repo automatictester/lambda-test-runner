@@ -2,6 +2,8 @@ package uk.co.automatictester.lambdatestrunner;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import uk.co.automatictester.lambdatestrunner.process.ProcessResult;
+import uk.co.automatictester.lambdatestrunner.process.ProcessRunner;
 
 import java.io.File;
 import java.time.Duration;

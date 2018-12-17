@@ -1,10 +1,11 @@
-package uk.co.automatictester.lambdatestrunner;
+package uk.co.automatictester.lambdatestrunner.git;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
+import uk.co.automatictester.lambdatestrunner.SshKeyManager;
 
 import java.io.File;
 import java.time.Duration;
@@ -21,17 +22,6 @@ public class GitCloner {
         maybeDownloadSshKey(repoUri);
         log.info("Git repo '{}', branch '{}', dir '{}'", repoUri, branch, dir);
         CloneCommand cloneCommand = CloneCommandFactory.getInstance(repoUri, branch, dir);
-        try {
-            executeCloneCommand(cloneCommand);
-        } finally {
-            maybeDeleteSshKey(repoUri);
-        }
-    }
-
-    public static void cloneRepo(String repoUri, File dir) {
-        maybeDownloadSshKey(repoUri);
-        log.info("Git repo '{}', dir '{}'", repoUri, dir);
-        CloneCommand cloneCommand = CloneCommandFactory.getInstance(repoUri, dir);
         try {
             executeCloneCommand(cloneCommand);
         } finally {

@@ -1,4 +1,4 @@
-package uk.co.automatictester.lambdatestrunner;
+package uk.co.automatictester.lambdatestrunner.process;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

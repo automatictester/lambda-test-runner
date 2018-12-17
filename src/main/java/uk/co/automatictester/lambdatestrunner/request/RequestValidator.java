@@ -6,14 +6,15 @@ public class RequestValidator {
     private RequestValidator() {
     }
 
-    public static void validate(Request request) {
+    public static void validate(RawRequest request) {
         validateRepoUri(request.getRepoUri());
         validateCommand(request.getCommand());
         validateStoreToS3(request.getStoreToS3());
     }
 
     private static void validateRepoUri(String repoUri) {
-        if (repoUri == null || repoUri.equals("")) {
+        if (repoUri == null || repoUri.equals("") ||
+                (!repoUri.startsWith("git") && !repoUri.startsWith("http"))) {
             throw new IllegalArgumentException("Invalid repoUri: " + repoUri);
         }
     }

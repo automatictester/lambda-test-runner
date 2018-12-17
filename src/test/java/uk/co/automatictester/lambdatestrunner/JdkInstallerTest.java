@@ -1,6 +1,7 @@
 package uk.co.automatictester.lambdatestrunner;
 
 import org.testng.annotations.Test;
+import uk.co.automatictester.lambdatestrunner.process.ProcessResult;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
