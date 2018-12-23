@@ -31,6 +31,11 @@ if ! [ $EXIT_CODE -eq 0 ]; then
     exit 1
 fi
 
+if ! [ -f "${S3_PREFIX}/test-execution.log" ]; then
+    echo "FILE WITH TEST EXECUTION LOG DOES NOT EXIST"
+    exit 1
+fi
+
 if ! [ -f "${S3_PREFIX}/target/surefire-reports.zip" ]; then
     echo "ZIP FILE WITH BUILD OUTPUTS DOES NOT EXIST"
     exit 1

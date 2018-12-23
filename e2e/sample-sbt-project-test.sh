@@ -26,7 +26,7 @@ if ! [[ $OUTPUT == *"All tests passed"* ]]; then
     exit 1
 fi
 
-if ! [ $EXIT_CODE -eq 0 ];then
+if ! [ $EXIT_CODE -eq 0 ]; then
     echo "INCORRECT EXIT CODE: $EXIT_CODE"
     exit 1
 fi
