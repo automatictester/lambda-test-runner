@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.io.FileMatchers.anExistingDirectory;
+import static org.hamcrest.io.FileMatchers.anExistingFile;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -25,7 +25,7 @@ public class JdkInstallerTest {
         assertEquals(processResult.getExitCode(), 0);
         Path path = Paths.get(jdkPath);
         assertTrue(Files.exists(path));
-        String jdkInstallationLog = jdkPath + "/" + System.getenv("JDK_INSTALLATION_LOG");
-        assertThat(new File(jdkInstallationLog), anExistingDirectory());
+        String jdkInstallationLog = "/tmp/" + System.getenv("JDK_INSTALLATION_LOG");
+        assertThat(new File(jdkInstallationLog), anExistingFile());
     }
 }
