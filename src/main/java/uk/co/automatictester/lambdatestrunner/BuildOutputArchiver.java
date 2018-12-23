@@ -42,8 +42,9 @@ public class BuildOutputArchiver {
     }
 
     private void compress(String dir, String zipFileName) {
-        log.info("Compressing '{}' to '{}'", new File(dir).getAbsolutePath(), zipFileName);
-        ZipUtil.pack(new File(dir), new File(zipFileName));
+        File sourceDir = new File(workDir + "/" + dir);
+        log.info("Compressing '{}' to '{}'", sourceDir.getAbsolutePath(), zipFileName);
+        ZipUtil.pack(sourceDir, new File(zipFileName));
     }
 
     private void upload(String commonS3Prefix, String zipFileName) {
