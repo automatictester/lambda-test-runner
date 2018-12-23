@@ -55,7 +55,7 @@ public class Handler implements RequestHandler<RawRequest, Response> {
 
     private void storeToS3(String workDir, Request request, String commonS3Prefix) {
         BuildOutputArchiver archiver = new BuildOutputArchiver(workDir, commonS3Prefix);
-        String jdkInstallationLog = System.getenv("TEMP_DIR") + "/" + System.getenv("JDK_INSTALLATION_LOG");
+        String jdkInstallationLog = workDir + "/" + System.getenv("JDK_INSTALLATION_LOG");
         if (Files.exists(Paths.get(jdkInstallationLog))) archiver.storeFile(jdkInstallationLog);
         String testExecutionLog = System.getenv("TEST_EXECUTION_LOG");
         archiver.storeFile(testExecutionLog);
