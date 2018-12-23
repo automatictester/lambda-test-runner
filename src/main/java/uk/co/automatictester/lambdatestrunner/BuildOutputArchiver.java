@@ -31,29 +31,29 @@ public class BuildOutputArchiver {
     }
 
     private void store(String dir, String commonS3Prefix) {
-        Path dirPath = Paths.get(workDir + "/" + dir);
-        if (Files.exists(dirPath) && Files.isDirectory(dirPath) && Files.isReadable(dirPath)) {
-            String zipFileName = dir + ".zip";
-            compress(dir, zipFileName);
-            upload(commonS3Prefix, zipFileName);
+        Path absoluteDirPath = Paths.get(workDir + "/" + dir);
+        if (Files.exists(absoluteDirPath) && Files.isDirectory(absoluteDirPath) && Files.isReadable(absoluteDirPath)) {
+            String absoluteZipFile = absoluteDirPath + ".zip";
+            compress(absoluteDirPath.toString(), absoluteZipFile);
+            String relativeZipFile = dir + ".zip";
+            upload(commonS3Prefix, relativeZipFile);
         } else {
-            log.warn("Dir '{}' does not exist, is not readable or is not a directory", dirPath.toAbsolutePath());
+            log.warn("Dir '{}' does not exist, is not readable or is not a directory", absoluteDirPath.toAbsolutePath());
         }
     }
 
-    private void compress(String dir, String zipFileName) {
-        File sourceDir = new File(workDir + "/" + dir);
-        String targetZip = workDir + "/" + zipFileName;
-        log.info("Compressing '{}' to '{}'", sourceDir.getAbsolutePath(), targetZip);
-        ZipUtil.pack(sourceDir, new File(targetZip));
+    private void compress(String absoluteDir, String absoluteZipFile) {
+        log.info("Compressing '{}' to '{}'", absoluteDir, absoluteZipFile);
+        ZipUtil.pack(new File(absoluteDir), new File(absoluteZipFile));
     }
 
-    private void upload(String commonS3Prefix, String zipFileName) {
+    private void upload(String commonS3Prefix, String relativeZipFile) {
         AmazonS3 amazonS3 = AmazonS3Factory.getInstance();
-        String s3Key = commonS3Prefix + "/" + zipFileName;
+        String s3Key = commonS3Prefix + "/" + relativeZipFile;
         String destination = s3Bucket + "/" + s3Key;
-        log.info("Uploading to '{}'", destination);
-        amazonS3.putObject(s3Bucket, s3Key, new File(zipFileName));
+        String absoluteZipFile = workDir + "/" + relativeZipFile;
+        log.info("Uploading '{}' to '{}'", absoluteZipFile, destination);
+        amazonS3.putObject(s3Bucket, s3Key, new File(absoluteZipFile));
         log.info("Upload finished");
     }
 }
