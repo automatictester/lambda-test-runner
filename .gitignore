@@ -5,3 +5,4 @@ tf/.terraform/
 tf/terraform.tf*
 *.log
 *response*.json
+*.zip

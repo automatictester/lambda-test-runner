@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 public class BuildOutputArchiverTest {
 
@@ -86,15 +87,11 @@ public class BuildOutputArchiverTest {
 
         BuildOutputArchiver archiver = new BuildOutputArchiver(workDir, commonS3Prefix);
         archiver.store(dirsToStore);
-        String keyA = commonS3Prefix + "/" + dirA + "/a.txt";
-        String keyAA = commonS3Prefix + "/" + dirA + "/subdir/aa.txt";
-        String keyB = commonS3Prefix + "/" + dirB + "/b.txt";
-        String keyBB = commonS3Prefix + "/" + dirB + "/subdir/bb.txt";
+        String keyDirA = commonS3Prefix + "/" + dirA + ".zip";
+        String keyDirB = commonS3Prefix + "/" + dirB + ".zip";
 
-        assertEquals(getObjectAsString(keyA), "a");
-        assertEquals(getObjectAsString(keyAA), "aa");
-        assertEquals(getObjectAsString(keyB), "b");
-        assertEquals(getObjectAsString(keyBB), "bb");
+        assertTrue(amazonS3.doesObjectExist(bucket, keyDirA));
+        assertTrue(amazonS3.doesObjectExist(bucket, keyDirB));
     }
 
     @Test(groups = "local", expectedExceptions = IllegalArgumentException.class)
