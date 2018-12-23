@@ -106,19 +106,21 @@ resource "aws_lambda_function" "lambda_test_runner" {
 
   environment {
     variables = {
-      BUILD_OUTPUTS    = "${aws_s3_bucket.build_outputs.bucket}"
-      JAVA_HOME        = "/tmp/jdk10"
-      LOG_LEVEL        = "info"
-      M2_CLEANUP       = "true"
-      MAVEN_USER_HOME  = "/tmp/.m2"
-      REPO_DIR         = "/tmp/repo"
-      SBT_CLEANUP      = "true"
-      SBT_GLOBAL_BASE  = "/tmp/.sbt"
-      SBT_IVY_HOME     = "/tmp/.ivy2"
-      SSH_KEY_BUCKET   = "${var.s3_bucket_ssh_keys}"
-      SSH_KEY_KEY      = "${var.s3_bucket_object_ssh_key_key}"
-      SSH_KEY_LOCAL    = "/tmp/id_rsa"
-      TEMP_DIR         = "/tmp"
+      BUILD_OUTPUTS         = "${aws_s3_bucket.build_outputs.bucket}"
+      JAVA_HOME             = "/tmp/jdk10"
+      JDK_INSTALLATION_LOG  = "jdk-installation.log"
+      LOG_LEVEL             = "info"
+      M2_CLEANUP            = "true"
+      MAVEN_USER_HOME       = "/tmp/.m2"
+      REPO_DIR              = "/tmp/repo"
+      SBT_CLEANUP           = "true"
+      SBT_GLOBAL_BASE       = "/tmp/.sbt"
+      SBT_IVY_HOME          = "/tmp/.ivy2"
+      SSH_KEY_BUCKET        = "${var.s3_bucket_ssh_keys}"
+      SSH_KEY_KEY           = "${var.s3_bucket_object_ssh_key_key}"
+      SSH_KEY_LOCAL         = "/tmp/id_rsa"
+      TEMP_DIR              = "/tmp"
+      TEST_EXECUTION_LOG    = "test-execution.log"
     }
   }
 }

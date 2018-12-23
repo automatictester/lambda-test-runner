@@ -9,6 +9,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.StringContains.containsString;
+import static org.hamcrest.io.FileMatchers.anExistingFile;
 import static org.testng.Assert.assertEquals;
 
 public class ProcessRunnerTest {
@@ -19,8 +20,11 @@ public class ProcessRunnerTest {
     public void testRunProcess() {
         List<String> command = Arrays.asList("./mvnw", "clean", "test", "-Dtest=SmokeTest");
         File workDir = new File(System.getProperty("user.dir"));
-        ProcessResult processResult = ProcessRunner.runProcess(command, workDir, Collections.emptyMap());
+        String relativeLogFile = "output.log";
+        String absoluteLogFile = workDir.toString() + "/" + relativeLogFile;
+        ProcessResult processResult = ProcessRunner.runProcess(command, workDir, Collections.emptyMap(), relativeLogFile);
         assertEquals(processResult.getExitCode(), 0);
+        assertThat(new File(absoluteLogFile), anExistingFile());
         assertThat(processResult.getOutput(MAX_OUTPUT_SIZE), containsString("Running uk.co.automatictester.lambdatestrunner.SmokeTest"));
         assertThat(processResult.getOutput(MAX_OUTPUT_SIZE), containsString("Tests run: 1, Failures: 0, Errors: 0, Skipped: 0"));
         assertThat(processResult.getOutput(MAX_OUTPUT_SIZE), containsString("\n"));
@@ -30,6 +34,7 @@ public class ProcessRunnerTest {
     public void testRunProcessEx() {
         List<String> command = Collections.singletonList("uname -a");
         File workDir = new File("nonexistent");
-        ProcessRunner.runProcess(command, workDir, Collections.emptyMap());
+        String logFile = "output.log";
+        ProcessRunner.runProcess(command, workDir, Collections.emptyMap(), logFile);
     }
 }

@@ -74,7 +74,7 @@ public class BuildOutputArchiverTest {
     }
 
     @Test(groups = "local")
-    public void testStore() {
+    public void testStoreDirs() {
         String dirNonexistent = "src/test/resources/nonexistent";
         String dirA = "src/test/resources/a";
         String dirB = "src/test/resources/b";
@@ -86,7 +86,7 @@ public class BuildOutputArchiverTest {
 
 
         BuildOutputArchiver archiver = new BuildOutputArchiver(workDir, commonS3Prefix);
-        archiver.store(dirsToStore);
+        archiver.storeDirs(dirsToStore);
         String keyDirA = commonS3Prefix + "/" + dirA + ".zip";
         String keyDirB = commonS3Prefix + "/" + dirB + ".zip";
 
@@ -94,10 +94,19 @@ public class BuildOutputArchiverTest {
         assertTrue(amazonS3.doesObjectExist(bucket, keyDirB));
     }
 
+    @Test(groups = "local")
+    public void testStoreFile() {
+        String fileA = "src/test/resources/a/a.txt";
+        BuildOutputArchiver archiver = new BuildOutputArchiver(workDir, commonS3Prefix);
+        archiver.storeFile(fileA);
+        String keyDirA = commonS3Prefix + "/" + fileA;
+        assertTrue(amazonS3.doesObjectExist(bucket, keyDirA));
+    }
+
     @Test(groups = "local", expectedExceptions = IllegalArgumentException.class)
     public void testStoreNullInput() {
         BuildOutputArchiver archiver = new BuildOutputArchiver(workDir, commonS3Prefix);
-        archiver.store(null);
+        archiver.storeDirs(null);
     }
 
     private String getS3Prefix() {

@@ -7,6 +7,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +23,7 @@ public class ProcessRunner {
     private ProcessRunner() {
     }
 
-    public static ProcessResult runProcess(List<String> command, File workDir, Map<String, String> extraEnvVars) {
+    public static ProcessResult runProcess(List<String> command, File workDir, Map<String, String> extraEnvVars, String relativeLogFile) {
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(command)
                     .directory(workDir)
@@ -42,10 +45,23 @@ public class ProcessRunner {
 
             ProcessResult result = new ProcessResult();
             result.setExitCode(process.waitFor());
-            result.setOutput(processOutput.toString());
+            String processOutputAsString = processOutput.toString();
+            result.setOutput(processOutputAsString);
+            String absoluteLogFile = workDir + "/" + relativeLogFile;
+            storeLogFileToDisk(absoluteLogFile, processOutputAsString);
             return result;
 
         } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static void storeLogFileToDisk(String file, String content) {
+        Path filePath = Paths.get(file);
+        try {
+            Files.write(filePath, content.getBytes());
+        } catch (IOException e) {
+            log.error("Error storing log file to disk '{}'", filePath.toAbsolutePath().toString());
             throw new RuntimeException(e);
         }
     }

@@ -24,6 +24,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 public class HandlerTest {
 
@@ -99,6 +100,10 @@ public class HandlerTest {
         assertThat(response.getOutput(), containsString("Running uk.co.automatictester.lambdatestrunner.SmokeTest"));
         assertThat(response.getOutput(), containsString("Tests run: 1, Failures: 0, Errors: 0, Skipped: 0"));
         assertThat(response.getS3Prefix(), startsWith(getDatePartFromPrefix()));
+        String surefireZipFileS3Key = response.getS3Prefix() + "/target/surefire-reports.zip";
+        assertTrue(amazonS3.doesObjectExist(bucket, surefireZipFileS3Key));
+        String testExecutionLogS3Key = response.getS3Prefix() + "/" + System.getenv("TEST_EXECUTION_LOG");
+        assertTrue(amazonS3.doesObjectExist(bucket, testExecutionLogS3Key));
     }
 
     @Test(groups = "local")
@@ -114,6 +119,10 @@ public class HandlerTest {
         assertThat(response.getOutput(), containsString("Running TestSuite"));
         assertThat(response.getOutput(), containsString("Tests run: 2, Failures: 0, Errors: 0, Skipped: 0"));
         assertThat(response.getS3Prefix(), startsWith(getDatePartFromPrefix()));
+        String surefireZipFileS3Key = response.getS3Prefix() + "target/surefire-reports.zip";
+        assertTrue(amazonS3.doesObjectExist(bucket, surefireZipFileS3Key));
+        String testExecutionLogS3Key = response.getS3Prefix() + System.getenv("TEST_EXECUTION_LOG");
+        assertTrue(amazonS3.doesObjectExist(bucket, testExecutionLogS3Key));
     }
 
     private List<String> getStoreToS3() {

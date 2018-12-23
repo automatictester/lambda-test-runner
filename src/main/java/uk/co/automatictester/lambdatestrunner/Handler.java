@@ -15,6 +15,8 @@ import uk.co.automatictester.lambdatestrunner.request.RequestValidator;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -46,17 +48,18 @@ public class Handler implements RequestHandler<RawRequest, Response> {
         cloneRepoToFreshDir(request);
         ProcessResult processResult = runCommand(request);
         logTempDirSize();
-        String commonS3Prefix = null;
-        if (request.getStoreToS3() != null) {
-            commonS3Prefix = getS3Prefix();
-            storeToS3(System.getenv("REPO_DIR"), request, commonS3Prefix);
-        }
+        String commonS3Prefix = getS3Prefix();
+        storeToS3(System.getenv("REPO_DIR"), request, commonS3Prefix);
         return createResponse(context, processResult, commonS3Prefix);
     }
 
-    private void storeToS3(String workDir, Request request, String prefix) {
-        BuildOutputArchiver archiver = new BuildOutputArchiver(workDir, prefix);
-        archiver.store(request.getStoreToS3());
+    private void storeToS3(String workDir, Request request, String commonS3Prefix) {
+        BuildOutputArchiver archiver = new BuildOutputArchiver(workDir, commonS3Prefix);
+        String jdkInstallationLog = System.getenv("JDK_INSTALLATION_LOG");
+        if (Files.exists(Paths.get(jdkInstallationLog))) archiver.storeFile(jdkInstallationLog);
+        String testExecutionLog = System.getenv("TEST_EXECUTION_LOG");
+        archiver.storeFile(testExecutionLog);
+        if (request.getStoreToS3() != null) archiver.storeDirs(request.getStoreToS3());
     }
 
     private String getS3Prefix() {
@@ -131,7 +134,8 @@ public class Handler implements RequestHandler<RawRequest, Response> {
         File repoDir = new File(REPO_DIR);
         log.info("Command: {}", rawCommand);
         Instant start = Instant.now();
-        ProcessResult processResult = ProcessRunner.runProcess(command, repoDir, Collections.emptyMap());
+        String logFile = System.getenv("TEST_EXECUTION_LOG");
+        ProcessResult processResult = ProcessRunner.runProcess(command, repoDir, Collections.emptyMap(), logFile);
         Instant finish = Instant.now();
         Duration duration = Duration.between(start, finish);
         String logEntry = String.format("Exit code: %d, command took %s s", processResult.getExitCode(), duration.getSeconds());
