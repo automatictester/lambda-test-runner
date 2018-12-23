@@ -108,7 +108,6 @@ resource "aws_lambda_function" "lambda_test_runner" {
     variables = {
       BUILD_OUTPUTS         = "${aws_s3_bucket.build_outputs.bucket}"
       JAVA_HOME             = "/tmp/jdk10"
-      JDK_INSTALLATION_LOG  = "jdk-installation.log"
       LOG_LEVEL             = "info"
       M2_CLEANUP            = "true"
       MAVEN_USER_HOME       = "/tmp/.m2"

@@ -25,7 +25,5 @@ public class JdkInstallerTest {
         assertEquals(processResult.getExitCode(), 0);
         Path path = Paths.get(jdkPath);
         assertTrue(Files.exists(path));
-        String jdkInstallationLog = "/tmp/" + System.getenv("JDK_INSTALLATION_LOG");
-        assertThat(new File(jdkInstallationLog), anExistingFile());
     }
 }

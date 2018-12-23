@@ -24,7 +24,7 @@ public class JdkInstaller {
         Instant start = Instant.now();
 
         File tempDir = new File(System.getenv("TEMP_DIR"));
-        String logFile = System.getenv("JDK_INSTALLATION_LOG");
+        String logFile = "jdk-installation.log";
         ProcessResult jdkInstallationResult = ProcessRunner.runProcess(getCommand(), tempDir, extraEnvVars, logFile);
 
         if (jdkInstallationResult.getExitCode() != 0) {

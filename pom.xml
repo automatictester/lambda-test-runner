@@ -47,7 +47,6 @@
                     <environmentVariables>
                         <AWS_REGION>eu-west-2</AWS_REGION>
                         <BUILD_OUTPUTS>automatictester.co.uk-lambda-test-runner-build-outputs</BUILD_OUTPUTS>
-                        <JDK_INSTALLATION_LOG>jdk-installation.log</JDK_INSTALLATION_LOG>
                         <M2_CLEANUP>false</M2_CLEANUP>
                         <MAVEN_USER_HOME>/tmp/.m2</MAVEN_USER_HOME>
                         <REPO_DIR>/tmp/repo</REPO_DIR>

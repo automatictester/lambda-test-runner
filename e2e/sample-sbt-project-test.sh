@@ -35,8 +35,3 @@ if ! [ -f "${S3_PREFIX}/test-execution.log" ]; then
     echo "FILE WITH TEST EXECUTION LOG DOES NOT EXIST"
     exit 1
 fi
-
-if ! [ -f "${S3_PREFIX}/jdk-installation.log" ]; then
-    echo "FILE WITH JDK INSTALLATION LOG DOES NOT EXIST"
-    exit 1
-fi

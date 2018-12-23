@@ -15,8 +15,6 @@ import uk.co.automatictester.lambdatestrunner.request.RequestValidator;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -55,8 +53,6 @@ public class Handler implements RequestHandler<RawRequest, Response> {
 
     private void storeToS3(String workDir, Request request, String commonS3Prefix) {
         BuildOutputArchiver archiver = new BuildOutputArchiver(workDir, commonS3Prefix);
-        String jdkInstallationLog = workDir + "/" + System.getenv("JDK_INSTALLATION_LOG");
-        if (Files.exists(Paths.get(jdkInstallationLog))) archiver.storeFile(jdkInstallationLog);
         String testExecutionLog = System.getenv("TEST_EXECUTION_LOG");
         archiver.storeFile(testExecutionLog);
         if (request.getStoreToS3() != null) archiver.storeDirs(request.getStoreToS3());
