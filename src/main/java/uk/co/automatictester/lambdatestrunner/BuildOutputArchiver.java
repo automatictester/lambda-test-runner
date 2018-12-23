@@ -42,7 +42,7 @@ public class BuildOutputArchiver {
     }
 
     private void compress(String dir, String zipFileName) {
-        log.info("Compressing '{}' to '{}'", dir, zipFileName);
+        log.info("Compressing '{}' to '{}'", new File(dir).getAbsolutePath(), zipFileName);
         ZipUtil.pack(new File(dir), new File(zipFileName));
     }
 
