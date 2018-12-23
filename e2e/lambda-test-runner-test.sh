@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
 
-rm -f lambda-test-runner-response.json
+RESPONSE_JSON=lambda-test-runner-response.json
+rm -f ${RESPONSE_JSON}
 
 START=`date +%s`
-aws lambda invoke --function-name LambdaTestRunner --region eu-west-2 --cli-read-timeout 0 --payload file://lambda-test-runner-payload.json lambda-test-runner-response.json
+aws lambda invoke --function-name LambdaTestRunner --region eu-west-2 --cli-read-timeout 0 --payload file://lambda-test-runner-payload.json ${RESPONSE_JSON}
 END=`date +%s`
 EXEC_TIME=$((END-START))
 
 echo "Execution time: ${EXEC_TIME}s"
 
-EXIT_CODE=`cat lambda-test-runner-response.json | jq -r '.exitCode'`
-OUTPUT=`cat lambda-test-runner-response.json | jq -r '.output'`
-S3_PREFIX=$(jq -r ".s3Prefix" lambda-test-runner-response.json)
+EXIT_CODE=`cat ${RESPONSE_JSON} | jq -r '.exitCode'`
+OUTPUT=`cat ${RESPONSE_JSON} | jq -r '.output'`
+S3_PREFIX=$(jq -r ".s3Prefix" ${RESPONSE_JSON})
 
 aws s3 cp --exclude "*" --include "${S3_PREFIX}*" --recursive s3://automatictester.co.uk-lambda-test-runner-build-outputs . > /dev/null
 
