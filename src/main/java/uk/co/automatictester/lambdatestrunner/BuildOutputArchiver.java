@@ -37,7 +37,6 @@ public class BuildOutputArchiver {
         String absoluteFile = workDir + "/" + relativeFile;
         log.info("Uploading '{}' to '{}'", absoluteFile, destination);
         amazonS3.putObject(s3Bucket, s3Key, new File(absoluteFile));
-        log.info("Upload finished");
     }
 
     private void storeDir(String dir) {
