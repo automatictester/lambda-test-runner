@@ -51,7 +51,7 @@ AWS Lambda Test Runner will:
 - Run shell command which you passed in your request. There are no build tools available on Lambda, so it needs to be included in your repo.
   See [Build tools](https://github.com/automatictester/lambda-test-runner#build-tools) and 
   [Build tool examples](https://github.com/automatictester/lambda-test-runner#build-tool-examples) for more information.
-- Store build outputs to S3, if requested.
+- Store build outputs to S3, if requested. Test execution log is always stored to S3.
 - Log events to CloudWatch Logs.
 
 ## Architecture
@@ -198,7 +198,7 @@ Sample request payload for running SBT tests:
 
 JVM options defined in the above examples are necessary due to locations other than `/tmp` not being writable on AWS Lambda.
 
-## SSH access
+## Git repository SSH access
 
 To clone public repos, you should provide HTTPS URL in your request payload. If you intend to clone only public repos, you can ignore remainder of this section.
 
