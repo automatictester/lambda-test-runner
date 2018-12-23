@@ -19,12 +19,13 @@ public class JdkInstallerTest {
 
     @Test(groups = "travis")
     public void testInstallJdk() {
-        Map<String, String> extraEnvVars = Collections.singletonMap("JAVA_HOME", "/tmp/jdk10");
+        String jdkPath = "/tmp/jdk10";
+        Map<String, String> extraEnvVars = Collections.singletonMap("JAVA_HOME", jdkPath);
         ProcessResult processResult = JdkInstaller.installJdk(extraEnvVars);
         assertEquals(processResult.getExitCode(), 0);
-        Path path = Paths.get("/tmp/jdk10");
+        Path path = Paths.get(jdkPath);
         assertTrue(Files.exists(path));
-        String jdkInstallationLog = System.getenv("JDK_INSTALLATION_LOG");
+        String jdkInstallationLog = jdkPath + "/" + System.getenv("JDK_INSTALLATION_LOG");
         assertThat(new File(jdkInstallationLog), anExistingFile());
     }
 }
