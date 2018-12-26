@@ -92,7 +92,10 @@ No other environment variables are expected to be modified without a good reason
 
 ## Usage example
 
-This example demonstrates how to invoke already deployed AWS Lambda Test Runner using `aws cli`. It requires all necessary tools to be installed and configured.
+AWS Lambda Test Runner is an AWS Lambda function and can be invoked like other Lambdas. To make it easier for Jenkins users, there is a 
+[Jenkins Plugin for AWS Lambda Test Runner](https://github.com/automatictester/lambda-test-runner-jenkins-plugin) which you can use to trigger the execution. 
+If you do not use Jenkins, or prefer to orchestrate the execution yourself, below is a step-by-step guide to executing already deployed AWS Lambda Test Runner 
+using `aws cli`. It requires all necessary tools to be installed and configured.
 
 Below is sample JSON payload: 
 
@@ -152,7 +155,8 @@ aws s3 cp --exclude "*" --include "${S3_PREFIX}*" --recursive \
   s3://automatictester.co.uk-lambda-test-runner-build-outputs .
 ```
 
-At this point we have the test results on the local file system. They can be now processed in the usual way.
+At this point we have the build outputs on the local file system. This will include `test-execution.log` as well as compressed content in ZIP format of the 
+directories we requested to store to S3, in our case `target/surefire-reports`. They can be now processed in the usual way.
 
 ## Request parameters
 
