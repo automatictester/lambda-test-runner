@@ -157,7 +157,7 @@ aws s3 cp --exclude "*" --include "${S3_PREFIX}*" --recursive \
 
 At this point we have the build outputs on the local file system. This will include:
 - Test execution log in `test-execution.log`.
-- ZIP files with the directories we requested to store to S3, in this case `target/surefire-reports`.
+- ZIP files with the directories we requested to store to S3, in this case `target/surefire-reports.zip`.
 
 They can be now processed in the usual way.
 
