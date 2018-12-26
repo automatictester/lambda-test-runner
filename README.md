@@ -155,8 +155,9 @@ aws s3 cp --exclude "*" --include "${S3_PREFIX}*" --recursive \
   s3://automatictester.co.uk-lambda-test-runner-build-outputs .
 ```
 
-At this point we have the build outputs on the local file system. This will include `test-execution.log` as well as compressed content in ZIP format of the 
-directories we requested to store to S3, in our case `target/surefire-reports`. They can be now processed in the usual way.
+At this point we have the build outputs on the local file system. This will include:
+- `test-execution.log`.
+- ZIP files with the directories we requested to store to S3, in this case `target/surefire-reports`. They can be now processed in the usual way.
 
 ## Request parameters
 
