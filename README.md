@@ -23,6 +23,12 @@ To provide an efficient test runner based on AWS Lambda technology for the Java 
 - Provide the runner, not the orchestration. In other words, if your current CI server is Jenkins, AWS Lambda Test Runner may help you reduce your dependency 
   on Jenkins slaves, not on Jenkins master. Of course you don't have to be using Jenkins to use AWS Lambda Test Runner.
 
+## Benefits
+
+- Up to 1000 concurrent executions.
+- No maintenance of build agents.
+- You don't pay for what you don't use.
+
 ## Supported platforms
 
 ### Git hosting
