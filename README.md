@@ -2,7 +2,8 @@
 
 [![Build Status](https://travis-ci.com/automatictester/lambda-test-runner.svg?branch=master)](https://travis-ci.com/automatictester/lambda-test-runner)
 
-Run your unit tests with Maven or SBT directly on AWS Lambda.
+Run your unit tests with Maven or SBT directly on AWS Lambda. 
+For related Jenkins plugin see [here](https://github.com/automatictester/lambda-test-runner-jenkins-plugin).
 
 ## Project history
 
