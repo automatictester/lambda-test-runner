@@ -29,13 +29,12 @@ public class BuildOutputArchiverTest {
     public void setupEnv() {
         if (System.getProperty("mockS3") != null) {
             startS3Mock();
+            maybeCreateBucket();
         }
-        maybeCreateBucket();
     }
 
     @AfterClass(alwaysRun = true)
     public void teardown() {
-        maybeDeleteBucket();
         if (System.getProperty("mockS3") != null) {
             s3Mock.stop();
         }
@@ -48,13 +47,6 @@ public class BuildOutputArchiverTest {
     private void maybeCreateBucket() {
         if (!amazonS3.doesBucketExistV2(bucket)) {
             amazonS3.createBucket(bucket);
-        }
-    }
-
-    private void maybeDeleteBucket() {
-        if (amazonS3.doesBucketExistV2(bucket)) {
-            deleteAllObjects(bucket);
-            amazonS3.deleteBucket(bucket);
         }
     }
 
@@ -113,9 +105,5 @@ public class BuildOutputArchiverTest {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss");
         return f.format(now);
-    }
-
-    private String getObjectAsString(String key) {
-        return amazonS3.getObjectAsString(bucket, key);
     }
 }
