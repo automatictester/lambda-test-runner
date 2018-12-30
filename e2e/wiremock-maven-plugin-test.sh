@@ -35,3 +35,5 @@ if ! [ -f "${S3_PREFIX}/test-execution.log" ]; then
     echo "FILE WITH TEST EXECUTION LOG DOES NOT EXIST"
     exit 1
 fi
+
+rm -f ${RESPONSE_JSON}

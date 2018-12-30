@@ -40,3 +40,5 @@ if ! [ -f "${S3_PREFIX}/target/surefire-reports.zip" ]; then
     echo "ZIP FILE WITH BUILD OUTPUTS DOES NOT EXIST"
     exit 1
 fi
+
+rm -f ${RESPONSE_JSON}
