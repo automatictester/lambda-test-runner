@@ -10,7 +10,7 @@ public class RequestTransformer {
     private RequestTransformer() {
     }
 
-    public static Request transform(RawRequest rawRequest) {
+    public static Request transform(Request rawRequest) {
         Request request = new Request();
         request.setRepoUri(rawRequest.getRepoUri());
         request.setCommand(rawRequest.getCommand());

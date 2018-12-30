@@ -9,7 +9,7 @@ import java.util.List;
 
 public class RequestValidatorTest {
 
-    private RawRequest rawRequest;
+    private Request rawRequest;
 
     @BeforeMethod(alwaysRun = true)
     public void createRequest() {
@@ -17,7 +17,7 @@ public class RequestValidatorTest {
         dirsToStore.add("target/surefire-reports");
         dirsToStore.add("target/failsafe-reports");
 
-        rawRequest = new RawRequest();
+        rawRequest = new Request();
         rawRequest.setRepoUri("https://github.com/automatictester/lambda-test-runner.git");
         rawRequest.setBranch("master");
         rawRequest.setCommand("./mvnw clean test -Dtest=SmokeTest -Dmaven.repo.local=${MAVEN_USER_HOME}");

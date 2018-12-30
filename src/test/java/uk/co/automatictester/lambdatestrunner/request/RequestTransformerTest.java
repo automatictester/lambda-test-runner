@@ -15,11 +15,11 @@ public class RequestTransformerTest {
     private static final String MASTER = "master";
     private static final String HEAD = "HEAD";
 
-    private RawRequest rawRequest;
+    private Request rawRequest;
 
     @BeforeMethod(alwaysRun = true)
     public void createRequest() {
-        rawRequest = new RawRequest();
+        rawRequest = new Request();
         rawRequest.setRepoUri(REPO_URI);
         rawRequest.setBranch(MASTER);
         rawRequest.setCommand(COMMAND);

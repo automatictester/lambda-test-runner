@@ -10,7 +10,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import uk.co.automatictester.lambdatestrunner.request.RawRequest;
+import uk.co.automatictester.lambdatestrunner.request.Request;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,7 +32,7 @@ public class HandlerTest {
     private final File workDir = new File(System.getenv("REPO_DIR"));
     private final AmazonS3 amazonS3 = AmazonS3Factory.getInstance();
     private final S3Mock s3Mock = new S3Mock.Builder().withPort(8001).withInMemoryBackend().build();
-    private RawRequest request = new RawRequest();
+    private Request rawRequest = new Request();
 
     @BeforeClass(alwaysRun = true)
     public void setupEnv() {
@@ -89,13 +89,13 @@ public class HandlerTest {
 
     @Test(groups = "local")
     public void testHandleRequest() {
-        request.setRepoUri("https://github.com/automatictester/lambda-test-runner.git");
-        request.setBranch("master");
-        request.setCommand("./mvnw clean test -Dtest=SmokeTest -Dmaven.repo.local=${MAVEN_USER_HOME}");
-        request.setStoreToS3(getStoreToS3());
+        rawRequest.setRepoUri("https://github.com/automatictester/lambda-test-runner.git");
+        rawRequest.setBranch("master");
+        rawRequest.setCommand("./mvnw clean test -Dtest=SmokeTest -Dmaven.repo.local=${MAVEN_USER_HOME}");
+        rawRequest.setStoreToS3(getStoreToS3());
         Context context = null;
         Handler handler = new Handler();
-        Response response = handler.handleRequest(request, context);
+        Response response = handler.handleRequest(rawRequest, context);
         assertEquals(response.getExitCode(), 0);
         assertThat(response.getOutput(), containsString("Running uk.co.automatictester.lambdatestrunner.SmokeTest"));
         assertThat(response.getOutput(), containsString("Tests run: 1, Failures: 0, Errors: 0, Skipped: 0"));
@@ -108,13 +108,13 @@ public class HandlerTest {
 
     @Test(groups = "local")
     public void testHandleRequestNonDefaultBranch() {
-        request.setRepoUri("https://github.com/automatictester/lambda-test-runner.git");
-        request.setBranch("unit-testing");
-        request.setCommand("./mvnw clean test -Dtest=*SmokeTest -Dmaven.repo.local=${MAVEN_USER_HOME}");
-        request.setStoreToS3(getStoreToS3());
+        rawRequest.setRepoUri("https://github.com/automatictester/lambda-test-runner.git");
+        rawRequest.setBranch("unit-testing");
+        rawRequest.setCommand("./mvnw clean test -Dtest=*SmokeTest -Dmaven.repo.local=${MAVEN_USER_HOME}");
+        rawRequest.setStoreToS3(getStoreToS3());
         Context context = null;
         Handler handler = new Handler();
-        Response response = handler.handleRequest(request, context);
+        Response response = handler.handleRequest(rawRequest, context);
         assertEquals(response.getExitCode(), 0);
         assertThat(response.getOutput(), containsString("Running TestSuite"));
         assertThat(response.getOutput(), containsString("Tests run: 2, Failures: 0, Errors: 0, Skipped: 0"));

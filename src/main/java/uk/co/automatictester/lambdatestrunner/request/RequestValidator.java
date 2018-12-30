@@ -6,10 +6,10 @@ public class RequestValidator {
     private RequestValidator() {
     }
 
-    public static void validate(RawRequest request) {
-        validateRepoUri(request.getRepoUri());
-        validateCommand(request.getCommand());
-        validateStoreToS3(request.getStoreToS3());
+    public static void validate(Request rawRequest) {
+        validateRepoUri(rawRequest.getRepoUri());
+        validateCommand(rawRequest.getCommand());
+        validateStoreToS3(rawRequest.getStoreToS3());
     }
 
     private static void validateRepoUri(String repoUri) {
