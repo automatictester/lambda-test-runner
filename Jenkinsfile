@@ -4,6 +4,11 @@ pipeline {
     agent {
         label 'linux'
     }
+    parameters {
+        string(name: 'RELEASE_VERSION', defaultValue: '0.9.0', description: '')
+        string(name: 'POST_RELEASE_SNAPSHOT_VERSION', defaultValue: '0.9.1-SNAPSHOT', description: '')
+        booleanParam(name: 'RELEASE', defaultValue: false, description: '')
+    }
     options {
         timestamps()
         skipDefaultCheckout()
@@ -21,6 +26,12 @@ pipeline {
                 sshagent(['github-creds']) {
                     git branch: "${env.BRANCH_NAME}", credentialsId: 'github-creds', url: 'git@github.com:automatictester/lambda-test-runner.git'
                 }
+            }
+        }
+        stage('Set release version number') {
+            steps {
+                sh "./mvnw versions:set -DnewVersion=${params.RELEASE_VERSION}"
+                sh "git add -A; git commit -m 'Release version bump'"
             }
         }
         stage('Test') {
@@ -51,9 +62,33 @@ pipeline {
                 }
             }
         }
+        stage('Tag release') {
+            steps {
+                sh "git tag ${params.RELEASE_VERSION}"
+            }
+        }
         stage('Archive JAR') {
             steps {
                 archiveArtifacts artifacts: 'target/lambda-test-runner.jar'
+            }
+        }
+        stage('Set snapshot version number') {
+            steps {
+                sh "./mvnw versions:set -DnewVersion=${params.POST_RELEASE_SNAPSHOT_VERSION}"
+                sh "git add -A; git commit -m 'Post-release version bump'"
+            }
+        }
+        stage('Push release to origin/master') {
+            when {
+                expression {
+                    "${params.RELEASE}".toBoolean() && "${env.BRANCH_NAME}" == "master"
+                }
+            }
+            steps {
+                echo 'PUSH EXECUTED'
+//                sshagent(['github-creds']) {
+//                    sh 'git push --set-upstream origin master; git push --tags'
+//                }
             }
         }
     }
