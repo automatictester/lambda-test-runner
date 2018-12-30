@@ -55,9 +55,9 @@ pipeline {
         stage('End-to-end test') {
             steps {
                 dir('e2e') {
-                    sh './sample-sbt-project-test.sh'
                     sh './lambda-test-runner-test.sh'
                     sh './wiremock-maven-plugin-test.sh'
+                    sh './sample-sbt-project-test.sh'
                     sh './lightning-core-test.sh'
                 }
             }
@@ -78,17 +78,16 @@ pipeline {
                 sh "git add -A; git commit -m 'Post-release version bump'"
             }
         }
-        stage('Push release to origin/master') {
+        stage('Push to origin') {
             when {
                 expression {
                     "${params.RELEASE}".toBoolean() && "${env.BRANCH_NAME}" == "master"
                 }
             }
             steps {
-                echo 'PUSH EXECUTED'
-//                sshagent(['github-creds']) {
-//                    sh 'git push --set-upstream origin master; git push --tags'
-//                }
+                sshagent(['github-creds']) {
+                    sh 'git push --set-upstream origin master; git push --tags'
+                }
             }
         }
     }
