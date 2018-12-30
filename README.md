@@ -69,9 +69,9 @@ This is the big picture:
 
 ## How to deploy it
 
-- Clone the repo.
-- Build Java JAR: `./mvnw clean package -DskipTests`.
-- Deploy it to your AWS account. There is a [Terraform script](https://github.com/automatictester/lambda-test-runner/blob/master/tf) to speed things up.
+- You can either start by downloading the JAR from [Releases](https://github.com/automatictester/lambda-test-runner/releases)
+  tab, or building it yourself. If you decide to go for the latter, clone the repo and build Java JAR file with: `./mvnw clean package -DskipTests`.
+- Deploy it to your AWS account. There is [Terraform](https://github.com/automatictester/lambda-test-runner/blob/master/tf) scripts to speed things up.
   Before running `terraform apply`, you will need to: 
   - Customize all variables in [tf/variables.tf](https://github.com/automatictester/lambda-test-runner/blob/master/tf/variables.tf). 
   - Customize Terraform backend S3 bucket in [tf/main.tf](https://github.com/automatictester/lambda-test-runner/blob/master/tf/main.tf).
