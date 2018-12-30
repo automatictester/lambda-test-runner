@@ -50,21 +50,6 @@ public class BuildOutputArchiverTest {
         }
     }
 
-    private void deleteAllObjects(String bucket) {
-        ObjectListing objectListing = amazonS3.listObjects(bucket);
-        while (true) {
-            Iterator<S3ObjectSummary> objIter = objectListing.getObjectSummaries().iterator();
-            while (objIter.hasNext()) {
-                amazonS3.deleteObject(bucket, objIter.next().getKey());
-            }
-            if (objectListing.isTruncated()) {
-                objectListing = amazonS3.listNextBatchOfObjects(objectListing);
-            } else {
-                break;
-            }
-        }
-    }
-
     @Test(groups = "local")
     public void testStoreDirs() {
         String dirNonexistent = "src/test/resources/nonexistent";

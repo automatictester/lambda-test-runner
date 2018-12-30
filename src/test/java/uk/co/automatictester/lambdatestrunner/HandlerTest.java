@@ -38,13 +38,12 @@ public class HandlerTest {
     public void setupEnv() {
         if (System.getProperty("mockS3") != null) {
             startS3Mock();
+            maybeCreateBucket();
         }
-        maybeCreateBucket();
     }
 
     @AfterClass(alwaysRun = true)
     public void teardown() {
-        maybeDeleteBucket();
         if (System.getProperty("mockS3") != null) {
             s3Mock.stop();
         }
@@ -57,28 +56,6 @@ public class HandlerTest {
     private void maybeCreateBucket() {
         if (!amazonS3.doesBucketExistV2(bucket)) {
             amazonS3.createBucket(bucket);
-        }
-    }
-
-    private void maybeDeleteBucket() {
-        if (amazonS3.doesBucketExistV2(bucket)) {
-            deleteAllObjects(bucket);
-            amazonS3.deleteBucket(bucket);
-        }
-    }
-
-    private void deleteAllObjects(String bucket) {
-        ObjectListing objectListing = amazonS3.listObjects(bucket);
-        while (true) {
-            Iterator<S3ObjectSummary> objIter = objectListing.getObjectSummaries().iterator();
-            while (objIter.hasNext()) {
-                amazonS3.deleteObject(bucket, objIter.next().getKey());
-            }
-            if (objectListing.isTruncated()) {
-                objectListing = amazonS3.listNextBatchOfObjects(objectListing);
-            } else {
-                break;
-            }
         }
     }
 
