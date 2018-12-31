@@ -61,6 +61,10 @@ AWS Lambda Test Runner will:
 - Store build outputs to S3, if requested. Test execution log is always stored to S3.
 - Log events to CloudWatch Logs.
 
+Sample exectution log from CloudWatch Logs:
+
+<img src="img/aws-lambda-test-runner-execution-log.png" width="923" height="420"/>
+
 ## Architecture
 
 This is the big picture:
