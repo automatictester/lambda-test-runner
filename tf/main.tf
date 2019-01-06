@@ -17,9 +17,9 @@ resource "aws_s3_bucket" "jar" {
 
 resource "aws_s3_bucket_object" "jar" {
   bucket               = "${aws_s3_bucket.jar.bucket}"
-  key                  = "lambda-test-runner.jar"
-  source               = "${path.module}/../target/lambda-test-runner.jar"
-  etag                 = "${md5(file("${path.module}/../target/lambda-test-runner.jar"))}"
+  key                  = "${var.jar_file_name}"
+  source               = "${path.module}/../target/${var.jar_file_name}"
+  etag                 = "${md5(file("${path.module}/../target/${var.jar_file_name}"))}"
 }
 
 resource "aws_s3_bucket" "build_outputs" {
@@ -98,7 +98,7 @@ resource "aws_lambda_function" "lambda_test_runner" {
   runtime                        = "java8"
   s3_bucket                      = "${aws_s3_bucket.jar.bucket}"
   s3_key                         = "${aws_s3_bucket_object.jar.key}"
-  source_code_hash               = "${base64sha256(file("${path.module}/../target/lambda-test-runner.jar"))}"
+  source_code_hash               = "${base64sha256(file("${path.module}/../target/${var.jar_file_name}"))}"
   role                           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${aws_iam_role.lambda_test_runner_role.name}"
   memory_size                    = "2048"
   timeout                        = "180"
