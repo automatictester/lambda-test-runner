@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.com/automatictester/lambda-test-runner.svg?branch=master)](https://travis-ci.com/automatictester/lambda-test-runner)
 
 Run your unit tests with Maven or SBT directly on AWS Lambda. 
-For related Jenkins plugin see [here](https://github.com/automatictester/lambda-test-runner-jenkins-plugin).
+For related Jenkins plugin see [here](https://github.com/jenkinsci/lambda-test-runner-plugin).
 
 ## Project history
 
@@ -104,7 +104,7 @@ No other environment variables are expected to be modified without a good reason
 ## Usage example
 
 AWS Lambda Test Runner is an AWS Lambda function and can be invoked like other Lambdas. To make it easier for Jenkins users, there is a 
-[Jenkins Plugin for AWS Lambda Test Runner](https://github.com/automatictester/lambda-test-runner-jenkins-plugin) which you can use to trigger the execution. 
+[Jenkins Plugin for AWS Lambda Test Runner](https://github.com/jenkinsci/lambda-test-runner-plugin) which you can use to trigger the execution. 
 If you do not use Jenkins, or prefer to orchestrate the execution yourself, below is a step-by-step guide to executing already deployed AWS Lambda Test Runner 
 using `aws cli`. It requires all necessary tools to be installed and configured.
 
