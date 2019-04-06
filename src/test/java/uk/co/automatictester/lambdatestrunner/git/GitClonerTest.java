@@ -84,7 +84,7 @@ public class GitClonerTest {
 
     @Test(groups = "jenkins")
     public void testCloneRepoGitHubOverSsh() {
-        String repoUri = "git@github.com:automatictester/lambda-test-runner.git";
+        String repoUri = "git@github.com:automatictester/sample-private-repo.git";
         String branch = "master";
         GitCloner.cloneRepo(repoUri, branch, REPO_DIR);
 
