@@ -215,7 +215,7 @@
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.11.465</version>
+            <version>1.11.534</version>
         </dependency>
 
         <dependency>
@@ -313,7 +313,7 @@
             <dependency>
                 <groupId>com.amazonaws</groupId>
                 <artifactId>aws-java-sdk-s3</artifactId>
-                <version>1.11.465</version>
+                <version>1.11.534</version>
             </dependency>
 
         </dependencies>
