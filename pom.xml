@@ -11,6 +11,7 @@
     <name>lambda-test-runner</name>
     <description>AWS Lambda Test Runner</description>
     <url>https://github.com/automatictester/lambda-test-runner</url>
+    <inceptionYear>2018</inceptionYear>
 
     <licenses>
         <license>
