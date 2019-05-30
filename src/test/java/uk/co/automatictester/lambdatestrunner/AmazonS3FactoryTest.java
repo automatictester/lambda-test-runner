@@ -1,8 +1,7 @@
 package uk.co.automatictester.lambdatestrunner;
 
 import com.amazonaws.services.s3.AmazonS3;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -11,6 +10,19 @@ import static org.testng.Assert.assertNotNull;
 
 public class AmazonS3FactoryTest {
 
+    private String mockS3value;
+
+    @BeforeClass
+    public void getMockS3ValueBeforeTest() {
+        mockS3value = System.getProperty("mockS3");
+    }
+
+    @AfterClass
+    public void restoreMockS3ValueFromBeforeTest() {
+        System.setProperty("mockS3", mockS3value);
+    }
+
+    @BeforeMethod
     @AfterMethod
     public void cleanUpVmOptions() {
         System.clearProperty("mockS3");
