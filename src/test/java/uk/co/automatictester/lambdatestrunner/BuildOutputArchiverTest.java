@@ -1,52 +1,27 @@
 package uk.co.automatictester.lambdatestrunner;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.ObjectListing;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
-import io.findify.s3mock.S3Mock;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-public class BuildOutputArchiverTest {
+public class BuildOutputArchiverTest extends AmazonS3Test {
 
     private final String bucket = System.getenv("BUILD_OUTPUTS");
     private final String workDir = System.getProperty("user.dir");
-    private final AmazonS3 amazonS3 = AmazonS3Factory.getInstance();
     private final String commonS3Prefix = getS3Prefix();
-    private final S3Mock s3Mock = new S3Mock.Builder().withPort(8001).withInMemoryBackend().build();
 
     @BeforeClass(alwaysRun = true)
     public void setupEnv() {
         if (System.getProperty("mockS3") != null) {
-            startS3Mock();
-            maybeCreateBucket();
-        }
-    }
-
-    @AfterClass(alwaysRun = true)
-    public void teardown() {
-        if (System.getProperty("mockS3") != null) {
-            s3Mock.stop();
-        }
-    }
-
-    private void startS3Mock() {
-        s3Mock.start();
-    }
-
-    private void maybeCreateBucket() {
-        if (!amazonS3.doesBucketExistV2(bucket)) {
-            amazonS3.createBucket(bucket);
+            if (!amazonS3.doesBucketExistV2(bucket)) {
+                amazonS3.createBucket(bucket);
+            }
         }
     }
 

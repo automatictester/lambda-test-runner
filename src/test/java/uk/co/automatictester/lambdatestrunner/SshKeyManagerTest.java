@@ -1,7 +1,5 @@
 package uk.co.automatictester.lambdatestrunner;
 
-import com.amazonaws.services.s3.AmazonS3;
-import io.findify.s3mock.S3Mock;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -12,25 +10,16 @@ import java.nio.file.Paths;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
-public class SshKeyManagerTest {
+public class SshKeyManagerTest extends AmazonS3Test {
 
     private static final String BUCKET = System.getenv("SSH_KEY_BUCKET");
-    private S3Mock s3Mock;
-    private final AmazonS3 amazonS3 = AmazonS3Factory.getInstance();
 
     @BeforeClass(alwaysRun = true)
     public void setupEnv() {
         if (System.getProperty("mockS3") != null) {
-            startS3Mock();
             createS3Bucket();
             uploadSshKeyStub();
         }
-    }
-
-    private void startS3Mock() {
-        int port = 8001;
-        s3Mock = new S3Mock.Builder().withPort(port).withInMemoryBackend().build();
-        s3Mock.start();
     }
 
     private void createS3Bucket() {

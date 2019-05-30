@@ -26,7 +26,7 @@ public class AmazonS3Factory {
     }
 
     private static AmazonS3 getMockedInstance() {
-        String s3MockUrl = "http://localhost:8001";
+        String s3MockUrl = getMockedUrl();
         String region = AmazonS3ClientBuilder.standard().getRegion();
         AwsClientBuilder.EndpointConfiguration endpointConfiguration = new AwsClientBuilder.EndpointConfiguration(s3MockUrl, region);
         return AmazonS3ClientBuilder
@@ -34,5 +34,16 @@ public class AmazonS3Factory {
                 .withPathStyleAccessEnabled(true)
                 .withEndpointConfiguration(endpointConfiguration)
                 .build();
+    }
+
+    static String getMockedUrl() {
+        if (!isMockedInstanceExpected()) {
+            throw new IllegalStateException("Method call unexpected when VM option 'mockS3' not set");
+        }
+        return String.format("http://localhost:%s", getMockedPort());
+    }
+
+    static String getMockedPort() {
+        return System.getProperty("mockS3Port", "8001");
     }
 }
