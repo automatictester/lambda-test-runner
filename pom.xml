@@ -45,7 +45,9 @@
                                 <banDuplicatePomDependencyVersions/>
                                 <dependencyConvergence/>
                                 <requireProfileIdsExist/>
-                                <requireReleaseDeps/>
+                                <requireReleaseDeps>
+                                    <onlyWhenRelease>true</onlyWhenRelease>
+                                </requireReleaseDeps>
                             </rules>
                         </configuration>
                     </execution>
