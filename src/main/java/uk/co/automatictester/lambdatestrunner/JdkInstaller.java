@@ -53,7 +53,11 @@ public class JdkInstaller {
         }
 
         public static String getDownloadUrl() {
+            String defaultDownloadUrl = "https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz";
             String javaVersion = System.getenv("JAVA_VERSION");
+            if (javaVersion == null) {
+                return defaultDownloadUrl;
+            }
             switch (javaVersion) {
                 case "9.0.4":
                     return "https://download.java.net/java/GA/jdk9/9.0.4/binaries/openjdk-9.0.4_linux-x64_bin.tar.gz";
@@ -63,7 +67,7 @@ public class JdkInstaller {
                     return "https://download.java.net/java/GA/jdk12.0.1/69cfe15208a647278a19ef0990eea691/12/GPL/openjdk-12.0.1_linux-x64_bin.tar.gz";
                 case "10.0.2":
                 default:
-                    return "https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz";
+                    return defaultDownloadUrl;
             }
         }
     }
