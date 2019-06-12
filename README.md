@@ -98,6 +98,7 @@ All Lambda configuration is managed through environment variables. See
 Variables you may want to customize:
 - `BUILD_OUTPUTS` - S3 bucket for storing build outputs. If you followed [How to deploy it](https://github.com/automatictester/lambda-test-runner#how-to-deploy-it)
   it should be already customized.
+- `JAVA_VERSION` - Java version used to run the tests. Options: `9.0.4`, `10.0.2` (default), `11.0.2`, `12.0.1`.
 - `LOG_LEVEL` - you can switch between `info` and `debug`.
 - `M2_CLEANUP` - if set to `true`, `MAVEN_USER_HOME` will be purged at the beginning of every execution to free up disk space.
 - `SBT_CLEANUP` - if set to `true`, `SBT_GLOBAL_BASE` and `SBT_IVY_HOME` will be purged at the beginning of every execution to free up disk space.
