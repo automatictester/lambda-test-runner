@@ -42,6 +42,7 @@ public class JdkInstaller {
         shellCommand.add("/bin/bash");
         shellCommand.add("-c");
         String downloadUrl = JdkVersionSelector.getDownloadUrl();
+        log.info("Downloading from URL: {}", downloadUrl);
         String downloadAndExtractShellCommend = String.format("rm -rf /tmp/jdk; mkdir -p /tmp/jdk; curl %s | gunzip -c | tar xf - -C /tmp/jdk --strip-components=1", downloadUrl);
         shellCommand.add(downloadAndExtractShellCommend);
         return shellCommand;
