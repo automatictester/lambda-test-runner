@@ -41,7 +41,30 @@ public class JdkInstaller {
         List<String> shellCommand = new ArrayList<>();
         shellCommand.add("/bin/bash");
         shellCommand.add("-c");
-        shellCommand.add("rm -rf /tmp/jdk10; curl https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz | gunzip -c | tar xf - -C /tmp; mv /tmp/jdk-10.0.2 /tmp/jdk10");
+        String downloadUrl = JdkVersionSelector.getDownloadUrl();
+        String downloadAndExtractShellCommend = String.format("rm -rf /tmp/jdk; curl %s | gunzip -c | tar xf - -C /tmp; mv /tmp/jdk-10.0.2 /tmp/jdk", downloadUrl);
+        shellCommand.add(downloadAndExtractShellCommend);
         return shellCommand;
+    }
+
+    static class JdkVersionSelector {
+
+        private JdkVersionSelector() {
+        }
+
+        public static String getDownloadUrl() {
+            String javaVersion = System.getenv("JAVA_VERSION");
+            switch (javaVersion) {
+                case "9.0.4":
+                    return "https://download.java.net/java/GA/jdk9/9.0.4/binaries/openjdk-9.0.4_linux-x64_bin.tar.gz";
+                case "11.0.2":
+                    return "https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz";
+                case "12.0.1":
+                    return "https://download.java.net/java/GA/jdk12.0.1/69cfe15208a647278a19ef0990eea691/12/GPL/openjdk-12.0.1_linux-x64_bin.tar.gz";
+                case "10.0.2":
+                default:
+                    return "https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz";
+            }
+        }
     }
 }

@@ -19,7 +19,7 @@ public class JdkInstallerTest {
 
     @Test(groups = "travis")
     public void testInstallJdk() {
-        String jdkPath = "/tmp/jdk10";
+        String jdkPath = "/tmp/jdk";
         Map<String, String> extraEnvVars = Collections.singletonMap("JAVA_HOME", jdkPath);
         ProcessResult processResult = JdkInstaller.installJdk(extraEnvVars);
         assertEquals(processResult.getExitCode(), 0);

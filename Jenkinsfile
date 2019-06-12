@@ -62,6 +62,34 @@ pipeline {
                 }
             }
         }
+        stage('Test Java versions') {
+            steps {
+                dir('tf') {
+                    sh 'terraform apply -no-color -auto-approve -var-file="jdk-9.tfvars"'
+                }
+                dir('e2e') {
+                    sh './lambda-test-runner-test.sh'
+                }
+                dir('tf') {
+                    sh 'terraform apply -no-color -auto-approve -var-file="jdk-10.tfvars"'
+                }
+                dir('e2e') {
+                    sh './lambda-test-runner-test.sh'
+                }
+                dir('tf') {
+                    sh 'terraform apply -no-color -auto-approve -var-file="jdk-11.tfvars"'
+                }
+                dir('e2e') {
+                    sh './lambda-test-runner-test.sh'
+                }
+                dir('tf') {
+                    sh 'terraform apply -no-color -auto-approve -var-file="jdk-12.tfvars"'
+                }
+                dir('e2e') {
+                    sh './lambda-test-runner-test.sh'
+                }
+            }
+        }
         stage('Tag release') {
             steps {
                 sh "git tag ${params.RELEASE_VERSION}"

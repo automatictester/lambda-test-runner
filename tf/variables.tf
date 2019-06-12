@@ -13,3 +13,6 @@ variable "s3_bucket_object_ssh_key_key" {
 variable "jar_file_name" {
   default = "lambda-test-runner.jar"
 }
+variable "java_version" {
+  default = "10.0.2"
+}
