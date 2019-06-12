@@ -6,3 +6,4 @@ tf/terraform.tf*
 *.log
 *response*.json
 *.zip
+pom.xml.versionsBackup
