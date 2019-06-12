@@ -47,7 +47,13 @@ To provide an efficient test runner based on AWS Lambda technology for the Java 
 
 ### Java version
 
-- [x] OpenJDK 10.0.2 - is used to run your tests
+Java version used to run the tests:
+
+- [x] OpenJDK 9.0.4
+- [x] OpenJDK 10.0.2 (default)
+- [x] OpenJDK 11.0.2
+- [x] OpenJDK 12.0.1
+- [ ] Other - not supported
 
 ## How it works
 
