@@ -215,7 +215,7 @@
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.11.792</version>
+            <version>1.11.814</version>
         </dependency>
         <dependency>
             <groupId>org.zeroturnaround</groupId>
@@ -297,7 +297,7 @@
             <dependency>
                 <groupId>com.amazonaws</groupId>
                 <artifactId>aws-java-sdk-s3</artifactId>
-                <version>1.11.792</version>
+                <version>1.11.814</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
