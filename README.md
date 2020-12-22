@@ -1,9 +1,20 @@
 # AWS Lambda Test Runner
 
-[![Build Status](https://travis-ci.com/automatictester/lambda-test-runner.svg?branch=master)](https://travis-ci.com/automatictester/lambda-test-runner)
-
 Run your unit tests with Maven or SBT directly on AWS Lambda. 
 For related Jenkins plugin see [here](https://github.com/jenkinsci/lambda-test-runner-plugin).
+
+## Project status
+
+Many thanks to everyone who decided to give this solution a try. Some two years after initial release I made a decision
+to finally discontinue this project. The concept is still great. However, there are some very tangible obstacles 
+preventing widespread adoption. These include:
+- There are certain limits of AWS Lambda functions which will render this solution not feasible for many.
+- There is certain level of complexity involved in initial configuration. It's not a rocket science and there is
+  Terraform automation available, but it still requires certain degree of familiarity with AWS.
+- More organisations talk about cloud than actually use it.
+- Last but not least, development and integration testing of the complete solution is a tad complex.
+
+I wish you best of luck with your cloud journey!
 
 ## Project history
 
@@ -21,7 +32,7 @@ To provide an efficient test runner based on AWS Lambda technology for the Java 
 - Provide support for multiple Git hostings.
 - Provide support for multiple build tools.
 - Provide the runner, not the orchestration. In other words, if your current CI server is Jenkins, AWS Lambda Test Runner may help you reduce your dependency 
-  on Jenkins slaves, not on Jenkins master. Of course you don't have to be using Jenkins to use AWS Lambda Test Runner.
+  on Jenkins slaves, not on Jenkins master. Of course, you don't have to be using Jenkins to use AWS Lambda Test Runner.
 
 ## Benefits
 
